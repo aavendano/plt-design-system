@@ -1,0 +1,23 @@
+{
+  "name": "@playlovetoys/design-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portable visual design foundations for Play, love & Toys.",
+  "type": "module",
+  "files": [
+    "src",
+    "DESIGN.md"
+  ],
+  "exports": {
+    ".": "./src/index.css",
+    "./tokens": "./src/tokens.css",
+    "./typography": "./src/typography.css",
+    "./geometry": "./src/geometry.css",
+    "./utilities": "./src/utilities.css",
+    "./daisyui": "./src/daisyui-theme.css"
+  },
+  "peerDependencies": {
+    "daisyui": ">=5",
+    "tailwindcss": ">=4"
+  }
+}
