@@ -1,0 +1,18 @@
+/* Shopify adapter: maps PLT foundations into theme-friendly aliases without redefining design values. */
+:root {
+  --color-page-background: var(--plt-color-base-100);
+  --color-page-foreground: var(--plt-color-base-content);
+  --token-section-border-width: var(--plt-section-border-width);
+  --token-section-gap-min: var(--plt-section-gap-min);
+  --token-shadow-offset: var(--plt-shadow-offset);
+  --token-spacing-scale: var(--plt-spacing-scale);
+}
+
+body {
+  background: var(--color-page-background);
+  color: var(--color-page-foreground);
+}
+
+.shopify-section + .shopify-section {
+  margin-block-start: var(--token-section-gap-min);
+}
