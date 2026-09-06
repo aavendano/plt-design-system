@@ -1,0 +1,26 @@
+{% comment %}
+  PLT ProductCard renderer.
+  Normalized inputs only; does not accept a Shopify product object.
+{% endcomment %}
+
+<article class="plt-media-card plt-product-card">
+  {% if image_url != blank %}
+    <a class="plt-media-card__media" href="{{ url }}">
+      <img src="{{ image_url }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
+    </a>
+  {% endif %}
+
+  <div class="plt-media-card__body">
+    {% if badge != blank %}<span class="plt-badge">{{ badge }}</span>{% endif %}
+    <h3 class="plt-headline-sm plt-media-card__title"><a href="{{ url }}">{{ title }}</a></h3>
+    {% if vendor != blank %}<p class="plt-meta plt-media-card__meta">{{ vendor }}</p>{% endif %}
+
+    <div class="plt-media-card__actions">
+      <span class="plt-product-card__price">
+        {{ price }}
+        {% if compare_at_price != blank %}<span class="plt-product-card__compare-price">{{ compare_at_price }}</span>{% endif %}
+      </span>
+      {% if action_label != blank %}<a class="plt-button plt-button--secondary" href="{{ action_url | default: url }}">{{ action_label }}</a>{% endif %}
+    </div>
+  </div>
+</article>

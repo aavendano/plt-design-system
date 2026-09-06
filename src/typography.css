@@ -1,0 +1,50 @@
+:root {
+  --plt-font-display: "Fjalla One", "Arial Narrow", sans-serif;
+  --plt-font-body: "Atkinson Hyperlegible", Arial, sans-serif;
+  --plt-font-accent: "Space Grotesk", Arial, sans-serif;
+}
+
+.plt-headline-lg {
+  font-family: var(--plt-font-display);
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.plt-headline-sm {
+  font-family: var(--plt-font-display);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.plt-label-bold {
+  font-family: var(--plt-font-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.plt-label-sm {
+  font-family: var(--plt-font-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.plt-body-lg {
+  font-family: var(--plt-font-body);
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+
+.plt-meta {
+  font-family: var(--plt-font-body);
+  font-size: 0.875rem;
+  opacity: 0.6;
+}

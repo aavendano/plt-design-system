@@ -1,0 +1,39 @@
+{
+  "name": "@playlovetoys/design-system",
+  "version": "0.5.0",
+  "private": true,
+  "description": "Portable visual foundations, primitives, composite patterns and cross-platform renderers for Play, love & Toys.",
+  "type": "module",
+  "files": [
+    "src",
+    "adapters",
+    "contracts",
+    "renderers",
+    "demo",
+    "docs",
+    "DESIGN.md"
+  ],
+  "exports": {
+    ".": "./src/index.css",
+    "./tokens": "./src/tokens.css",
+    "./typography": "./src/typography.css",
+    "./geometry": "./src/geometry.css",
+    "./utilities": "./src/utilities.css",
+    "./primitives": "./src/primitives.css",
+    "./patterns": "./src/patterns.css",
+    "./daisyui": "./src/daisyui-theme.css",
+    "./shopify": "./adapters/shopify.css",
+    "./astro": "./adapters/astro.css",
+    "./contracts": "./contracts/components.md",
+    "./renderers/liquid/*": "./renderers/liquid/*",
+    "./renderers/astro/*": "./renderers/astro/*"
+  },
+  "peerDependencies": {
+    "daisyui": ">=5",
+    "tailwindcss": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "daisyui": { "optional": true },
+    "tailwindcss": { "optional": true }
+  }
+}

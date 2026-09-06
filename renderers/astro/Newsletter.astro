@@ -1,0 +1,33 @@
+---
+interface Props {
+  heading: string;
+  body?: string;
+  formAction?: string;
+  method?: "get" | "post";
+  inputName?: string;
+  inputPlaceholder?: string;
+  actionLabel?: string;
+}
+const {
+  heading,
+  body,
+  formAction = "#",
+  method = "post",
+  inputName = "email",
+  inputPlaceholder = "Email address",
+  actionLabel = "Subscribe",
+} = Astro.props;
+---
+
+<section class="plt-newsletter">
+  <div class="plt-card plt-newsletter__card">
+    <div class="plt-newsletter__content">
+      <h2 class="plt-headline-lg">{heading}</h2>
+      {body && <p class="plt-body-lg">{body}</p>}
+      <form class="plt-newsletter__form" action={formAction} method={method}>
+        <input class="plt-field" type="email" name={inputName} placeholder={inputPlaceholder} required />
+        <button class="plt-button plt-button--primary" type="submit">{actionLabel}</button>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+{% comment %} PLT Hero renderer. Normalized inputs only. {% endcomment %}
+<section class="plt-hero{% if image_url != blank %} plt-hero--media{% endif %}">
+  {% if image_url != blank %}
+    <div class="plt-hero__media"><img src="{{ image_url }}" alt="{{ image_alt | default: heading | escape }}"></div>
+    <div class="plt-hero__overlay" aria-hidden="true"></div>
+  {% endif %}
+  <div class="plt-hero__content">
+    <div class="plt-hero__copy">
+      {% if eyebrow != blank %}<span class="plt-badge">{{ eyebrow }}</span>{% endif %}
+      <h1 class="plt-headline-lg">{{ heading }}</h1>
+      {% if body != blank %}<div class="plt-body-lg">{{ body }}</div>{% endif %}
+      <div class="plt-hero__actions">
+        {% if primary_label != blank and primary_url != blank %}<a class="plt-button plt-button--primary" href="{{ primary_url }}">{{ primary_label }}</a>{% endif %}
+        {% if secondary_label != blank and secondary_url != blank %}<a class="plt-button plt-button--ghost" href="{{ secondary_url }}">{{ secondary_label }}</a>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
