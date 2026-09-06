@@ -1,0 +1,49 @@
+---
+interface Props {
+  title: string;
+  url: string;
+  price: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  vendor?: string;
+  compareAtPrice?: string;
+  badge?: string;
+  actionLabel?: string;
+  actionUrl?: string;
+}
+
+const {
+  title,
+  url,
+  price,
+  imageUrl,
+  imageAlt = title,
+  vendor,
+  compareAtPrice,
+  badge,
+  actionLabel,
+  actionUrl = url,
+} = Astro.props;
+---
+
+<article class="plt-media-card plt-product-card">
+  {imageUrl && (
+    <a class="plt-media-card__media" href={url}>
+      <img src={imageUrl} alt={imageAlt} loading="lazy" />
+    </a>
+  )}
+
+  <div class="plt-media-card__body">
+    {badge && <span class="plt-badge">{badge}</span>}
+    <h3 class="plt-headline-sm plt-media-card__title"><a href={url}>{title}</a></h3>
+    {vendor && <p class="plt-meta plt-media-card__meta">{vendor}</p>}
+
+    <div class="plt-media-card__actions">
+      <span class="plt-product-card__price">
+        {price}
+        {compareAtPrice && <span class="plt-product-card__compare-price">{compareAtPrice}</span>}
+      </span>
+      {actionLabel && <a class="plt-button plt-button--secondary" href={actionUrl}>{actionLabel}</a>}
+    </div>
+  </div>
+</article>
