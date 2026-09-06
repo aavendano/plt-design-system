@@ -1,36 +1,60 @@
 # PLT Design System
 
-Portable visual foundations for Play, love & Toys, extracted from `aavendano/plt-frontend`.
+Portable visual foundations and framework-agnostic primitives for Play, love & Toys, extracted from `aavendano/plt-frontend`.
 
-## Scope of v0.1
+## Scope
 
-This first layer contains only reusable visual foundations:
+The package currently contains:
 
 - design tokens
 - typography
 - geometry
 - layout/utilities
+- 10 universal CSS primitives
 - daisyUI 5 theme adapter
-- design rules and the first universal primitive candidates
+- design rules and usage documentation
 
-Shopify-specific behavior is intentionally excluded from the foundation package.
+Shopify-specific behavior is intentionally excluded from the core package.
 
-## Package entry points
+## Install / consume
+
+Import the full framework-agnostic system:
 
 ```css
 @import "@playlovetoys/design-system";
 ```
 
-Individual foundations can also be imported:
+Or consume individual layers:
 
 ```css
 @import "@playlovetoys/design-system/tokens";
 @import "@playlovetoys/design-system/typography";
 @import "@playlovetoys/design-system/geometry";
 @import "@playlovetoys/design-system/utilities";
+@import "@playlovetoys/design-system/primitives";
 ```
 
-For Tailwind 4 + daisyUI 5 projects:
+Example:
+
+```html
+<section class="plt-section">
+  <div class="plt-container">
+    <article class="plt-card">
+      <div class="plt-card__body">
+        <span class="plt-badge">New</span>
+        <h2 class="plt-headline-sm">Product title</h2>
+        <button class="plt-button plt-button--primary" type="button">Add to cart</button>
+      </div>
+    </article>
+  </div>
+</section>
+```
+
+See `docs/primitives.md` for the complete primitive API.
+
+## daisyUI adapter
+
+Tailwind and daisyUI are optional. Projects that use them can add the adapter explicitly:
 
 ```css
 @import "tailwindcss";
@@ -45,19 +69,31 @@ For Tailwind 4 + daisyUI 5 projects:
 
 ## Architecture
 
-`--plt-*` tokens are the source of truth. Framework adapters consume those tokens rather than owning the design values.
+`--plt-*` tokens are the source of truth. Framework adapters consume those values rather than owning the design.
 
 ```text
-foundations
-  tokens
-  typography
-  geometry
-  utilities
-      |
-      +-- adapters/daisyUI
-      +-- future adapters (Shopify, Astro, React, etc.)
-      |
-      +-- future universal primitives
+PLT design system
+  foundations
+    tokens
+    typography
+    geometry
+    utilities
+  primitives
+    button
+    card / surface
+    badge
+    input
+    select
+    textarea
+    divider
+    container / section
+    alert / notice
+    navigation link / tab
+  adapters
+    daisyUI
+    future: Shopify / Astro / React / others
 ```
 
-See `DESIGN.md` for visual rules and the initial primitive shortlist.
+Primitives own presentation, interaction states and accessible visual affordances. They do not own ecommerce data, cart state, modal behavior, Shopify settings or framework lifecycle.
+
+See `DESIGN.md` for the visual rules and `docs/primitives.md` for semantic HTML examples.
