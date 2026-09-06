@@ -1,26 +1,14 @@
 # PLT Design System
 
-Portable visual foundations and universal primitives for Play, love & Toys, extracted from `aavendano/plt-frontend`.
+Portable visual foundations, primitives and composite patterns for Play, love & Toys, extracted from `aavendano/plt-frontend`.
 
 ## Scope
 
-The package contains:
+The package contains framework-agnostic `--plt-*` tokens, typography, geometry, utilities, 10 semantic primitives, extracted composite visual patterns, daisyUI/Shopify/Astro adapters, and a static verification catalog.
 
-- framework-agnostic `--plt-*` design tokens
-- typography foundations
-- geometry: borders, radii and hard offset shadows
-- portable layout/style utilities
-- 10 universal semantic HTML/CSS primitives
-- daisyUI 5 theme adapter
-- Shopify adapter
-- Astro adapter
-- a static primitive catalog for visual verification
-
-Shopify runtime behavior and ecommerce-specific composite components remain outside the foundation package.
+Runtime Shopify behavior remains outside the visual core.
 
 ## Package entry points
-
-Complete framework-agnostic core:
 
 ```css
 @import "@playlovetoys/design-system";
@@ -34,7 +22,26 @@ Individual layers:
 @import "@playlovetoys/design-system/geometry";
 @import "@playlovetoys/design-system/utilities";
 @import "@playlovetoys/design-system/primitives";
+@import "@playlovetoys/design-system/patterns";
 ```
+
+## Extracted theme patterns
+
+The reusable visual structures identified in the Shopify theme are:
+
+- Section Header
+- Product Card
+- Collection Card
+- Editorial / Blog Card
+- Hero
+- Split CTA
+- Promo Strip
+- Newsletter
+- Breadcrumbs
+
+They live in `src/patterns.css` and compose the primitive/token layers. Product lookup, variants, quick-add, swatches, money formatting, route construction, translations, CMS lookups and carousel behavior stay in platform/application code.
+
+See `docs/patterns.md` for semantic HTML examples and the extraction boundary.
 
 ## Platform adapters
 
@@ -45,16 +52,12 @@ Individual layers:
 @import "@playlovetoys/design-system/shopify";
 ```
 
-The Shopify adapter maps PLT tokens into theme-oriented aliases such as `--color-page-background` and `--token-section-gap-min`; it does not redefine design values.
-
 ### Astro
 
 ```css
 @import "@playlovetoys/design-system";
 @import "@playlovetoys/design-system/astro";
 ```
-
-Astro can consume the core directly. The adapter only provides a minimal `.astro-page-shell` convenience abstraction and page-width aliases.
 
 ### Tailwind 4 + daisyUI 5
 
@@ -64,22 +67,15 @@ Astro can consume the core directly. The adapter only provides a minimal `.astro
   themes: brand --default;
   prefix: "d-";
 }
-
 @import "@playlovetoys/design-system";
 @import "@playlovetoys/design-system/daisyui";
 ```
 
-Tailwind and daisyUI are optional peer dependencies and are only needed when this adapter is used.
-
-## Primitive catalog
-
-`demo/index.html` renders the package primitives directly from `src/index.css`. It is deliberately static and framework-free so visual regressions can be inspected without Shopify, Astro or JavaScript runtime dependencies.
-
-The catalog covers buttons, cards/surfaces, badges, inputs, selects, textareas, dividers, containers, alerts/notices and navigation links/tabs.
+Tailwind and daisyUI are optional peer dependencies.
 
 ## Architecture
 
-`--plt-*` tokens are the source of truth. Framework and platform adapters consume those tokens rather than owning the design values.
+`--plt-*` tokens are authoritative.
 
 ```text
 foundations
@@ -88,12 +84,13 @@ foundations
   geometry
   utilities
   primitives
+  patterns
       |
       +-- adapters/daisyUI
       +-- adapters/Shopify
       +-- adapters/Astro
       |
-      +-- future composite patterns
+      +-- platform behavior (outside package)
 ```
 
-See `DESIGN.md` for visual rules, `docs/primitives.md` for primitive usage examples, and `docs/adapters.md` for platform boundaries.
+See `DESIGN.md`, `docs/primitives.md`, `docs/patterns.md`, and `docs/adapters.md`.
