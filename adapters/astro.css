@@ -1,0 +1,10 @@
+/* Astro adapter: intentionally thin. Astro consumes the framework-agnostic package directly. */
+:root {
+  --plt-astro-content-width: var(--plt-page-width);
+  --plt-astro-page-margin: var(--plt-page-margin);
+}
+
+.astro-page-shell {
+  width: min(100% - (2 * var(--plt-astro-page-margin)), var(--plt-astro-content-width));
+  margin-inline: auto;
+}
