@@ -96,4 +96,4 @@ foundations
       +-- future composite patterns
 ```
 
-See `DESIGN.md` for visual rules and `docs/primitives.md` for primitive usage examples.
+See `DESIGN.md` for visual rules, `docs/primitives.md` for primitive usage examples, and `docs/adapters.md` for platform boundaries.
