@@ -1,0 +1,37 @@
+:root {
+  --plt-radius-selector: 0.25rem;
+  --plt-radius-field: 0.25rem;
+  --plt-radius-box: 0.25rem;
+  --plt-border-width: 1.5px;
+  --plt-section-border-width: 3px;
+  --plt-shadow-offset: 2px;
+}
+
+.plt-surface {
+  background: var(--plt-color-base-100);
+  color: var(--plt-color-base-content);
+  border-radius: var(--plt-radius-box);
+}
+
+.plt-bordered {
+  border: var(--plt-section-border-width) solid var(--plt-color-base-content);
+}
+
+.plt-border-y {
+  border-block: var(--plt-section-border-width) solid var(--plt-color-base-content);
+}
+
+.plt-elevated {
+  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 var(--plt-color-base-content);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.plt-elevated:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: calc(var(--plt-shadow-offset) * 2.5) calc(var(--plt-shadow-offset) * 2.5) 0 var(--plt-color-base-content);
+}
+
+.plt-elevated:active {
+  transform: translateY(0.125rem);
+  box-shadow: none;
+}
