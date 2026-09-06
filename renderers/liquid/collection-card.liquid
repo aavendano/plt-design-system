@@ -1,0 +1,12 @@
+{% comment %} PLT CollectionCard renderer. Normalized inputs only. {% endcomment %}
+<a href="{{ url }}" class="plt-media-card plt-collection-card">
+  {% if image_url != blank %}
+    <figure class="plt-media-card__media plt-collection-card__media">
+      <img src="{{ image_url }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
+    </figure>
+  {% endif %}
+  <div class="plt-media-card__body">
+    <h2 class="plt-headline-sm plt-media-card__title">{{ title }}</h2>
+    {% if description != blank %}<p class="plt-meta plt-media-card__description">{{ description }}</p>{% endif %}
+  </div>
+</a>
