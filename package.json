@@ -1,8 +1,8 @@
 {
   "name": "@playlovetoys/design-system",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
-  "description": "Portable visual design foundations and primitives for Play, love & Toys.",
+  "description": "Portable visual foundations, primitives and composite patterns for Play, love & Toys.",
   "type": "module",
   "files": [
     "src",
@@ -18,6 +18,7 @@
     "./geometry": "./src/geometry.css",
     "./utilities": "./src/utilities.css",
     "./primitives": "./src/primitives.css",
+    "./patterns": "./src/patterns.css",
     "./daisyui": "./src/daisyui-theme.css",
     "./shopify": "./adapters/shopify.css",
     "./astro": "./adapters/astro.css"
