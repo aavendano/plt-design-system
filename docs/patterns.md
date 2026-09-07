@@ -122,7 +122,7 @@ Use `plt-promo-strip--warning` for editorial warning-yellow callouts.
       <h2 class="d-card-title theme-headline-lg">Join the underground</h2>
       <p class="theme-body-lg">Get updates directly to your inbox.</p>
       <form class="plt-newsletter__form">
-        <input class="d-input d-input-bordered" type="email" placeholder="EMAIL@STORE.COM">
+        <input class="d-input" type="email" placeholder="EMAIL@STORE.COM">
         <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">Subscribe</button>
       </form>
     </div>
