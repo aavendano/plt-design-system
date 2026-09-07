@@ -15,15 +15,15 @@ const { heading, eyebrow, body, imageUrl, imageAlt = heading, primaryLabel, prim
 
 <section class:list={["d-hero", "plt-hero", { "plt-hero--media": Boolean(imageUrl) }]}>
   {imageUrl && <div class="plt-hero__media"><img src={imageUrl} alt={imageAlt} /></div>}
-  {imageUrl && <div class="plt-hero__overlay" aria-hidden="true"></div>}
+  {imageUrl && <div class="d-hero-overlay plt-hero__overlay" aria-hidden="true"></div>}
   <div class="d-hero-content plt-hero__content">
     <div class="plt-hero__copy">
       {eyebrow && <span class="d-badge d-badge-secondary theme-label-bold">{eyebrow}</span>}
-      <h1 class="plt-headline-lg">{heading}</h1>
-      {body && <div class="plt-body-lg">{body}</div>}
+      <h1 class="theme-headline-lg">{heading}</h1>
+      {body && <div class="theme-body-lg">{body}</div>}
       <div class="plt-hero__actions">
         {primaryLabel && primaryUrl && <a class="d-btn d-btn-primary d-btn-lg theme-bordered theme-elevated theme-label-bold" href={primaryUrl}>{primaryLabel}</a>}
-        {secondaryLabel && secondaryUrl && <a class="d-btn d-btn-outline d-btn-lg theme-bordered theme-label-bold" href={secondaryUrl}>{secondaryLabel}</a>}
+        {secondaryLabel && secondaryUrl && <a class="d-btn d-btn-outline d-btn-lg theme-bordered theme-elevated theme-label-bold" href={secondaryUrl}>{secondaryLabel}</a>}
       </div>
     </div>
   </div>
