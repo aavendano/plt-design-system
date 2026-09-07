@@ -5,22 +5,22 @@
 
 <article class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-product-card">
   {% if image_url != blank %}
-    <a class="plt-media-card__media" href="{{ url }}">
-      <img src="{{ image_url }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
+    <a class="plt-media-card__media" href="{{ url | escape }}">
+      <img src="{{ image_url | escape }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
     </a>
   {% endif %}
 
   <div class="d-card-body plt-media-card__body">
-    {% if badge != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ badge }}</span>{% endif %}
-    <h3 class="d-card-title theme-headline-sm plt-media-card__title"><a href="{{ url }}">{{ title }}</a></h3>
-    {% if vendor != blank %}<p class="theme-meta plt-media-card__meta">{{ vendor }}</p>{% endif %}
+    {% if badge != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ badge | escape }}</span>{% endif %}
+    <h3 class="d-card-title theme-headline-sm plt-media-card__title"><a href="{{ url | escape }}">{{ title | escape }}</a></h3>
+    {% if vendor != blank %}<p class="theme-meta plt-media-card__meta">{{ vendor | escape }}</p>{% endif %}
 
     <div class="d-card-actions plt-media-card__actions">
       <span class="plt-product-card__price">
-        {{ price }}
-        {% if compare_at_price != blank %}<span class="plt-product-card__compare-price">{{ compare_at_price }}</span>{% endif %}
+        {{ price | escape }}
+        {% if compare_at_price != blank %}<span class="plt-product-card__compare-price">{{ compare_at_price | escape }}</span>{% endif %}
       </span>
-      {% if action_label != blank %}<a class="d-btn d-btn-secondary d-btn-sm theme-bordered theme-elevated theme-label-bold" href="{{ action_url | default: url }}">{{ action_label }}</a>{% endif %}
+      {% if action_label != blank %}<a class="d-btn d-btn-secondary d-btn-sm theme-bordered theme-elevated theme-label-bold" href="{{ action_url | default: url | escape }}">{{ action_label | escape }}</a>{% endif %}
     </div>
   </div>
 </article>

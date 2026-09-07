@@ -1,13 +1,14 @@
 {
   "name": "@playlovetoys/design-system",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "description": "PLT component design layer built on daisyUI 5 and Tailwind CSS 4.",
   "type": "module",
   "scripts": {
     "build:demo": "tailwindcss -i ./demo/demo.css -o ./demo/dist.css --minify",
     "check:conformance": "node scripts/check-daisyui-conformance.mjs",
-    "check": "npm run check:conformance && npm run build:demo"
+    "check:renderers": "node scripts/check-renderer-safety.mjs",
+    "check": "npm run check:conformance && npm run check:renderers && npm run build:demo"
   },
   "files": [
     "src",
