@@ -34,7 +34,15 @@
   --radius-selector: var(--plt-radius-selector);
   --radius-field: var(--plt-radius-field);
   --radius-box: var(--plt-radius-box);
+  --size-selector: var(--plt-size-selector);
+  --size-field: var(--plt-size-field);
   --border: var(--plt-border-width);
   --depth: 1;
   --noise: 1;
+
+  --shadow-offset: var(--plt-shadow-offset);
+  --shadow-color: var(--plt-color-base-content);
+  --font-display: var(--plt-font-display);
+  --font-body: var(--plt-font-body);
+  --font-accent: var(--plt-font-accent);
 }
