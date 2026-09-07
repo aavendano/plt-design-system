@@ -16,7 +16,7 @@ const { title, url, imageUrl, imageAlt = title, description } = Astro.props;
     </figure>
   )}
   <div class="d-card-body plt-media-card__body">
-    <h2 class="plt-headline-sm plt-media-card__title">{title}</h2>
-    {description && <p class="plt-meta plt-media-card__description">{description}</p>}
+    <h2 class="d-card-title theme-headline-sm plt-media-card__title">{title}</h2>
+    {description && <p class="theme-meta plt-media-card__description">{description}</p>}
   </div>
 </a>
