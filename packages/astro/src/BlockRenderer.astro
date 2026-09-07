@@ -13,17 +13,20 @@ const { block } = Astro.props;
 
 {block.type === "hero" && (
   <Hero
-    title={block.title}
-    description={block.description}
-    image={block.image}
-    actions={block.actions}
+    heading={block.title}
+    body={block.description}
+    imageUrl={block.image}
+    primaryLabel={block.actions?.[0]?.label}
+    primaryUrl={block.actions?.[0]?.href}
+    secondaryLabel={block.actions?.[1]?.label}
+    secondaryUrl={block.actions?.[1]?.href}
   />
 )}
 
 {block.type === "promo_strip" && (
   <PromoStrip
-    title={block.title}
-    description={block.description}
+    heading={block.title}
+    body={block.description}
     actionLabel={block.action?.label}
     actionUrl={block.action?.href}
   />
@@ -31,10 +34,10 @@ const { block } = Astro.props;
 
 {block.type === "newsletter" && (
   <Newsletter
-    title={block.title}
-    description={block.description}
-    placeholder={block.placeholder}
-    buttonLabel={block.buttonLabel}
+    heading={block.title}
+    body={block.description}
+    inputPlaceholder={block.placeholder}
+    actionLabel={block.buttonLabel}
   />
 )}
 
