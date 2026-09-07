@@ -4,7 +4,7 @@
   --plt-font-accent: "Space Grotesk", Arial, sans-serif;
 }
 
-.plt-headline-lg {
+.theme-headline-lg {
   font-family: var(--plt-font-display);
   font-size: clamp(2.25rem, 4vw, 3rem);
   line-height: 1;
@@ -13,7 +13,7 @@
   text-transform: uppercase;
 }
 
-.plt-headline-sm {
+.theme-headline-sm {
   font-family: var(--plt-font-display);
   font-size: clamp(1.25rem, 2vw, 1.5rem);
   line-height: 1.1;
@@ -22,7 +22,14 @@
   text-transform: uppercase;
 }
 
-.plt-label-bold {
+.theme-headline-underline {
+  text-decoration-line: underline;
+  text-decoration-color: var(--plt-color-secondary);
+  text-decoration-thickness: var(--plt-section-border-width);
+  text-underline-offset: 0.25rem;
+}
+
+.theme-label-bold {
   font-family: var(--plt-font-accent);
   font-size: 0.875rem;
   font-weight: 700;
@@ -30,21 +37,21 @@
   text-transform: uppercase;
 }
 
-.plt-label-sm {
+.theme-label-sm {
   font-family: var(--plt-font-accent);
   font-size: 0.75rem;
   letter-spacing: 0.025em;
   text-transform: uppercase;
 }
 
-.plt-body-lg {
+.theme-body-lg {
   font-family: var(--plt-font-body);
   font-size: 1.125rem;
   line-height: 1.625;
 }
 
-.plt-meta {
+.theme-meta {
   font-family: var(--plt-font-body);
   font-size: 0.875rem;
-  opacity: 0.6;
+  color: color-mix(in oklab, var(--plt-color-base-content) 60%, transparent);
 }

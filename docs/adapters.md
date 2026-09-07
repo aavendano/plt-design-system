@@ -1,33 +1,38 @@
 # Platform adapters
 
-Adapters connect the framework-agnostic PLT design system to platform conventions without becoming the source of truth for design values.
+Adapters connect the PLT component/design layer to platform conventions without becoming the source of truth for design values.
 
 ## Rule
 
-Canonical values live in `--plt-*` tokens. Adapters may alias or expose them, but must not duplicate colors, typography, geometry, spacing or shadows.
+Canonical values live in `--plt-*` tokens. Adapters may alias or expose them, but must not duplicate colors, typography, geometry, spacing or shadows. daisyUI remains the component foundation in every consuming platform.
 
 ## Shopify
 
-Import:
-
 ```css
+@import "tailwindcss";
 @import "@playlovetoys/design-system";
 @import "@playlovetoys/design-system/shopify";
 ```
 
-The Shopify adapter exposes theme-friendly aliases and section spacing hooks. Runtime ecommerce behavior, Liquid settings, cart state and product state remain outside the core design package.
+The Shopify adapter exposes theme-friendly aliases and section-spacing hooks. Runtime ecommerce behavior, Liquid settings, cart state and product state remain outside the design package.
 
 ## Astro
 
-Import:
-
 ```css
+@import "tailwindcss";
 @import "@playlovetoys/design-system";
 @import "@playlovetoys/design-system/astro";
 ```
 
-Astro requires no runtime adapter for the primitive layer. The adapter only provides page-shell conveniences and aliases for layout composition.
+The Astro adapter only provides page-shell conveniences and aliases for layout composition. Astro renderers still emit the same prefixed daisyUI classes as Liquid renderers.
 
-## Verification
+## Catalog verification
 
-`demo/index.html` is the zero-runtime catalog. A primitive should render there without Shopify, Astro, React, Liquid or JavaScript.
+`demo/index.html` is a no-JavaScript visual catalog, but its stylesheet must be compiled because Tailwind CSS and daisyUI use build-time directives.
+
+```bash
+npm install
+npm run build:demo
+```
+
+For the complete validation suite run `npm run check`.

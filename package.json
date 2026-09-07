@@ -1,9 +1,14 @@
 {
   "name": "@playlovetoys/design-system",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
-  "description": "Portable visual foundations, primitives, composite patterns and cross-platform renderers for Play, love & Toys.",
+  "description": "PLT component design layer built on daisyUI 5 and Tailwind CSS 4.",
   "type": "module",
+  "scripts": {
+    "build:demo": "tailwindcss -i ./demo/demo.css -o ./demo/dist.css --minify",
+    "check:conformance": "node scripts/check-daisyui-conformance.mjs",
+    "check": "npm run check:conformance && npm run build:demo"
+  },
   "files": [
     "src",
     "adapters",
@@ -29,11 +34,12 @@
     "./renderers/astro/*": "./renderers/astro/*"
   },
   "peerDependencies": {
-    "daisyui": ">=5",
-    "tailwindcss": ">=4"
+    "daisyui": ">=5.7.8 <6",
+    "tailwindcss": ">=4 <5"
   },
-  "peerDependenciesMeta": {
-    "daisyui": { "optional": true },
-    "tailwindcss": { "optional": true }
+  "devDependencies": {
+    "@tailwindcss/cli": ">=4 <5",
+    "daisyui": ">=5.7.8 <6",
+    "tailwindcss": ">=4 <5"
   }
 }

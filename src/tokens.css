@@ -20,12 +20,6 @@
   --plt-color-error: oklch(89% 0.058 10.001);
   --plt-color-error-content: oklch(27% 0.105 12.094);
 
-  --plt-radius-selector: 0.25rem;
-  --plt-radius-field: 0.25rem;
-  --plt-radius-box: 0.25rem;
-  --plt-border-width: 1.5px;
-  --plt-section-border-width: 3px;
-  --plt-shadow-offset: 2px;
   --plt-section-gap-min: 3rem;
   --plt-spacing-scale: 1;
   --plt-page-width: 110rem;

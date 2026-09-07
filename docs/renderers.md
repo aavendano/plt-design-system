@@ -1,6 +1,6 @@
 # Component renderers
 
-The renderer layer maps normalized component contracts to platform syntax while preserving the same PLT anatomy and CSS classes.
+The renderer layer maps normalized component contracts to platform syntax while preserving the same daisyUI anatomy and PLT visual extensions.
 
 ## Included
 
@@ -16,26 +16,25 @@ Each component has a Liquid renderer under `renderers/liquid/` and an Astro rend
 
 Renderers accept normalized values. They do not own Shopify product objects, money formatting, variants, swatches, quick-add, cart state, translations, CMS lookups or Astro content collection resolution.
 
-A Shopify integration should therefore normalize first, then render:
-
 ```text
-Shopify product
-  -> Shopify adapter / presenter
-  -> ProductCard contract
-  -> renderers/liquid/product-card.liquid
-  -> shared PLT pattern CSS
+Shopify product -> presenter -> ProductCard contract -> Liquid renderer
+API/content     -> presenter -> ProductCard contract -> Astro renderer
 ```
 
-Astro follows the same shape:
+## daisyUI anatomy
 
-```text
-API / content entry
-  -> Astro presenter
-  -> ProductCard props
-  -> renderers/astro/ProductCard.astro
-  -> shared PLT pattern CSS
-```
+Liquid and Astro may differ syntactically, but equivalent renderers must emit the same daisyUI parts:
 
-## Design invariant
+- ProductCard: `d-card`, `d-card-body`, `d-card-title`, `d-card-actions`, `d-badge`, `d-btn`
+- CollectionCard: `d-card`, `d-card-body`, `d-card-title`
+- Hero: `d-hero`, `d-hero-content`, `d-hero-overlay`, `d-btn`; eyebrow uses `d-badge`
+- Newsletter: `d-card`, `d-card-body`, `d-card-title`, `d-input`, `d-btn`
+- PromoStrip: PLT-specific composition containing `d-btn` when an action exists
 
-Liquid and Astro may differ syntactically, but their semantic anatomy and `plt-*` class names must remain equivalent. Visual changes belong in `src/patterns.css`, not duplicated in each renderer.
+PLT `theme-*` classes apply brand treatment. `plt-*` classes may extend composition where daisyUI has no corresponding component part, but may not replace a daisyUI component class.
+
+## Verification
+
+`npm run check:conformance` verifies renderer anatomy and rejects the old parallel primitive class families. `npm run check` additionally compiles the catalog with Tailwind CSS 4 and daisyUI 5.
+
+See `docs/daisyui-conformance.md` for the complete mapping.
