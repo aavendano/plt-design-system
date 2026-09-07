@@ -1,17 +1,17 @@
-{% comment %} PLT Hero renderer. Normalized inputs only. {% endcomment %}
+{% comment %} PLT Hero renderer. Normalized text inputs are escaped. {% endcomment %}
 <section class="d-hero plt-hero{% if image_url != blank %} plt-hero--media{% endif %}">
   {% if image_url != blank %}
-    <div class="plt-hero__media"><img src="{{ image_url }}" alt="{{ image_alt | default: heading | escape }}"></div>
+    <div class="plt-hero__media"><img src="{{ image_url | escape }}" alt="{{ image_alt | default: heading | escape }}"></div>
     <div class="d-hero-overlay plt-hero__overlay" aria-hidden="true"></div>
   {% endif %}
   <div class="d-hero-content plt-hero__content">
     <div class="plt-hero__copy">
-      {% if eyebrow != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ eyebrow }}</span>{% endif %}
-      <h1 class="theme-headline-lg">{{ heading }}</h1>
-      {% if body != blank %}<div class="theme-body-lg">{{ body }}</div>{% endif %}
+      {% if eyebrow != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ eyebrow | escape }}</span>{% endif %}
+      <h1 class="theme-headline-lg">{{ heading | escape }}</h1>
+      {% if body != blank %}<div class="theme-body-lg">{{ body | escape }}</div>{% endif %}
       <div class="plt-hero__actions">
-        {% if primary_label != blank and primary_url != blank %}<a class="d-btn d-btn-primary d-btn-lg theme-bordered theme-elevated theme-label-bold" href="{{ primary_url }}">{{ primary_label }}</a>{% endif %}
-        {% if secondary_label != blank and secondary_url != blank %}<a class="d-btn d-btn-outline d-btn-lg theme-bordered theme-elevated theme-label-bold" href="{{ secondary_url }}">{{ secondary_label }}</a>{% endif %}
+        {% if primary_label != blank and primary_url != blank %}<a class="d-btn d-btn-primary d-btn-lg theme-bordered theme-elevated theme-label-bold" href="{{ primary_url | escape }}">{{ primary_label | escape }}</a>{% endif %}
+        {% if secondary_label != blank and secondary_url != blank %}<a class="d-btn d-btn-outline d-btn-lg theme-bordered theme-elevated theme-label-bold" href="{{ secondary_url | escape }}">{{ secondary_label | escape }}</a>{% endif %}
       </div>
     </div>
   </div>
