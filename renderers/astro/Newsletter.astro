@@ -20,13 +20,13 @@ const {
 ---
 
 <section class="plt-newsletter">
-  <div class="plt-card plt-newsletter__card">
-    <div class="plt-newsletter__content">
+  <div class="d-card bg-base-100 theme-bordered theme-elevated plt-newsletter__card">
+    <div class="d-card-body plt-newsletter__content">
       <h2 class="plt-headline-lg">{heading}</h2>
       {body && <p class="plt-body-lg">{body}</p>}
       <form class="plt-newsletter__form" action={formAction} method={method}>
-        <input class="plt-field" type="email" name={inputName} placeholder={inputPlaceholder} required />
-        <button class="plt-button plt-button--primary" type="submit">{actionLabel}</button>
+        <input class="d-input d-input-bordered" type="email" name={inputName} placeholder={inputPlaceholder} required />
+        <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{actionLabel}</button>
       </form>
     </div>
   </div>
