@@ -6,7 +6,7 @@
       {% if body != blank %}<p class="theme-body-lg">{{ body }}</p>{% endif %}
       <form class="plt-newsletter__form" action="{{ form_action | default: '#' }}" method="{{ method | default: 'post' }}">
         <input
-          class="d-input d-input-bordered"
+          class="d-input"
           type="email"
           name="{{ input_name | default: 'email' }}"
           placeholder="{{ input_placeholder | default: 'Email address' }}"
