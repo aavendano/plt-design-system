@@ -1,0 +1,4 @@
+@import "tailwindcss";
+@source "./index.html";
+@source "../renderers/**/*.{astro,liquid}";
+@import "../src/index.css";
