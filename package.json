@@ -5,7 +5,9 @@
   "description": "PLT component design layer built on daisyUI 5 and Tailwind CSS 4.",
   "type": "module",
   "scripts": {
-    "check:conformance": "node scripts/check-daisyui-conformance.mjs"
+    "build:demo": "tailwindcss -i ./demo/demo.css -o ./demo/dist.css --minify",
+    "check:conformance": "node scripts/check-daisyui-conformance.mjs",
+    "check": "npm run check:conformance && npm run build:demo"
   },
   "files": [
     "src",
@@ -32,6 +34,11 @@
     "./renderers/astro/*": "./renderers/astro/*"
   },
   "peerDependencies": {
+    "daisyui": ">=5 <6",
+    "tailwindcss": ">=4 <5"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": ">=4 <5",
     "daisyui": ">=5 <6",
     "tailwindcss": ">=4 <5"
   }
