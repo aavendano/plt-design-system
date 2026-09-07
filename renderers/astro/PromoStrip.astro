@@ -15,6 +15,6 @@ const { heading, body, actionLabel, actionUrl, tone = "primary" } = Astro.props;
       <h2 class="plt-headline-sm">{heading}</h2>
       {body && <p class="plt-body-lg">{body}</p>}
     </div>
-    {actionLabel && actionUrl && <a class="plt-button plt-button--secondary" href={actionUrl}>{actionLabel}</a>}
+    {actionLabel && actionUrl && <a class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold" href={actionUrl}>{actionLabel}</a>}
   </div>
 </section>
