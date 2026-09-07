@@ -1,75 +1,46 @@
 /* PLT visual extensions for daisyUI 5.
- * Component behavior and base anatomy belong to daisyUI (`d-*`).
- * These classes add only PLT-specific visual identity and layout helpers.
+ * daisyUI (`d-*`) owns component anatomy and behavior.
+ * These utilities reproduce the original PLT theme treatment only.
  */
 
-.theme-bordered {
-  border-width: var(--plt-border-width);
-  border-style: solid;
-  border-color: var(--plt-color-base-content);
-}
-
 .theme-elevated {
-  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 var(--plt-color-base-content);
+  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 0 var(--plt-color-base-content);
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
 .theme-elevated:hover {
   transform: translateY(-0.125rem);
-  box-shadow: calc(var(--plt-shadow-offset) * 2.5) calc(var(--plt-shadow-offset) * 2.5) 0 var(--plt-color-base-content);
+  box-shadow: calc(var(--plt-shadow-offset) * 2.5) calc(var(--plt-shadow-offset) * 2.5) 0 0 var(--plt-color-base-content);
 }
 
-.theme-label-bold {
-  font-family: var(--plt-font-accent);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.theme-elevated:active {
+  transform: translateY(0.125rem);
+  box-shadow: none;
 }
 
-.theme-label-sm {
-  font-family: var(--plt-font-accent);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.theme-bordered {
+  border-width: var(--plt-section-border-width);
+  border-style: solid;
+  border-color: var(--plt-color-base-content);
+}
+
+.theme-border-y {
+  border-top-width: var(--plt-section-border-width);
+  border-bottom-width: var(--plt-section-border-width);
+  border-left-width: 0;
+  border-right-width: 0;
+  border-style: solid;
+  border-color: var(--plt-color-base-content);
 }
 
 .theme-divider {
-  border-color: var(--plt-color-base-content);
-  border-width: var(--plt-section-border-width);
+  border: 0;
+  border-top-width: var(--plt-section-border-width);
+  border-top-style: solid;
+  border-top-color: var(--plt-color-base-content);
+  margin-block: 1.5rem;
 }
 
 .theme-sidebar-shadow {
-  box-shadow: calc(var(--plt-shadow-offset) * -1) 0 0 var(--plt-color-base-content);
-}
-
-.plt-container {
-  width: min(calc(100% - (var(--plt-page-margin) * 2)), var(--plt-page-width));
-  margin-inline: auto;
-}
-
-.plt-section {
-  padding-block: clamp(3rem, 6vw, 5rem);
-}
-
-/* Navigation links are a PLT composition detail rather than a daisyUI primitive. */
-.plt-nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding-block: 0.375rem;
-  color: var(--plt-color-base-content);
-  font-family: var(--plt-font-accent);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  text-transform: uppercase;
-  border-bottom: var(--plt-section-border-width) solid transparent;
-}
-
-.plt-nav-link:hover,
-.plt-nav-link[aria-current="page"],
-.plt-nav-link[aria-selected="true"] {
-  border-bottom-color: var(--plt-color-secondary);
+  box-shadow: calc(var(--plt-shadow-offset) * 2.5) 0 0 0 var(--plt-color-base-content);
 }
