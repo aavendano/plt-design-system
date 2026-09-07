@@ -3,7 +3,7 @@ import { extname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const scanRoots = ["src", "renderers", "demo"];
+const scanRoots = ["src", "adapters", "renderers", "demo"];
 const textExtensions = new Set([".css", ".astro", ".liquid", ".html"]);
 
 const forbiddenClasses = [
