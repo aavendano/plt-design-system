@@ -1,41 +1,63 @@
 # PLT Design System
 
-Portable visual foundations, primitives, composite patterns and cross-platform renderers for Play, love & Toys, extracted from `aavendano/plt-frontend`.
+Component design layer for Play, love & Toys, extracted from `aavendano/plt-frontend` and built explicitly on daisyUI 5 + Tailwind CSS 4.
 
 ## Scope
 
-The package contains framework-agnostic `--plt-*` tokens, typography, geometry, utilities, 10 semantic primitives, extracted composite visual patterns, platform adapters, normalized component contracts, Liquid/Astro renderers and a static verification catalog.
+This repository owns only the visual/component layer:
 
-Runtime Shopify behavior remains outside the visual core.
+- PLT design tokens (`--plt-*`)
+- typography and geometry
+- daisyUI `brand` theme
+- PLT visual extensions such as `theme-bordered`, `theme-elevated` and label typography
+- PLT-specific composite patterns
+- normalized Liquid/Astro renderers for those visual components
 
-## Package entry points
+It does not own editorial schemas, CMS logic, Shopify business behavior, routing, cart state, or application lifecycle.
+
+## daisyUI-first invariant
+
+PLT does not recreate daisyUI primitives. Every component with a daisyUI equivalent must use the official prefixed class as its base.
+
+```html
+<button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold">Shop now</button>
+
+<article class="d-card bg-base-100 theme-bordered theme-elevated">
+  <div class="d-card-body">...</div>
+</article>
+
+<span class="d-badge d-badge-secondary theme-label-bold">New</span>
+<input class="d-input d-input-bordered" type="email">
+```
+
+The project uses the same daisyUI prefix as `plt-frontend`: `d-`.
+
+Parallel primitive APIs such as `plt-button`, `plt-card`, `plt-badge`, `plt-input`, `plt-select`, `plt-textarea`, and `plt-alert` are prohibited.
+
+## Installation / import
+
+The root import includes the PLT tokens, daisyUI configuration/theme and PLT visual layers:
 
 ```css
+@import "tailwindcss";
 @import "@playlovetoys/design-system";
 ```
 
-Individual CSS layers:
+The design-system daisyUI configuration sets:
 
 ```css
-@import "@playlovetoys/design-system/tokens";
-@import "@playlovetoys/design-system/typography";
-@import "@playlovetoys/design-system/geometry";
-@import "@playlovetoys/design-system/utilities";
-@import "@playlovetoys/design-system/primitives";
-@import "@playlovetoys/design-system/patterns";
+@plugin "daisyui" {
+  themes: brand --default;
+  logs: false;
+  prefix: "d-";
+}
 ```
+
+`daisyui >=5 <6` and `tailwindcss >=4 <5` are required peer dependencies.
 
 ## Component contracts and renderers
 
-The first shared component contracts are:
-
-- ProductCard
-- CollectionCard
-- Hero
-- PromoStrip
-- Newsletter
-
-Canonical inputs are documented in `contracts/components.md`.
+Shared visual contracts currently cover ProductCard, CollectionCard, Hero, PromoStrip and Newsletter. Canonical inputs are documented in `contracts/components.md`.
 
 Equivalent platform renderers live in:
 
@@ -44,68 +66,27 @@ renderers/liquid/
 renderers/astro/
 ```
 
-Liquid and Astro use the same `plt-*` anatomy and pattern CSS. Platform-specific code normalizes its data before invoking a renderer.
+Both renderer sets emit the same daisyUI component anatomy (`d-card`, `d-btn`, `d-badge`, `d-input`, `d-hero`) plus the same PLT `theme-*` and composition classes.
 
-Example flow:
-
-```text
-Shopify product -> Shopify presenter -> ProductCard contract -> Liquid renderer
-API/content     -> Astro presenter   -> ProductCard contract -> Astro renderer
-                                                |
-                                         shared patterns.css
-```
-
-Excluded from the renderer contract: Shopify product objects, variant selection, swatches, quick-add, cart state, money formatting, translations, CMS lookup and application lifecycle.
-
-See `docs/renderers.md`.
-
-## Extracted theme patterns
-
-The reusable visual structures identified in the Shopify theme are Section Header, Product Card, Collection Card, Editorial / Blog Card, Hero, Split CTA, Promo Strip, Newsletter and Breadcrumbs. They live in `src/patterns.css`.
-
-## Platform adapters
-
-### Shopify
-
-```css
-@import "@playlovetoys/design-system";
-@import "@playlovetoys/design-system/shopify";
-```
-
-### Astro
-
-```css
-@import "@playlovetoys/design-system";
-@import "@playlovetoys/design-system/astro";
-```
-
-### Tailwind 4 + daisyUI 5
-
-```css
-@import "tailwindcss";
-@plugin "daisyui" {
-  themes: brand --default;
-  prefix: "d-";
-}
-@import "@playlovetoys/design-system";
-@import "@playlovetoys/design-system/daisyui";
-```
-
-Tailwind and daisyUI are optional peer dependencies.
-
-## Architecture
-
-`--plt-*` tokens are authoritative.
+Platform-specific code must normalize data before invoking a renderer.
 
 ```text
-foundations
-  -> primitives
-  -> patterns
-  -> contracts
-  -> renderers
-       +-- Liquid
-       +-- Astro
-  -> platform presenters/behavior
+Shopify product -> presenter -> ProductCard contract -> Liquid renderer
+API/content     -> presenter -> ProductCard contract -> Astro renderer
 ```
+
+## Design layering
+
+```text
+daisyUI 5 component anatomy
+        +
+PLT brand theme / tokens
+        +
+PLT theme-* extensions
+        +
+PLT-specific compositions
+```
+
+`--plt-*` values remain the source of truth for PLT brand decisions. daisyUI consumes those values through the `brand` theme.
 
 See `DESIGN.md`, `docs/primitives.md`, `docs/patterns.md`, `docs/renderers.md`, and `docs/adapters.md`.
