@@ -30,12 +30,14 @@ Every component with a daisyUI equivalent must use the official prefixed class a
 </article>
 
 <span class="d-badge d-badge-secondary theme-label-bold">New</span>
-<input class="d-input d-input-bordered" type="email">
+<input class="d-input" type="email">
 ```
 
 The project uses the same daisyUI prefix as `plt-frontend`: `d-`.
 
 Parallel primitive APIs such as `plt-button`, `plt-card`, `plt-badge`, `plt-input`, `plt-select`, `plt-textarea`, `plt-alert`, `plt-divider` and `plt-nav-link` are prohibited. Brand typography and treatment use `theme-*`; `plt-*` is reserved for compositions that daisyUI does not provide.
+
+Obsolete daisyUI modifiers removed in current v5 releases, including `d-input-bordered`, `d-select-bordered`, `d-textarea-bordered` and `d-card-bordered`, are also prohibited.
 
 ## Installation / import
 
@@ -44,7 +46,7 @@ Parallel primitive APIs such as `plt-button`, `plt-card`, `plt-badge`, `plt-inpu
 @import "@playlovetoys/design-system";
 ```
 
-The package configures daisyUI with the PLT `brand` theme and `d-` prefix. `daisyui >=5 <6` and `tailwindcss >=4 <5` are required peer dependencies.
+The package configures daisyUI with the PLT `brand` theme and `d-` prefix. The supported daisyUI range starts at `5.7.8` because later 5.7 releases include prefix-related fixes used by this package; Tailwind CSS 4 is required.
 
 ## Component contracts and renderers
 
@@ -87,6 +89,6 @@ npm install
 npm run check
 ```
 
-`check:conformance` rejects parallel PLT primitives and verifies the required daisyUI anatomy of every renderer. `build:demo` compiles the Tailwind/daisyUI catalog and catches invalid plugin/theme integration. GitHub Actions runs the same check on pull requests and pushes to `main`.
+`check:conformance` rejects parallel PLT primitives, obsolete daisyUI modifiers and incomplete renderer anatomy. `build:demo` compiles the Tailwind/daisyUI catalog and catches invalid plugin/theme integration. GitHub Actions runs the same check on pull requests and pushes to `main`.
 
 See `DESIGN.md`, `docs/daisyui-conformance.md`, `docs/primitives.md`, `docs/patterns.md`, `docs/renderers.md`, and `docs/adapters.md`.
