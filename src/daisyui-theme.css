@@ -1,3 +1,9 @@
+@plugin "daisyui" {
+  themes: brand --default;
+  logs: false;
+  prefix: "d-";
+}
+
 @plugin "daisyui/theme" {
   name: "brand";
   default: true;
@@ -29,8 +35,6 @@
   --radius-field: var(--plt-radius-field);
   --radius-box: var(--plt-radius-box);
   --border: var(--plt-border-width);
-  --shadow-offset: var(--plt-shadow-offset);
-  --shadow-color: var(--plt-color-base-content);
   --depth: 1;
   --noise: 1;
 }
