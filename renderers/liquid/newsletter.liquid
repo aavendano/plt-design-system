@@ -2,17 +2,17 @@
 <section class="plt-newsletter">
   <div class="d-card bg-base-100 theme-bordered theme-elevated plt-newsletter__card">
     <div class="d-card-body plt-newsletter__content">
-      <h2 class="d-card-title theme-headline-lg">{{ heading }}</h2>
-      {% if body != blank %}<p class="theme-body-lg">{{ body }}</p>{% endif %}
-      <form class="plt-newsletter__form" action="{{ form_action | default: '#' }}" method="{{ method | default: 'post' }}">
+      <h2 class="d-card-title theme-headline-lg">{{ heading | escape }}</h2>
+      {% if body != blank %}<p class="theme-body-lg">{{ body | escape }}</p>{% endif %}
+      <form class="plt-newsletter__form" action="{{ form_action | default: '#' | escape }}" method="{{ method | default: 'post' | escape }}">
         <input
           class="d-input"
           type="email"
-          name="{{ input_name | default: 'email' }}"
-          placeholder="{{ input_placeholder | default: 'Email address' }}"
+          name="{{ input_name | default: 'email' | escape }}"
+          placeholder="{{ input_placeholder | default: 'Email address' | escape }}"
           required
         >
-        <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{{ action_label | default: 'Subscribe' }}</button>
+        <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{{ action_label | default: 'Subscribe' | escape }}</button>
       </form>
     </div>
   </div>
