@@ -12,15 +12,15 @@
 
   <div class="d-card-body plt-media-card__body">
     {% if badge != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ badge }}</span>{% endif %}
-    <h3 class="plt-headline-sm plt-media-card__title"><a href="{{ url }}">{{ title }}</a></h3>
-    {% if vendor != blank %}<p class="plt-meta plt-media-card__meta">{{ vendor }}</p>{% endif %}
+    <h3 class="d-card-title theme-headline-sm plt-media-card__title"><a href="{{ url }}">{{ title }}</a></h3>
+    {% if vendor != blank %}<p class="theme-meta plt-media-card__meta">{{ vendor }}</p>{% endif %}
 
-    <div class="plt-media-card__actions">
+    <div class="d-card-actions plt-media-card__actions">
       <span class="plt-product-card__price">
         {{ price }}
         {% if compare_at_price != blank %}<span class="plt-product-card__compare-price">{{ compare_at_price }}</span>{% endif %}
       </span>
-      {% if action_label != blank %}<a class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold" href="{{ action_url | default: url }}">{{ action_label }}</a>{% endif %}
+      {% if action_label != blank %}<a class="d-btn d-btn-secondary d-btn-sm theme-bordered theme-elevated theme-label-bold" href="{{ action_url | default: url }}">{{ action_label }}</a>{% endif %}
     </div>
   </div>
 </article>
