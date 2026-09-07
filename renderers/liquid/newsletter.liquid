@@ -1,18 +1,18 @@
 {% comment %} PLT Newsletter renderer. Normalized inputs only. {% endcomment %}
 <section class="plt-newsletter">
-  <div class="plt-card plt-newsletter__card">
-    <div class="plt-newsletter__content">
+  <div class="d-card bg-base-100 theme-bordered theme-elevated plt-newsletter__card">
+    <div class="d-card-body plt-newsletter__content">
       <h2 class="plt-headline-lg">{{ heading }}</h2>
       {% if body != blank %}<p class="plt-body-lg">{{ body }}</p>{% endif %}
       <form class="plt-newsletter__form" action="{{ form_action | default: '#' }}" method="{{ method | default: 'post' }}">
         <input
-          class="plt-field"
+          class="d-input d-input-bordered"
           type="email"
           name="{{ input_name | default: 'email' }}"
           placeholder="{{ input_placeholder | default: 'Email address' }}"
           required
         >
-        <button class="plt-button plt-button--primary" type="submit">{{ action_label | default: 'Subscribe' }}</button>
+        <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{{ action_label | default: 'Subscribe' }}</button>
       </form>
     </div>
   </div>
