@@ -22,6 +22,7 @@
               "image": { "type": "string" },
               "actions": {
                 "type": "array",
+                "maxItems": 2,
                 "items": {
                   "type": "object",
                   "required": ["label", "href"],
@@ -51,6 +52,37 @@
               "type": { "const": "product_grid" },
               "title": { "type": "string" },
               "products": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["type", "title"],
+            "properties": {
+              "type": { "const": "promo_strip" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "action": {
+                "type": "object",
+                "required": ["label", "href"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "href": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["type", "title"],
+            "properties": {
+              "type": { "const": "newsletter" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "placeholder": { "type": "string" },
+              "buttonLabel": { "type": "string" }
             },
             "additionalProperties": false
           }
