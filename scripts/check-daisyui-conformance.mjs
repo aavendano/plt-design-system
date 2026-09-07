@@ -6,7 +6,8 @@ const root = fileURLToPath(new URL("..", import.meta.url));
 const scanRoots = ["src", "renderers", "demo"];
 const textExtensions = new Set([".css", ".astro", ".liquid", ".html"]);
 
-const forbiddenComponentClasses = [
+const forbiddenClasses = [
+  // Parallel PLT component APIs
   "plt-button",
   "plt-card",
   "plt-badge",
@@ -24,6 +25,11 @@ const forbiddenComponentClasses = [
   "plt-bordered",
   "plt-elevated",
   "plt-sidebar-shadow",
+  // Removed/obsolete daisyUI v5 modifiers
+  "d-input-bordered",
+  "d-select-bordered",
+  "d-textarea-bordered",
+  "d-card-bordered",
 ];
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -44,11 +50,11 @@ for (const scanRoot of scanRoots) {
   const files = await walk(join(root, scanRoot));
   for (const file of files) {
     const text = await readFile(file, "utf8");
-    for (const className of forbiddenComponentClasses) {
+    for (const className of forbiddenClasses) {
       const escaped = escapeRegExp(className);
       const tokenUse = new RegExp(`(?:\\.${escaped}(?![\\w-])|["'\\s]${escaped}(?=["'\\s]))`);
       if (tokenUse.test(text)) {
-        errors.push(`${relative(root, file)} uses forbidden parallel class ${className}`);
+        errors.push(`${relative(root, file)} uses forbidden or obsolete class ${className}`);
       }
     }
   }
