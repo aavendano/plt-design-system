@@ -26,6 +26,8 @@ const forbiddenComponentClasses = [
   "plt-sidebar-shadow",
 ];
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   const files = [];
@@ -43,8 +45,9 @@ for (const scanRoot of scanRoots) {
   for (const file of files) {
     const text = await readFile(file, "utf8");
     for (const className of forbiddenComponentClasses) {
-      const classUse = new RegExp(`(?:class(?:Name|:list)?=[^\\n]*|\\.${className}\\b)[^\\n]*\\b${className}\\b`);
-      if (classUse.test(text)) {
+      const escaped = escapeRegExp(className);
+      const tokenUse = new RegExp(`(?:\\.${escaped}(?![\\w-])|["'\\s]${escaped}(?=["'\\s]))`);
+      if (tokenUse.test(text)) {
         errors.push(`${relative(root, file)} uses forbidden parallel class ${className}`);
       }
     }
@@ -62,6 +65,7 @@ const required = {
   "renderers/liquid/newsletter.liquid": ["d-card", "d-card-body", "d-card-title", "d-input", "d-btn"],
   "renderers/astro/PromoStrip.astro": ["d-btn"],
   "renderers/liquid/promo-strip.liquid": ["d-btn"],
+  "demo/index.html": ["d-btn", "d-card", "d-card-body", "d-card-title", "d-card-actions", "d-badge", "d-input", "d-select", "d-textarea", "d-divider", "d-alert", "d-link", "d-tabs", "d-tab"],
 };
 
 for (const [path, classes] of Object.entries(required)) {
