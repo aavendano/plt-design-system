@@ -46,11 +46,15 @@ Use daisyUI card parts rather than recreating card internals.
 
 ## Forms
 
+Current daisyUI 5 inputs, selects and textareas have borders by default; the old `*-bordered` modifiers are not used.
+
 ```html
-<input class="d-input d-input-bordered" type="email">
-<select class="d-select d-select-bordered"><option>Canada</option></select>
-<textarea class="d-textarea d-textarea-bordered"></textarea>
+<input class="d-input" type="email">
+<select class="d-select"><option>Canada</option></select>
+<textarea class="d-textarea"></textarea>
 ```
+
+Use the corresponding `*-ghost` modifier only when the border should be removed.
 
 ## Divider
 
@@ -58,7 +62,7 @@ Use daisyUI card parts rather than recreating card internals.
 <div class="d-divider"></div>
 ```
 
-`theme-divider` remains available only as the legacy PLT thick-line visual utility where a semantic daisyUI divider is not the desired composition.
+`theme-divider` remains available only as the PLT thick-line visual utility where a semantic daisyUI divider is not the desired composition.
 
 ## Alert
 
