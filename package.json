@@ -4,6 +4,9 @@
   "private": true,
   "description": "PLT component design layer built on daisyUI 5 and Tailwind CSS 4.",
   "type": "module",
+  "scripts": {
+    "check:conformance": "node scripts/check-daisyui-conformance.mjs"
+  },
   "files": [
     "src",
     "adapters",
