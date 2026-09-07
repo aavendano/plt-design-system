@@ -16,34 +16,25 @@ Each component has a Liquid renderer under `renderers/liquid/` and an Astro rend
 
 Renderers accept normalized values. They do not own Shopify product objects, money formatting, variants, swatches, quick-add, cart state, translations, CMS lookups or Astro content collection resolution.
 
-A Shopify integration should normalize first, then render:
-
 ```text
-Shopify product
-  -> Shopify adapter / presenter
-  -> ProductCard contract
-  -> renderers/liquid/product-card.liquid
-  -> daisyUI component classes + PLT pattern CSS
+Shopify product -> presenter -> ProductCard contract -> Liquid renderer
+API/content     -> presenter -> ProductCard contract -> Astro renderer
 ```
 
-Astro follows the same shape:
+## daisyUI anatomy
 
-```text
-API / content entry
-  -> Astro presenter
-  -> ProductCard props
-  -> renderers/astro/ProductCard.astro
-  -> daisyUI component classes + PLT pattern CSS
-```
+Liquid and Astro may differ syntactically, but equivalent renderers must emit the same daisyUI parts:
 
-## Design invariant
+- ProductCard: `d-card`, `d-card-body`, `d-card-title`, `d-card-actions`, `d-badge`, `d-btn`
+- CollectionCard: `d-card`, `d-card-body`, `d-card-title`
+- Hero: `d-hero`, `d-hero-content`, `d-hero-overlay`, `d-btn`; eyebrow uses `d-badge`
+- Newsletter: `d-card`, `d-card-body`, `d-card-title`, `d-input`, `d-btn`
+- PromoStrip: PLT-specific composition containing `d-btn` when an action exists
 
-Liquid and Astro may differ syntactically, but they must emit equivalent component anatomy:
+PLT `theme-*` classes apply brand treatment. `plt-*` classes may extend composition where daisyUI has no corresponding component part, but may not replace a daisyUI component class.
 
-- `d-card` / `d-card-body` for cards
-- `d-btn` plus daisyUI variants for buttons
-- `d-badge` plus daisyUI variants for badges
-- `d-input`, `d-select`, `d-textarea` for fields
-- `d-hero` / `d-hero-content` for heroes
+## Verification
 
-PLT `theme-*` and composition classes may extend this anatomy, but may not replace the daisyUI component class. Visual changes belong in the shared design-system CSS, not duplicated independently in Liquid and Astro.
+`npm run check:conformance` verifies renderer anatomy and rejects the old parallel primitive class families. `npm run check` additionally compiles the catalog with Tailwind CSS 4 and daisyUI 5.
+
+See `docs/daisyui-conformance.md` for the complete mapping.
