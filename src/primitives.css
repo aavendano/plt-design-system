@@ -1,149 +1,46 @@
-/* Universal PLT primitives. Framework-agnostic and progressively enhanced. */
+/* PLT visual extensions for daisyUI 5.
+ * Component behavior and base anatomy belong to daisyUI (`d-*`).
+ * These classes add only PLT-specific visual identity and layout helpers.
+ */
 
-.plt-button {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  border: var(--plt-border-width) solid var(--plt-color-base-content);
-  border-radius: var(--plt-radius-field);
-  background: var(--plt-color-base-100);
-  color: var(--plt-color-base-content);
-  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 var(--plt-color-base-content);
-  font-family: var(--plt-font-accent);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  text-decoration: none;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease;
+.theme-bordered {
+  border-width: var(--plt-border-width);
+  border-style: solid;
+  border-color: var(--plt-color-base-content);
 }
 
-.plt-button:hover:not(:disabled) {
+.theme-elevated {
+  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 var(--plt-color-base-content);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.theme-elevated:hover {
   transform: translateY(-0.125rem);
   box-shadow: calc(var(--plt-shadow-offset) * 2.5) calc(var(--plt-shadow-offset) * 2.5) 0 var(--plt-color-base-content);
 }
 
-.plt-button:active:not(:disabled) {
-  transform: translateY(0.125rem);
-  box-shadow: none;
+.theme-label-bold {
+  font-family: var(--plt-font-accent);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.plt-button:focus-visible,
-.plt-field:focus-visible,
-.plt-nav-link:focus-visible {
-  outline: 2px solid var(--plt-color-primary);
-  outline-offset: 3px;
-}
-
-.plt-button:disabled,
-.plt-field:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.plt-button--primary {
-  background: var(--plt-color-primary);
-  color: var(--plt-color-primary-content);
-}
-
-.plt-button--secondary {
-  background: var(--plt-color-secondary);
-  color: var(--plt-color-secondary-content);
-}
-
-.plt-button--accent {
-  background: var(--plt-color-accent);
-  color: var(--plt-color-accent-content);
-}
-
-.plt-button--ghost {
-  box-shadow: none;
-  background: transparent;
-}
-
-.plt-surface,
-.plt-card {
-  border: var(--plt-section-border-width) solid var(--plt-color-base-content);
-  border-radius: var(--plt-radius-box);
-  background: var(--plt-color-base-100);
-  color: var(--plt-color-base-content);
-  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 var(--plt-color-base-content);
-}
-
-.plt-card {
-  overflow: clip;
-}
-
-.plt-card__body {
-  padding: 1.25rem;
-}
-
-.plt-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.5rem;
-  padding: 0.25rem 0.5rem;
-  border: var(--plt-border-width) solid var(--plt-color-base-content);
-  border-radius: var(--plt-radius-selector);
-  background: var(--plt-color-secondary);
-  color: var(--plt-color-secondary-content);
+.theme-label-sm {
   font-family: var(--plt-font-accent);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  line-height: 1;
   text-transform: uppercase;
 }
 
-.plt-field {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem 0.75rem;
-  border: var(--plt-border-width) solid var(--plt-color-base-content);
-  border-radius: var(--plt-radius-field);
-  background: var(--plt-color-base-100);
-  color: var(--plt-color-base-content);
-  font: inherit;
+.theme-divider {
+  border-color: var(--plt-color-base-content);
+  border-width: var(--plt-section-border-width);
 }
 
-textarea.plt-field {
-  min-height: 7rem;
-  resize: vertical;
-}
-
-select.plt-field {
-  cursor: pointer;
-}
-
-.plt-field::placeholder {
-  color: color-mix(in oklab, var(--plt-color-base-content) 55%, transparent);
-}
-
-.plt-field-label {
-  display: grid;
-  gap: 0.375rem;
-  font-family: var(--plt-font-accent);
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-
-.plt-field-hint {
-  color: color-mix(in oklab, var(--plt-color-base-content) 65%, transparent);
-  font-family: var(--plt-font-body);
-  font-size: 0.8125rem;
-  font-weight: 400;
-}
-
-.plt-divider {
-  width: 100%;
-  margin-block: 1.5rem;
-  border: 0;
-  border-top: var(--plt-section-border-width) solid var(--plt-color-base-content);
+.theme-sidebar-shadow {
+  box-shadow: calc(var(--plt-shadow-offset) * -1) 0 0 var(--plt-color-base-content);
 }
 
 .plt-container {
@@ -155,32 +52,7 @@ select.plt-field {
   padding-block: clamp(3rem, 6vw, 5rem);
 }
 
-.plt-alert {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: var(--plt-border-width) solid var(--plt-color-base-content);
-  border-radius: var(--plt-radius-box);
-  background: var(--plt-color-info);
-  color: var(--plt-color-info-content);
-}
-
-.plt-alert--success {
-  background: var(--plt-color-success);
-  color: var(--plt-color-success-content);
-}
-
-.plt-alert--warning {
-  background: var(--plt-color-warning);
-  color: var(--plt-color-warning-content);
-}
-
-.plt-alert--error {
-  background: var(--plt-color-error);
-  color: var(--plt-color-error-content);
-}
-
+/* Navigation links are a PLT composition detail rather than a daisyUI primitive. */
 .plt-nav-link {
   display: inline-flex;
   align-items: center;
