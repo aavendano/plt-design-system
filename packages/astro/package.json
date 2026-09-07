@@ -1,0 +1,17 @@
+{
+  "name": "@playlovetoys/astro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": ["src", "README.md"],
+  "exports": {
+    "./BlockRenderer.astro": "./src/BlockRenderer.astro"
+  },
+  "dependencies": {
+    "@playlovetoys/design-system": "workspace:*",
+    "@playlovetoys/editorial": "workspace:*"
+  },
+  "peerDependencies": {
+    "astro": ">=5"
+  }
+}

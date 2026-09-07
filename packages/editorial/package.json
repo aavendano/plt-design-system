@@ -1,0 +1,11 @@
+{
+  "name": "@playlovetoys/editorial",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": ["src", "schemas", "README.md"],
+  "exports": {
+    ".": "./src/types.ts",
+    "./page-schema": "./schemas/page.schema.json"
+  }
+}
