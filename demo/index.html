@@ -17,67 +17,72 @@
 <body>
   <main class="plt-container">
     <header class="demo-stack">
-      <span class="plt-badge plt-badge--secondary">v0.2 catalog</span>
-      <h1 class="plt-heading-lg">PLT Design System</h1>
-      <p class="plt-body-lg">Framework-agnostic primitives rendered from the package CSS.</p>
+      <span class="d-badge d-badge-secondary theme-label-bold">v0.6 catalog</span>
+      <h1 class="plt-headline-lg">PLT Design System</h1>
+      <p class="plt-body-lg">daisyUI 5 components with PLT brand theme and visual extensions.</p>
     </header>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Buttons</h2>
+      <h2 class="plt-headline-sm">Buttons</h2>
       <div class="demo-row">
-        <button class="plt-button plt-button--primary">Primary</button>
-        <button class="plt-button plt-button--secondary">Secondary</button>
-        <button class="plt-button plt-button--outline">Outline</button>
-        <button class="plt-button" disabled>Disabled</button>
+        <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold">Primary</button>
+        <button class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold">Secondary</button>
+        <button class="d-btn d-btn-outline theme-bordered theme-label-bold">Outline</button>
+        <button class="d-btn" disabled>Disabled</button>
       </div>
     </section>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Cards & badges</h2>
+      <h2 class="plt-headline-sm">Cards & badges</h2>
       <div class="demo-grid">
-        <article class="plt-card plt-elevated demo-stack">
-          <span class="plt-badge">Default badge</span>
-          <h3 class="plt-heading-sm">Portable surface</h3>
-          <p>Uses tokens, geometry and semantic primitives only.</p>
-          <a class="plt-nav-link" href="#forms">View forms</a>
+        <article class="d-card bg-base-100 theme-bordered theme-elevated">
+          <div class="d-card-body">
+            <span class="d-badge d-badge-secondary theme-label-bold">Default badge</span>
+            <h3 class="plt-headline-sm">Portable surface</h3>
+            <p>Base anatomy from daisyUI, PLT visual identity on top.</p>
+            <a class="plt-nav-link" href="#forms">View forms</a>
+          </div>
         </article>
-        <article class="plt-card demo-stack">
-          <span class="plt-badge plt-badge--accent">Accent</span>
-          <p class="plt-meta">No runtime dependency.</p>
+        <article class="d-card bg-base-100 theme-bordered">
+          <div class="d-card-body">
+            <span class="d-badge d-badge-accent theme-label-bold">Accent</span>
+            <p class="plt-meta">daisyUI-first.</p>
+          </div>
         </article>
       </div>
     </section>
 
     <section id="forms" class="demo-stack">
-      <h2 class="plt-heading-sm">Form controls</h2>
+      <h2 class="plt-headline-sm">Form controls</h2>
       <div class="demo-grid">
-        <label class="demo-field">Text input<input class="plt-input" value="Play, love & Toys"></label>
-        <label class="demo-field">Select<select class="plt-select"><option>Canada</option><option>United States</option></select></label>
-        <label class="demo-field">Textarea<textarea class="plt-textarea" rows="4">Editorial commerce</textarea></label>
+        <label class="demo-field">Text input<input class="d-input d-input-bordered" value="Play, love & Toys"></label>
+        <label class="demo-field">Select<select class="d-select d-select-bordered"><option>Canada</option><option>United States</option></select></label>
+        <label class="demo-field">Textarea<textarea class="d-textarea d-textarea-bordered" rows="4">Editorial commerce</textarea></label>
       </div>
     </section>
 
-    <hr class="plt-divider">
+    <div class="d-divider theme-divider"></div>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Notices</h2>
+      <h2 class="plt-headline-sm">Notices</h2>
       <div class="demo-grid">
-        <div class="plt-alert">Default notice</div>
-        <div class="plt-alert plt-alert--info">Information notice</div>
-        <div class="plt-alert plt-alert--success">Success notice</div>
-        <div class="plt-alert plt-alert--warning">Warning notice</div>
-        <div class="plt-alert plt-alert--error">Error notice</div>
+        <div class="d-alert d-alert-info">Information notice</div>
+        <div class="d-alert d-alert-success">Success notice</div>
+        <div class="d-alert d-alert-warning">Warning notice</div>
+        <div class="d-alert d-alert-error">Error notice</div>
       </div>
     </section>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Navigation</h2>
+      <h2 class="plt-headline-sm">Navigation</h2>
       <nav class="demo-row" aria-label="Primitive navigation example">
-        <a class="plt-nav-link plt-nav-link--active" href="#">Home</a>
+        <a class="plt-nav-link" aria-current="page" href="#">Home</a>
         <a class="plt-nav-link" href="#">Collections</a>
         <a class="plt-nav-link" href="#">Journal</a>
-        <button class="plt-tab" aria-selected="true">Featured</button>
-        <button class="plt-tab">New</button>
+        <div role="tablist" class="d-tabs d-tabs-border">
+          <button role="tab" class="d-tab d-tab-active">Featured</button>
+          <button role="tab" class="d-tab">New</button>
+        </div>
       </nav>
     </section>
   </main>
