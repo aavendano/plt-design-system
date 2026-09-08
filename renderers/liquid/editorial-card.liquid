@@ -1,0 +1,18 @@
+{% comment %} PLT EditorialCard renderer. Normalized text inputs are escaped. {% endcomment %}
+<article class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-editorial-card">
+  {% if image_url != blank %}
+    <a class="plt-media-card__media" href="{{ url | escape }}">
+      <img src="{{ image_url | escape }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
+    </a>
+  {% endif %}
+  <div class="d-card-body plt-media-card__body">
+    <h2 class="d-card-title theme-headline-sm plt-media-card__title">
+      <a href="{{ url | escape }}">{{ title | escape }}</a>
+    </h2>
+    {% if meta != blank %}<p class="theme-meta plt-media-card__meta">{{ meta | escape }}</p>{% endif %}
+    {% if excerpt != blank %}<p class="theme-body-lg plt-media-card__description">{{ excerpt | escape }}</p>{% endif %}
+    <div class="d-card-actions plt-media-card__actions">
+      <a class="d-btn d-btn-ghost theme-label-bold" href="{{ url | escape }}">{{ action_label | default: 'Read more' | escape }}</a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,66 @@
+---
+interface ProductImage {
+  url: string;
+  alt?: string;
+}
+
+interface Props {
+  title: string;
+  price: string;
+  vendor?: string;
+  compareAtPrice?: string;
+  badge?: string;
+  description?: string;
+  images?: ProductImage[];
+}
+
+const {
+  title,
+  price,
+  vendor,
+  compareAtPrice,
+  badge,
+  description,
+  images = [],
+} = Astro.props;
+
+const primary = images[0];
+---
+
+<section class="plt-product-detail">
+  <div class="plt-product-detail__gallery">
+    <slot name="gallery">
+      {primary && (
+        <div class="plt-product-detail__gallery-main">
+          <img src={primary.url} alt={primary.alt || title} />
+        </div>
+      )}
+      {images.length > 1 && (
+        <div class="plt-product-detail__thumbs">
+          {images.map((image) => (
+            <button type="button" class="plt-product-detail__thumb" aria-label={image.alt || title}>
+              <img src={image.url} alt="" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
+    </slot>
+  </div>
+
+  <div class="plt-product-detail__buybox">
+    {badge && <span class="d-badge d-badge-secondary theme-label-bold">{badge}</span>}
+    <h1 class="theme-headline-lg">{title}</h1>
+    {vendor && <p class="theme-meta">{vendor}</p>}
+    <div class="plt-product-detail__price">
+      <span>{price}</span>
+      {compareAtPrice && <span class="plt-product-detail__compare">{compareAtPrice}</span>}
+    </div>
+    {description && <div class="theme-body-lg plt-product-detail__description">{description}</div>}
+    <div>
+      <slot name="options" />
+    </div>
+    <div class="plt-product-detail__actions">
+      <slot name="actions" />
+    </div>
+  </div>
+</section>

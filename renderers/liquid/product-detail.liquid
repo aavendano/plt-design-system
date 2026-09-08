@@ -1,0 +1,36 @@
+{% comment %} PLT ProductDetail renderer. Options/actions provided by the platform. {% endcomment %}
+<section class="plt-product-detail">
+  <div class="plt-product-detail__gallery">
+    {% if gallery != blank %}
+      {{ gallery }}
+    {% else %}
+      {% assign primary = images | first %}
+      {% if primary %}
+        <div class="plt-product-detail__gallery-main">
+          <img src="{{ primary.url | escape }}" alt="{{ primary.alt | default: title | escape }}">
+        </div>
+      {% endif %}
+      {% if images.size > 1 %}
+        <div class="plt-product-detail__thumbs">
+          {% for image in images %}
+            <button type="button" class="plt-product-detail__thumb" aria-label="{{ image.alt | default: title | escape }}">
+              <img src="{{ image.url | escape }}" alt="" loading="lazy">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="plt-product-detail__buybox">
+    {% if badge != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ badge | escape }}</span>{% endif %}
+    <h1 class="theme-headline-lg">{{ title | escape }}</h1>
+    {% if vendor != blank %}<p class="theme-meta">{{ vendor | escape }}</p>{% endif %}
+    <div class="plt-product-detail__price">
+      <span>{{ price | escape }}</span>
+      {% if compare_at_price != blank %}<span class="plt-product-detail__compare">{{ compare_at_price | escape }}</span>{% endif %}
+    </div>
+    {% if description != blank %}<div class="theme-body-lg plt-product-detail__description">{{ description | escape }}</div>{% endif %}
+    <div>{{ options }}</div>
+    <div class="plt-product-detail__actions">{{ actions }}</div>
+  </div>
+</section>

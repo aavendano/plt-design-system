@@ -1,0 +1,11 @@
+{% comment %} PLT SectionHeader renderer. Normalized text inputs are escaped. {% endcomment %}
+<header class="plt-section-header">
+  {% if eyebrow != blank %}
+    <span class="d-badge d-badge-secondary theme-label-bold plt-section-header__eyebrow">{{ eyebrow | escape }}</span>
+  {% endif %}
+  {% assign heading_tag = as | default: 'h1' %}
+  <{{ heading_tag }} class="theme-headline-lg plt-section-header__title">{{ title | escape }}</{{ heading_tag }}>
+  {% if description != blank %}
+    <p class="theme-body-lg plt-section-header__description">{{ description | escape }}</p>
+  {% endif %}
+</header>

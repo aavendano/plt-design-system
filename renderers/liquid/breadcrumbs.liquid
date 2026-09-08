@@ -1,0 +1,14 @@
+{% comment %} PLT Breadcrumbs renderer. Expects items as an array of {label, url}. {% endcomment %}
+<nav class="d-breadcrumbs plt-breadcrumbs" aria-label="{{ aria_label | default: 'Breadcrumb' | escape }}">
+  <ul>
+    {% for item in items %}
+      <li>
+        {% if item.url != blank and forloop.last == false %}
+          <a href="{{ item.url | escape }}">{{ item.label | escape }}</a>
+        {% else %}
+          <span{% if forloop.last %} aria-current="page"{% endif %}>{{ item.label | escape }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>

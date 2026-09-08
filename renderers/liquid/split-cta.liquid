@@ -1,0 +1,18 @@
+{% comment %} PLT SplitCta renderer. Normalized text inputs are escaped. {% endcomment %}
+<section class="plt-split-cta{% if media_left %} plt-split-cta--media-left{% endif %}">
+  <div class="plt-split-cta__content">
+    {% if eyebrow != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ eyebrow | escape }}</span>{% endif %}
+    <h2 class="theme-headline-lg">{{ heading | escape }}</h2>
+    {% if body != blank %}<p class="theme-body-lg">{{ body | escape }}</p>{% endif %}
+    {% if action_label != blank and action_url != blank %}
+      <div>
+        <a class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" href="{{ action_url | escape }}">{{ action_label | escape }}</a>
+      </div>
+    {% endif %}
+  </div>
+  {% if image_url != blank %}
+    <div class="plt-split-cta__media">
+      <img src="{{ image_url | escape }}" alt="{{ image_alt | default: heading | escape }}" loading="lazy">
+    </div>
+  {% endif %}
+</section>

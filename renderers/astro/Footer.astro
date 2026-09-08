@@ -1,0 +1,96 @@
+---
+interface FooterLink {
+  label: string;
+  url: string;
+}
+
+interface FooterColumn {
+  title: string;
+  links: FooterLink[];
+}
+
+interface SocialLink {
+  label: string;
+  url: string;
+}
+
+interface Props {
+  siteName: string;
+  logoUrl?: string;
+  logoAlt?: string;
+  homeUrl?: string;
+  tagline?: string;
+  columns?: FooterColumn[];
+  social?: SocialLink[];
+  copyright?: string;
+}
+
+const {
+  siteName,
+  logoUrl,
+  logoAlt = siteName,
+  homeUrl = "/",
+  tagline,
+  columns = [],
+  social = [],
+  copyright = `© ${new Date().getFullYear()} ${siteName}`,
+} = Astro.props;
+---
+
+<footer class="d-footer plt-footer">
+  <div class="plt-footer__inner">
+    <div class="plt-footer__top">
+      <div class="plt-footer__brand">
+        <a class="plt-footer__logo" href={homeUrl} aria-label={siteName}>
+          {logoUrl ? (
+            <img src={logoUrl} alt={logoAlt} />
+          ) : (
+            <span class="theme-headline-sm">{siteName}</span>
+          )}
+        </a>
+        {tagline && <p class="theme-body-lg">{tagline}</p>}
+        {social.length > 0 && (
+          <div class="plt-footer__social">
+            {social.map((item) => (
+              <a
+                class="d-btn d-btn-square d-btn-neutral theme-elevated theme-label-bold"
+                href={item.url}
+                aria-label={item.label}
+              >
+                {item.label.slice(0, 2).toUpperCase()}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <slot name="newsletter" />
+      </div>
+    </div>
+
+    {columns.length > 0 && (
+      <div class="plt-footer__columns">
+        {columns.map((column) => (
+          <div>
+            <h5 class="theme-headline-sm theme-headline-underline plt-footer__column-title">
+              {column.title}
+            </h5>
+            <ul class="d-menu">
+              {column.links.map((link) => (
+                <li>
+                  <a class="theme-label-bold" href={link.url}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="plt-footer__bottom">
+      <p class="theme-meta">{copyright}</p>
+      <slot name="legal" />
+    </div>
+  </div>
+</footer>

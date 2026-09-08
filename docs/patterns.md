@@ -148,12 +148,12 @@ Route construction remains outside the component.
 
 ## Deliberately outside the visual core
 
-- product swatches and variant availability
+- product swatches and variant availability resolution
 - quick-add state and product form behavior
 - product-card second-image data selection
 - carousel scrolling behavior and Alpine directives
-- cart drawer and cart-line state
+- cart **state** (open/close, line mutations, money math)
 - Shopify route and translation resolution
 - CMS/metaobject lookup
 
-Those belong to platform/application integrations while reusing the daisyUI + PLT visual layer.
+Cart drawer / cart line **UI** is now part of the design system; only runtime state stays in the application. Those platform concerns reuse the daisyUI + PLT visual layer.

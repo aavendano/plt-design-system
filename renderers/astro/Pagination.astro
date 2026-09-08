@@ -1,0 +1,62 @@
+---
+interface PageItem {
+  label: string;
+  url?: string;
+  current?: boolean;
+  disabled?: boolean;
+}
+
+interface Props {
+  pages: PageItem[];
+  ariaLabel?: string;
+  prevUrl?: string;
+  nextUrl?: string;
+  prevLabel?: string;
+  nextLabel?: string;
+}
+
+const {
+  pages,
+  ariaLabel = "Pagination",
+  prevUrl,
+  nextUrl,
+  prevLabel = "Previous",
+  nextLabel = "Next",
+} = Astro.props;
+---
+
+<nav class="plt-pagination" aria-label={ariaLabel}>
+  <div class="d-join">
+    {prevUrl ? (
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={prevUrl}>{prevLabel}</a>
+    ) : (
+      <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{prevLabel}</button>
+    )}
+    {pages.map((page) =>
+      page.url && !page.current && !page.disabled ? (
+        <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={page.url}>{page.label}</a>
+      ) : (
+        <button
+          class:list={[
+            "d-btn",
+            "d-join-item",
+            "theme-bordered",
+            "theme-label-bold",
+            page.current ? "d-btn-primary" : "d-btn-outline",
+            { "d-btn-disabled": page.disabled },
+          ]}
+          type="button"
+          aria-current={page.current ? "page" : undefined}
+          disabled={page.disabled || page.current}
+        >
+          {page.label}
+        </button>
+      ),
+    )}
+    {nextUrl ? (
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={nextUrl}>{nextLabel}</a>
+    ) : (
+      <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{nextLabel}</button>
+    )}
+  </div>
+</nav>

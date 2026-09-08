@@ -1,0 +1,21 @@
+{% comment %} PLT CartLine renderer. Controls provided by the platform. {% endcomment %}
+<article class="plt-cart-line">
+  <div class="plt-cart-line__media">
+    {% if image_url != blank %}
+      {% if url != blank %}
+        <a href="{{ url | escape }}"><img src="{{ image_url | escape }}" alt="{{ image_alt | default: title | escape }}" loading="lazy"></a>
+      {% else %}
+        <img src="{{ image_url | escape }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
+      {% endif %}
+    {% endif %}
+  </div>
+  <div>
+    <h3 class="theme-headline-sm plt-cart-line__title">
+      {% if url != blank %}<a href="{{ url | escape }}">{{ title | escape }}</a>{% else %}{{ title | escape }}{% endif %}
+    </h3>
+    {% if variant_label != blank %}<p class="theme-meta plt-cart-line__meta">{{ variant_label | escape }}</p>{% endif %}
+    {% if quantity != blank %}<p class="theme-meta plt-cart-line__meta">Qty {{ quantity | escape }}</p>{% endif %}
+    <div class="plt-cart-line__controls">{{ controls }}</div>
+  </div>
+  <div class="plt-cart-line__price">{{ price | escape }}</div>
+</article>

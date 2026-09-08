@@ -1,0 +1,17 @@
+{% comment %} PLT CartSummary renderer. {% endcomment %}
+<aside class="d-card bg-base-100 theme-bordered theme-elevated plt-cart-summary">
+  <div class="d-card-body">
+    <h2 class="d-card-title theme-headline-sm">{{ heading | default: 'Order summary' | escape }}</h2>
+    <div class="plt-cart-summary__row theme-label-bold">
+      <span>Subtotal</span>
+      <span>{{ subtotal | escape }}</span>
+    </div>
+    {% if note != blank %}<p class="theme-meta">{{ note | escape }}</p>{% endif %}
+    <div class="d-card-actions">
+      {% if checkout_url != blank %}
+        <a class="d-btn d-btn-primary d-btn-block theme-bordered theme-elevated theme-label-bold" href="{{ checkout_url | escape }}">{{ checkout_label | default: 'Checkout' | escape }}</a>
+      {% endif %}
+      {{ children }}
+    </div>
+  </div>
+</aside>

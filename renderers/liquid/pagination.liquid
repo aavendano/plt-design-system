@@ -1,0 +1,27 @@
+{% comment %} PLT Pagination renderer. {% endcomment %}
+<nav class="plt-pagination" aria-label="{{ aria_label | default: 'Pagination' | escape }}">
+  <div class="d-join">
+    {% if prev_url != blank %}
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ prev_url | escape }}">{{ prev_label | default: 'Previous' | escape }}</a>
+    {% else %}
+      <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{{ prev_label | default: 'Previous' | escape }}</button>
+    {% endif %}
+    {% for page in pages %}
+      {% if page.url != blank and page.current != true and page.disabled != true %}
+        <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ page.url | escape }}">{{ page.label | escape }}</a>
+      {% else %}
+        <button
+          class="d-btn d-join-item theme-bordered theme-label-bold{% if page.current %} d-btn-primary{% else %} d-btn-outline{% endif %}{% if page.disabled %} d-btn-disabled{% endif %}"
+          type="button"
+          {% if page.current %}aria-current="page"{% endif %}
+          {% if page.disabled or page.current %}disabled{% endif %}
+        >{{ page.label | escape }}</button>
+      {% endif %}
+    {% endfor %}
+    {% if next_url != blank %}
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ next_url | escape }}">{{ next_label | default: 'Next' | escape }}</a>
+    {% else %}
+      <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{{ next_label | default: 'Next' | escape }}</button>
+    {% endif %}
+  </div>
+</nav>

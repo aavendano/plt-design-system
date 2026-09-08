@@ -47,6 +47,42 @@ const requiredEscapes = {
     "{{ heading | escape }}",
     "{{ body | escape }}",
   ],
+  "renderers/liquid/section-header.liquid": [
+    "{{ title | escape }}",
+  ],
+  "renderers/liquid/editorial-card.liquid": [
+    "{{ url | escape }}",
+    "{{ title | escape }}",
+  ],
+  "renderers/liquid/split-cta.liquid": [
+    "{{ heading | escape }}",
+  ],
+  "renderers/liquid/breadcrumbs.liquid": [
+    "{{ item.label | escape }}",
+  ],
+  "renderers/liquid/navbar.liquid": [
+    "{{ site_name | escape }}",
+  ],
+  "renderers/liquid/footer.liquid": [
+    "{{ site_name | escape }}",
+  ],
+  "renderers/liquid/cart-line.liquid": [
+    "{{ title | escape }}",
+    "{{ price | escape }}",
+  ],
+  "renderers/liquid/product-detail.liquid": [
+    "{{ title | escape }}",
+    "{{ price | escape }}",
+  ],
+  "renderers/liquid/empty-state.liquid": [
+    "{{ heading | escape }}",
+  ],
+  "renderers/liquid/search-field.liquid": [
+    "{{ placeholder | default: 'Search products' | escape }}",
+  ],
+  "renderers/liquid/cart-summary.liquid": [
+    "{{ subtotal | escape }}",
+  ],
 };
 
 for (const [path, snippets] of Object.entries(requiredEscapes)) {

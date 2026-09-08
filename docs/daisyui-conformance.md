@@ -9,17 +9,21 @@ Supported baseline: daisyUI `>=5.7.8 <6` with Tailwind CSS `>=4 <5`.
 | PLT need | daisyUI base |
 | --- | --- |
 | Button / CTA | `d-btn` |
-| Card | `d-card`, `d-card-body`, `d-card-title`, `d-card-actions` |
+| Card | `d-card`, with `d-card-body`, `d-card-title`, `d-card-actions` as applicable |
 | Badge | `d-badge` |
 | Text input | `d-input` |
 | Select | `d-select` |
 | Textarea | `d-textarea` |
-| Alert | `d-alert` |
 | Divider | `d-divider` |
-| Link | `d-link` |
-| Tabs | `d-tabs`, `d-tab` |
-| Hero | `d-hero`, `d-hero-content`, `d-hero-overlay` |
+| Alert / Notice | `d-alert` |
+| Links | `d-link` |
+| Tabs | `d-tabs` + `d-tab` |
+| Hero | `d-hero` + `d-hero-content` + `d-hero-overlay` |
 | Breadcrumbs | `d-breadcrumbs` |
+| Navbar | `d-navbar` + `d-menu` |
+| Footer | `d-footer` + `d-menu` |
+| Cart drawer | `d-drawer` + `d-drawer-toggle` + `d-drawer-side` |
+| Join groups (qty, pagination) | `d-join` |
 
 Current daisyUI 5 form controls are bordered by default. Removed modifiers such as `d-input-bordered`, `d-select-bordered`, `d-textarea-bordered`, and the old `d-card-bordered` spelling must not be used.
 

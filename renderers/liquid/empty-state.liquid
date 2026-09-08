@@ -1,0 +1,14 @@
+{% comment %} PLT EmptyState renderer. {% endcomment %}
+{% assign tone_class = 'd-alert-info' %}
+{% if tone == 'warning' %}{% assign tone_class = 'd-alert-warning' %}
+{% elsif tone == 'error' %}{% assign tone_class = 'd-alert-error' %}
+{% endif %}
+<div class="d-alert {{ tone_class }} plt-empty-state" role="status">
+  <div>
+    <h2 class="theme-headline-sm">{{ heading | escape }}</h2>
+    {% if body != blank %}<p class="theme-body-lg">{{ body | escape }}</p>{% endif %}
+    {% if action_label != blank and action_url != blank %}
+      <a class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold mt-2" href="{{ action_url | escape }}">{{ action_label | escape }}</a>
+    {% endif %}
+  </div>
+</div>

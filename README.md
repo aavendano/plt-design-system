@@ -50,7 +50,7 @@ The package configures daisyUI with the PLT `brand` theme and `d-` prefix. The s
 
 ## Component contracts and renderers
 
-Shared visual contracts currently cover ProductCard, CollectionCard, Hero, PromoStrip and Newsletter. Canonical inputs are documented in `contracts/components.md`.
+Shared visual contracts currently cover ProductCard, CollectionCard, Hero, PromoStrip, Newsletter, SectionHeader, EditorialCard, SplitCta, Breadcrumbs, Navbar, Footer, CartDrawer, CartLine, ProductGrid, ProductDetail, OptionPicker, QuantitySelector, CartSummary, FilterBar, SortSelect, SearchField, Pagination and EmptyState. Canonical inputs are documented in `contracts/components.md`.
 
 Equivalent platform renderers live in:
 

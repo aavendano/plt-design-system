@@ -1,0 +1,40 @@
+---
+interface Props {
+  value?: number | string;
+  min?: number;
+  max?: number;
+  inputName?: string;
+  decreaseLabel?: string;
+  increaseLabel?: string;
+  id?: string;
+}
+
+const {
+  value = 1,
+  min = 1,
+  max,
+  inputName = "quantity",
+  decreaseLabel = "Decrease quantity",
+  increaseLabel = "Increase quantity",
+  id = "plt-quantity",
+} = Astro.props;
+---
+
+<div class="d-join plt-quantity-selector">
+  <button type="button" class="d-btn d-btn-outline d-join-item theme-bordered" data-plt-qty-dec aria-label={decreaseLabel} aria-controls={id}>
+    −
+  </button>
+  <input
+    id={id}
+    class="d-input d-join-item"
+    type="number"
+    name={inputName}
+    value={value}
+    min={min}
+    max={max}
+    inputmode="numeric"
+  />
+  <button type="button" class="d-btn d-btn-outline d-join-item theme-bordered" data-plt-qty-inc aria-label={increaseLabel} aria-controls={id}>
+    +
+  </button>
+</div>
