@@ -1,0 +1,43 @@
+---
+interface OptionItem {
+  label: string;
+  value: string;
+  selected?: boolean;
+  disabled?: boolean;
+}
+
+interface Props {
+  name: string;
+  options: OptionItem[];
+  label?: string;
+}
+
+const { name, options, label = name } = Astro.props;
+---
+
+<div class="plt-option-picker">
+  <p class="theme-label-bold plt-option-picker__label">{label}</p>
+  <div class="plt-option-picker__options" role="group" aria-label={label}>
+    {options.map((option) => (
+      <label
+        class:list={[
+          "d-btn",
+          "d-btn-outline",
+          "theme-bordered",
+          "theme-label-bold",
+          { "d-btn-primary": option.selected, "d-btn-disabled": option.disabled },
+        ]}
+      >
+        <input
+          type="radio"
+          class="hidden"
+          name={name}
+          value={option.value}
+          checked={option.selected}
+          disabled={option.disabled}
+        />
+        {option.label}
+      </label>
+    ))}
+  </div>
+</div>

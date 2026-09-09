@@ -1,0 +1,71 @@
+---
+interface Props {
+  title?: string;
+  subtotal?: string;
+  checkoutUrl?: string;
+  cartUrl?: string;
+  checkoutLabel?: string;
+  viewCartLabel?: string;
+  emptyLabel?: string;
+  closeLabel?: string;
+  drawerId?: string;
+  hasItems?: boolean;
+}
+
+const {
+  title = "Cart",
+  subtotal,
+  checkoutUrl,
+  cartUrl = "/shop/cart",
+  checkoutLabel = "Checkout",
+  viewCartLabel = "View cart",
+  emptyLabel = "Your cart is empty.",
+  closeLabel = "Close cart",
+  drawerId = "plt-cart-drawer",
+  hasItems = false,
+} = Astro.props;
+---
+
+<div class="d-drawer d-drawer-end plt-cart-drawer" id={drawerId}>
+  <input id={`${drawerId}-toggle`} type="checkbox" class="d-drawer-toggle" />
+  <div class="d-drawer-content"><!-- page content host --></div>
+  <div class="d-drawer-side z-50">
+    <label for={`${drawerId}-toggle`} class="d-drawer-overlay" aria-label={closeLabel}></label>
+    <aside class="plt-cart-drawer__panel" aria-labelledby={`${drawerId}-title`}>
+      <header class="plt-cart-drawer__header">
+        <h2 id={`${drawerId}-title`} class="theme-headline-sm">{title}</h2>
+        <label for={`${drawerId}-toggle`} class="d-btn d-btn-ghost d-btn-sm d-btn-square" aria-label={closeLabel}>
+          <span aria-hidden="true">×</span>
+        </label>
+      </header>
+
+      <div class="plt-cart-drawer__body">
+        {hasItems ? (
+          <slot name="lines" />
+        ) : (
+          <div class="plt-cart-drawer__empty">
+            <p class="theme-body-lg">{emptyLabel}</p>
+            <slot name="empty" />
+          </div>
+        )}
+      </div>
+
+      {hasItems && (
+        <footer class="plt-cart-drawer__footer">
+          {subtotal && (
+            <div class="plt-cart-drawer__subtotal theme-label-bold">
+              <span>Subtotal</span>
+              <span>{subtotal}</span>
+            </div>
+          )}
+          {checkoutUrl && (
+            <a class="d-btn d-btn-primary d-btn-block theme-bordered theme-elevated theme-label-bold" href={checkoutUrl}>
+              {checkoutLabel}
+            </a>
+          )}
+          <a class="d-btn d-btn-ghost d-btn-block theme-label-bold" href={cartUrl}>{viewCartLabel}</a>
+        </footer>
+      )}
+    </aside>
+  </div>
+</div>

@@ -1,6 +1,9 @@
+@source "../renderers";
+
 @import "./tokens.css";
-@import "./typography.css";
 @import "./geometry.css";
+@import "./typography.css";
+@import "./daisyui-theme.css";
 @import "./utilities.css";
 @import "./primitives.css";
 @import "./patterns.css";

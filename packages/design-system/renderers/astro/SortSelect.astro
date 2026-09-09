@@ -1,0 +1,36 @@
+---
+interface SortOption {
+  label: string;
+  value: string;
+  selected?: boolean;
+}
+
+interface Props {
+  options: SortOption[];
+  name?: string;
+  label?: string;
+  action?: string;
+  method?: "get" | "post";
+}
+
+const {
+  options,
+  name = "sort",
+  label = "Sort by",
+  action,
+  method = "get",
+} = Astro.props;
+
+const Tag = action ? "form" : "div";
+---
+
+<Tag class="plt-sort-select" {...(action ? { action, method } : {})}>
+  <label class="theme-label-bold" for={`sort-${name}`}>{label}</label>
+  <select class="d-select" id={`sort-${name}`} name={name}>
+    {options.map((option) => (
+      <option value={option.value} selected={option.selected}>
+        {option.label}
+      </option>
+    ))}
+  </select>
+</Tag>

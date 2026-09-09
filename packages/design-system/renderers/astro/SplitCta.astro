@@ -1,0 +1,43 @@
+---
+interface Props {
+  heading: string;
+  eyebrow?: string;
+  body?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  actionLabel?: string;
+  actionUrl?: string;
+  mediaLeft?: boolean;
+}
+
+const {
+  heading,
+  eyebrow,
+  body,
+  imageUrl,
+  imageAlt = heading,
+  actionLabel,
+  actionUrl,
+  mediaLeft = false,
+} = Astro.props;
+---
+
+<section class:list={["plt-split-cta", { "plt-split-cta--media-left": mediaLeft }]}>
+  <div class="plt-split-cta__content">
+    {eyebrow && <span class="d-badge d-badge-secondary theme-label-bold">{eyebrow}</span>}
+    <h2 class="theme-headline-lg">{heading}</h2>
+    {body && <p class="theme-body-lg">{body}</p>}
+    {actionLabel && actionUrl && (
+      <div>
+        <a class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" href={actionUrl}>
+          {actionLabel}
+        </a>
+      </div>
+    )}
+  </div>
+  {imageUrl && (
+    <div class="plt-split-cta__media">
+      <img src={imageUrl} alt={imageAlt} loading="lazy" />
+    </div>
+  )}
+</section>

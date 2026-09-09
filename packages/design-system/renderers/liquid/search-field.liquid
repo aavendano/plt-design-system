@@ -1,0 +1,12 @@
+{% comment %} PLT SearchField renderer. {% endcomment %}
+<form class="plt-search-field" action="{{ action | default: '/search' | escape }}" method="{{ method | default: 'get' | escape }}" role="search">
+  <input
+    class="d-input"
+    type="search"
+    name="{{ input_name | default: 'q' | escape }}"
+    value="{{ value | escape }}"
+    placeholder="{{ placeholder | default: 'Search products' | escape }}"
+    aria-label="{{ placeholder | default: 'Search products' | escape }}"
+  >
+  <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{{ submit_label | default: 'Search' | escape }}</button>
+</form>

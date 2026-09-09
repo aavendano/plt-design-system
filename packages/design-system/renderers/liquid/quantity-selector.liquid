@@ -1,0 +1,16 @@
+{% comment %} PLT QuantitySelector renderer. Click handlers stay with the platform. {% endcomment %}
+{% assign qty_id = id | default: 'plt-quantity' %}
+<div class="d-join plt-quantity-selector">
+  <button type="button" class="d-btn d-btn-outline d-join-item theme-bordered" data-plt-qty-dec aria-label="{{ decrease_label | default: 'Decrease quantity' | escape }}" aria-controls="{{ qty_id | escape }}">−</button>
+  <input
+    id="{{ qty_id | escape }}"
+    class="d-input d-join-item"
+    type="number"
+    name="{{ input_name | default: 'quantity' | escape }}"
+    value="{{ value | default: 1 | escape }}"
+    min="{{ min | default: 1 | escape }}"
+    {% if max != blank %}max="{{ max | escape }}"{% endif %}
+    inputmode="numeric"
+  >
+  <button type="button" class="d-btn d-btn-outline d-join-item theme-bordered" data-plt-qty-inc aria-label="{{ increase_label | default: 'Increase quantity' | escape }}" aria-controls="{{ qty_id | escape }}">+</button>
+</div>

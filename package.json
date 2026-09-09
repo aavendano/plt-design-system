@@ -3,6 +3,6 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
-    "check": "npm -ws run check --if-present"
+    "check": "npm run check --workspaces --if-present"
   }
 }

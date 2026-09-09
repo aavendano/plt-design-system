@@ -2,11 +2,11 @@
 <section class="plt-promo-strip{% if tone == 'warning' %} plt-promo-strip--warning{% endif %}">
   <div class="plt-promo-strip__inner">
     <div class="plt-promo-strip__copy">
-      <h2 class="plt-headline-sm">{{ heading }}</h2>
-      {% if body != blank %}<p class="plt-body-lg">{{ body }}</p>{% endif %}
+      <h2 class="theme-headline-sm">{{ heading | escape }}</h2>
+      {% if body != blank %}<p class="theme-body-lg">{{ body | escape }}</p>{% endif %}
     </div>
     {% if action_label != blank and action_url != blank %}
-      <a class="plt-button plt-button--secondary" href="{{ action_url }}">{{ action_label }}</a>
+      <a class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold" href="{{ action_url | escape }}">{{ action_label | escape }}</a>
     {% endif %}
   </div>
 </section>

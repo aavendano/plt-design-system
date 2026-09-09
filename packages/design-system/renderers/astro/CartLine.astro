@@ -1,0 +1,46 @@
+---
+interface Props {
+  title: string;
+  price: string;
+  url?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  variantLabel?: string;
+  quantity?: string | number;
+}
+
+const {
+  title,
+  price,
+  url,
+  imageUrl,
+  imageAlt = title,
+  variantLabel,
+  quantity,
+} = Astro.props;
+---
+
+<article class="plt-cart-line">
+  <div class="plt-cart-line__media">
+    {imageUrl ? (
+      url ? (
+        <a href={url}><img src={imageUrl} alt={imageAlt} loading="lazy" /></a>
+      ) : (
+        <img src={imageUrl} alt={imageAlt} loading="lazy" />
+      )
+    ) : null}
+  </div>
+  <div>
+    <h3 class="theme-headline-sm plt-cart-line__title">
+      {url ? <a href={url}>{title}</a> : title}
+    </h3>
+    {variantLabel && <p class="theme-meta plt-cart-line__meta">{variantLabel}</p>}
+    {quantity !== undefined && quantity !== null && (
+      <p class="theme-meta plt-cart-line__meta">Qty {quantity}</p>
+    )}
+    <div class="plt-cart-line__controls">
+      <slot name="controls" />
+    </div>
+  </div>
+  <div class="plt-cart-line__price">{price}</div>
+</article>

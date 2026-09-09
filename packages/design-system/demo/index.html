@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="brand">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PLT Design System Catalog</title>
-  <link rel="stylesheet" href="../src/index.css">
+  <link rel="stylesheet" href="./dist.css">
   <style>
     body { margin: 0; background: var(--plt-color-base-100); color: var(--plt-color-base-content); }
     main { display: grid; gap: 3rem; padding-block: 3rem 6rem; }
@@ -15,71 +15,199 @@
   </style>
 </head>
 <body>
+  <header class="d-navbar plt-navbar">
+    <div class="plt-navbar__inner">
+      <div class="d-navbar-start">
+        <a class="d-btn d-btn-ghost plt-navbar__brand" href="#"><span class="theme-headline-sm">PLT</span></a>
+      </div>
+      <div class="d-navbar-center plt-navbar__links">
+        <ul class="d-menu d-menu-horizontal px-0">
+          <li><a class="theme-label-bold" href="#patterns">Patterns</a></li>
+          <li><a class="theme-label-bold" href="#commerce">Commerce</a></li>
+          <li><a class="theme-label-bold" href="#forms">Forms</a></li>
+        </ul>
+      </div>
+      <div class="d-navbar-end plt-navbar__actions">
+        <button class="d-btn d-btn-ghost d-btn-square theme-label-bold" type="button" aria-label="Cart">🛒</button>
+      </div>
+    </div>
+  </header>
+
   <main class="plt-container">
     <header class="demo-stack">
-      <span class="plt-badge plt-badge--secondary">v0.2 catalog</span>
-      <h1 class="plt-heading-lg">PLT Design System</h1>
-      <p class="plt-body-lg">Framework-agnostic primitives rendered from the package CSS.</p>
+      <span class="d-badge d-badge-secondary theme-label-bold">v0.7 catalog</span>
+      <h1 class="theme-headline-lg">PLT Design System</h1>
+      <p class="theme-body-lg">daisyUI 5 components with the PLT brand theme, shell patterns and commerce layouts.</p>
+    </header>
+
+    <nav class="d-breadcrumbs plt-breadcrumbs" aria-label="Breadcrumb">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Design system</a></li>
+        <li><span aria-current="page">Catalog</span></li>
+      </ul>
+    </nav>
+
+    <header class="plt-section-header">
+      <span class="d-badge d-badge-secondary theme-label-bold plt-section-header__eyebrow">Primitives</span>
+      <h2 class="theme-headline-lg plt-section-header__title">Buttons & surfaces</h2>
+      <p class="theme-body-lg plt-section-header__description">Official daisyUI anatomy with PLT theme treatment.</p>
     </header>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Buttons</h2>
+      <h2 class="theme-headline-sm">Buttons</h2>
       <div class="demo-row">
-        <button class="plt-button plt-button--primary">Primary</button>
-        <button class="plt-button plt-button--secondary">Secondary</button>
-        <button class="plt-button plt-button--outline">Outline</button>
-        <button class="plt-button" disabled>Disabled</button>
+        <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold">Primary</button>
+        <button class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold">Secondary</button>
+        <button class="d-btn d-btn-outline theme-bordered theme-elevated theme-label-bold">Outline</button>
+        <button class="d-btn" disabled>Disabled</button>
       </div>
     </section>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Cards & badges</h2>
+      <h2 class="theme-headline-sm">Cards & badges</h2>
       <div class="demo-grid">
-        <article class="plt-card plt-elevated demo-stack">
-          <span class="plt-badge">Default badge</span>
-          <h3 class="plt-heading-sm">Portable surface</h3>
-          <p>Uses tokens, geometry and semantic primitives only.</p>
-          <a class="plt-nav-link" href="#forms">View forms</a>
+        <article class="d-card bg-base-100 theme-bordered theme-elevated">
+          <div class="d-card-body">
+            <span class="d-badge d-badge-secondary theme-label-bold">Default badge</span>
+            <h3 class="d-card-title theme-headline-sm">Portable surface</h3>
+            <p>Base anatomy from daisyUI, PLT visual identity on top.</p>
+            <div class="d-card-actions"><a class="d-link d-link-hover theme-label-bold" href="#forms">View forms</a></div>
+          </div>
         </article>
-        <article class="plt-card demo-stack">
-          <span class="plt-badge plt-badge--accent">Accent</span>
-          <p class="plt-meta">No runtime dependency.</p>
+        <article class="d-card bg-base-100 theme-bordered">
+          <div class="d-card-body">
+            <span class="d-badge d-badge-accent theme-label-bold">Accent</span>
+            <p class="theme-meta">daisyUI-first.</p>
+          </div>
         </article>
       </div>
     </section>
 
     <section id="forms" class="demo-stack">
-      <h2 class="plt-heading-sm">Form controls</h2>
+      <h2 class="theme-headline-sm">Form controls</h2>
       <div class="demo-grid">
-        <label class="demo-field">Text input<input class="plt-input" value="Play, love & Toys"></label>
-        <label class="demo-field">Select<select class="plt-select"><option>Canada</option><option>United States</option></select></label>
-        <label class="demo-field">Textarea<textarea class="plt-textarea" rows="4">Editorial commerce</textarea></label>
+        <label class="demo-field">Text input<input class="d-input" value="Play, love & Toys"></label>
+        <label class="demo-field">Select<select class="d-select"><option>Canada</option><option>United States</option></select></label>
+        <label class="demo-field">Textarea<textarea class="d-textarea" rows="4">Editorial commerce</textarea></label>
       </div>
     </section>
 
-    <hr class="plt-divider">
+    <div class="d-divider"></div>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Notices</h2>
+      <h2 class="theme-headline-sm">Notices</h2>
       <div class="demo-grid">
-        <div class="plt-alert">Default notice</div>
-        <div class="plt-alert plt-alert--info">Information notice</div>
-        <div class="plt-alert plt-alert--success">Success notice</div>
-        <div class="plt-alert plt-alert--warning">Warning notice</div>
-        <div class="plt-alert plt-alert--error">Error notice</div>
+        <div class="d-alert d-alert-info">Information notice</div>
+        <div class="d-alert d-alert-success">Success notice</div>
+        <div class="d-alert d-alert-warning">Warning notice</div>
+        <div class="d-alert d-alert-error">Error notice</div>
       </div>
     </section>
 
     <section class="demo-stack">
-      <h2 class="plt-heading-sm">Navigation</h2>
+      <h2 class="theme-headline-sm">Navigation</h2>
       <nav class="demo-row" aria-label="Primitive navigation example">
-        <a class="plt-nav-link plt-nav-link--active" href="#">Home</a>
-        <a class="plt-nav-link" href="#">Collections</a>
-        <a class="plt-nav-link" href="#">Journal</a>
-        <button class="plt-tab" aria-selected="true">Featured</button>
-        <button class="plt-tab">New</button>
+        <a class="d-link d-link-hover theme-label-bold" aria-current="page" href="#">Home</a>
+        <a class="d-link d-link-hover theme-label-bold" href="#">Collections</a>
+        <a class="d-link d-link-hover theme-label-bold" href="#">Journal</a>
+        <div role="tablist" class="d-tabs d-tabs-border">
+          <button role="tab" class="d-tab d-tab-active">Featured</button>
+          <button role="tab" class="d-tab">New</button>
+        </div>
       </nav>
     </section>
+
+    <div class="d-divider"></div>
+
+    <section id="patterns" class="demo-stack">
+      <header class="plt-section-header">
+        <span class="d-badge d-badge-secondary theme-label-bold plt-section-header__eyebrow">Patterns</span>
+        <h2 class="theme-headline-lg plt-section-header__title">Marketing & editorial</h2>
+      </header>
+
+      <section class="d-hero plt-hero">
+        <div class="d-hero-content plt-hero__content">
+          <div class="plt-hero__copy">
+            <span class="d-badge d-badge-secondary theme-label-bold">New drop</span>
+            <h3 class="theme-headline-lg">Shop bold.</h3>
+            <p class="theme-body-lg">Soft neo-brutalist commerce with hard borders and offset shadows.</p>
+            <div class="plt-hero__actions">
+              <a class="d-btn d-btn-primary d-btn-lg theme-bordered theme-elevated theme-label-bold" href="#">Shop now</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="demo-grid">
+        <article class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-product-card">
+          <a class="plt-media-card__media" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e0d5' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23533278' font-family='sans-serif'%3EProduct%3C/text%3E%3C/svg%3E" alt="Product"></a>
+          <div class="d-card-body plt-media-card__body">
+            <span class="d-badge d-badge-secondary theme-label-bold">New</span>
+            <h3 class="d-card-title theme-headline-sm plt-media-card__title"><a href="#">Product title</a></h3>
+            <p class="theme-meta plt-media-card__meta">Vendor</p>
+            <div class="d-card-actions plt-media-card__actions">
+              <span class="plt-product-card__price">$49.00</span>
+              <a class="d-btn d-btn-secondary d-btn-sm theme-bordered theme-elevated theme-label-bold" href="#">View</a>
+            </div>
+          </div>
+        </article>
+        <article class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-editorial-card">
+          <a class="plt-media-card__media" href="#"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360'%3E%3Crect fill='%230C7489' width='640' height='360'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23FAF7F2' font-family='sans-serif'%3EArticle%3C/text%3E%3C/svg%3E" alt="Article"></a>
+          <div class="d-card-body plt-media-card__body">
+            <h3 class="d-card-title theme-headline-sm plt-media-card__title"><a href="#">Editorial title</a></h3>
+            <p class="theme-meta">Mar 8 · Team</p>
+            <p class="theme-body-lg">Excerpt from the journal.</p>
+            <div class="d-card-actions plt-media-card__actions"><a class="d-btn d-btn-ghost theme-label-bold" href="#">Read more</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="commerce" class="demo-stack">
+      <h2 class="theme-headline-sm">Commerce shell</h2>
+      <div class="demo-grid">
+        <article class="plt-cart-line">
+          <div class="plt-cart-line__media"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect fill='%23e8e0d5' width='80' height='80'/%3E%3C/svg%3E" alt=""></div>
+          <div>
+            <h3 class="theme-headline-sm plt-cart-line__title">Cart line</h3>
+            <p class="theme-meta plt-cart-line__meta">Size M · Qty 1</p>
+          </div>
+          <div class="plt-cart-line__price">$49.00</div>
+        </article>
+        <aside class="d-card bg-base-100 theme-bordered theme-elevated plt-cart-summary">
+          <div class="d-card-body">
+            <h3 class="d-card-title theme-headline-sm">Order summary</h3>
+            <div class="plt-cart-summary__row theme-label-bold"><span>Subtotal</span><span>$49.00</span></div>
+            <div class="d-card-actions">
+              <a class="d-btn d-btn-primary d-btn-block theme-bordered theme-elevated theme-label-bold" href="#">Checkout</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <div class="d-drawer d-drawer-end plt-cart-drawer" style="position:relative;height:12rem;overflow:hidden;">
+        <input type="checkbox" class="d-drawer-toggle" checked disabled aria-hidden="true">
+        <div class="d-drawer-content"></div>
+        <div class="d-drawer-side" style="position:absolute;inset:0;">
+          <aside class="plt-cart-drawer__panel" style="width:100%;border-left:none;">
+            <header class="plt-cart-drawer__header">
+              <h3 class="theme-headline-sm">Cart drawer</h3>
+              <button class="d-btn d-btn-ghost d-btn-sm" type="button">×</button>
+            </header>
+            <div class="plt-cart-drawer__body"><p class="theme-body-lg">Line items slot here.</p></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <footer class="d-footer plt-footer" style="padding:2rem;">
+      <div class="plt-footer__inner">
+        <div class="plt-footer__brand">
+          <span class="theme-headline-sm">Play, love & Toys</span>
+          <p class="theme-body-lg">Footer shell with newsletter slot.</p>
+        </div>
+      </div>
+    </footer>
   </main>
 </body>
 </html>

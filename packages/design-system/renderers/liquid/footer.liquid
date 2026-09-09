@@ -1,0 +1,49 @@
+{% comment %} PLT Footer renderer. Newsletter/legal blocks provided by the platform. {% endcomment %}
+<footer class="d-footer plt-footer">
+  <div class="plt-footer__inner">
+    <div class="plt-footer__top">
+      <div class="plt-footer__brand">
+        <a class="plt-footer__logo" href="{{ home_url | default: '/' | escape }}" aria-label="{{ site_name | escape }}">
+          {% if logo_url != blank %}
+            <img src="{{ logo_url | escape }}" alt="{{ logo_alt | default: site_name | escape }}">
+          {% else %}
+            <span class="theme-headline-sm">{{ site_name | escape }}</span>
+          {% endif %}
+        </a>
+        {% if tagline != blank %}<p class="theme-body-lg">{{ tagline | escape }}</p>{% endif %}
+        {% if social != blank and social.size > 0 %}
+          <div class="plt-footer__social">
+            {% for item in social %}
+              <a
+                class="d-btn d-btn-square d-btn-neutral theme-elevated theme-label-bold"
+                href="{{ item.url | escape }}"
+                aria-label="{{ item.label | escape }}"
+              >{{ item.label | slice: 0, 2 | upcase | escape }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div>{{ newsletter }}</div>
+    </div>
+
+    {% if columns != blank and columns.size > 0 %}
+      <div class="plt-footer__columns">
+        {% for column in columns %}
+          <div>
+            <h5 class="theme-headline-sm theme-headline-underline plt-footer__column-title">{{ column.title | escape }}</h5>
+            <ul class="d-menu">
+              {% for link in column.links %}
+                <li><a class="theme-label-bold" href="{{ link.url | escape }}">{{ link.label | escape }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="plt-footer__bottom">
+      <p class="theme-meta">{{ copyright | default: site_name | escape }}</p>
+      {{ legal }}
+    </div>
+  </div>
+</footer>

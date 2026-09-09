@@ -1,0 +1,14 @@
+{% comment %} PLT FilterBar renderer. Facet data stays with the platform. {% endcomment %}
+<form class="plt-filter-bar" action="{{ action | escape }}" method="{{ method | default: 'get' | escape }}">
+  {% for filter in filters %}
+    <div class="plt-filter-bar__field">
+      <label class="theme-label-bold" for="filter-{{ filter.id | escape }}">{{ filter.label | escape }}</label>
+      <select class="d-select" id="filter-{{ filter.id | escape }}" name="{{ filter.id | escape }}">
+        {% for option in filter.options %}
+          <option value="{{ option.value | escape }}"{% if option.selected %} selected{% endif %}>{{ option.label | escape }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  {% endfor %}
+  <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{{ submit_label | default: 'Apply' | escape }}</button>
+</form>

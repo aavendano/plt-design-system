@@ -1,0 +1,19 @@
+{% comment %} PLT OptionPicker renderer. Form wiring stays with the platform. {% endcomment %}
+<div class="plt-option-picker">
+  <p class="theme-label-bold plt-option-picker__label">{{ label | default: name | escape }}</p>
+  <div class="plt-option-picker__options" role="group" aria-label="{{ label | default: name | escape }}">
+    {% for option in options %}
+      <label class="d-btn d-btn-outline theme-bordered theme-label-bold{% if option.selected %} d-btn-primary{% endif %}{% if option.disabled %} d-btn-disabled{% endif %}">
+        <input
+          type="radio"
+          class="hidden"
+          name="{{ name | escape }}"
+          value="{{ option.value | escape }}"
+          {% if option.selected %}checked{% endif %}
+          {% if option.disabled %}disabled{% endif %}
+        >
+        {{ option.label | escape }}
+      </label>
+    {% endfor %}
+  </div>
+</div>

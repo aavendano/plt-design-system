@@ -1,0 +1,17 @@
+{% comment %} PLT SortSelect renderer. {% endcomment %}
+{% if action != blank %}
+<form class="plt-sort-select" action="{{ action | escape }}" method="{{ method | default: 'get' | escape }}">
+{% else %}
+<div class="plt-sort-select">
+{% endif %}
+  <label class="theme-label-bold" for="sort-{{ name | default: 'sort' | escape }}">{{ label | default: 'Sort by' | escape }}</label>
+  <select class="d-select" id="sort-{{ name | default: 'sort' | escape }}" name="{{ name | default: 'sort' | escape }}">
+    {% for option in options %}
+      <option value="{{ option.value | escape }}"{% if option.selected %} selected{% endif %}>{{ option.label | escape }}</option>
+    {% endfor %}
+  </select>
+{% if action != blank %}
+</form>
+{% else %}
+</div>
+{% endif %}

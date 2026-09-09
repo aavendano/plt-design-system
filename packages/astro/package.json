@@ -8,8 +8,8 @@
     "./BlockRenderer.astro": "./src/BlockRenderer.astro"
   },
   "dependencies": {
-    "@playlovetoys/design-system": "workspace:*",
-    "@playlovetoys/editorial": "workspace:*"
+    "@playlovetoys/design-system": "^0.7.0",
+    "@playlovetoys/editorial": "^0.1.0"
   },
   "peerDependencies": {
     "astro": ">=5"

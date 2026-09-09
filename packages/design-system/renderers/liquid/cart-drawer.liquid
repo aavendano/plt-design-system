@@ -1,0 +1,41 @@
+{% comment %} PLT CartDrawer renderer. Line items provided by the platform. {% endcomment %}
+{% assign drawer_id = drawer_id | default: 'plt-cart-drawer' %}
+<div class="d-drawer d-drawer-end plt-cart-drawer" id="{{ drawer_id | escape }}">
+  <input id="{{ drawer_id | escape }}-toggle" type="checkbox" class="d-drawer-toggle">
+  <div class="d-drawer-content"></div>
+  <div class="d-drawer-side z-50">
+    <label for="{{ drawer_id | escape }}-toggle" class="d-drawer-overlay" aria-label="{{ close_label | default: 'Close cart' | escape }}"></label>
+    <aside class="plt-cart-drawer__panel" aria-labelledby="{{ drawer_id | escape }}-title">
+      <header class="plt-cart-drawer__header">
+        <h2 id="{{ drawer_id | escape }}-title" class="theme-headline-sm">{{ title | default: 'Cart' | escape }}</h2>
+        <label for="{{ drawer_id | escape }}-toggle" class="d-btn d-btn-ghost d-btn-sm d-btn-square" aria-label="{{ close_label | default: 'Close cart' | escape }}">
+          <span aria-hidden="true">×</span>
+        </label>
+      </header>
+      <div class="plt-cart-drawer__body">
+        {% if has_items %}
+          {{ lines }}
+        {% else %}
+          <div class="plt-cart-drawer__empty">
+            <p class="theme-body-lg">{{ empty_label | default: 'Your cart is empty.' | escape }}</p>
+            {{ empty }}
+          </div>
+        {% endif %}
+      </div>
+      {% if has_items %}
+        <footer class="plt-cart-drawer__footer">
+          {% if subtotal != blank %}
+            <div class="plt-cart-drawer__subtotal theme-label-bold">
+              <span>Subtotal</span>
+              <span>{{ subtotal | escape }}</span>
+            </div>
+          {% endif %}
+          {% if checkout_url != blank %}
+            <a class="d-btn d-btn-primary d-btn-block theme-bordered theme-elevated theme-label-bold" href="{{ checkout_url | escape }}">{{ checkout_label | default: 'Checkout' | escape }}</a>
+          {% endif %}
+          <a class="d-btn d-btn-ghost d-btn-block theme-label-bold" href="{{ cart_url | default: '/cart' | escape }}">{{ view_cart_label | default: 'View cart' | escape }}</a>
+        </footer>
+      {% endif %}
+    </aside>
+  </div>
+</div>

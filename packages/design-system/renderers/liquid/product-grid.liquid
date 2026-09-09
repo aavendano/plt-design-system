@@ -1,0 +1,9 @@
+{% comment %} PLT ProductGrid renderer. Children supplied by the platform. {% endcomment %}
+{% assign cols_class = '' %}
+{% if columns == 2 %}{% assign cols_class = ' plt-product-grid--cols-2' %}
+{% elsif columns == 3 %}{% assign cols_class = ' plt-product-grid--cols-3' %}
+{% elsif columns == 4 %}{% assign cols_class = ' plt-product-grid--cols-4' %}
+{% endif %}
+<div class="plt-product-grid{{ cols_class }}">
+  {{ children }}
+</div>
