@@ -1,0 +1,53 @@
+---
+import type { EditorialBlock } from "@playlovetoys/editorial";
+import Hero from "@playlovetoys/design-system/renderers/astro/Hero.astro";
+import PromoStrip from "@playlovetoys/design-system/renderers/astro/PromoStrip.astro";
+import Newsletter from "@playlovetoys/design-system/renderers/astro/Newsletter.astro";
+
+interface Props {
+  block: EditorialBlock;
+}
+
+const { block } = Astro.props;
+---
+
+{block.type === "hero" && (
+  <Hero
+    heading={block.title}
+    body={block.description}
+    imageUrl={block.image}
+    primaryLabel={block.actions?.[0]?.label}
+    primaryUrl={block.actions?.[0]?.href}
+    secondaryLabel={block.actions?.[1]?.label}
+    secondaryUrl={block.actions?.[1]?.href}
+  />
+)}
+
+{block.type === "promo_strip" && (
+  <PromoStrip
+    heading={block.title}
+    body={block.description}
+    actionLabel={block.action?.label}
+    actionUrl={block.action?.href}
+  />
+)}
+
+{block.type === "newsletter" && (
+  <Newsletter
+    heading={block.title}
+    body={block.description}
+    inputPlaceholder={block.placeholder}
+    actionLabel={block.buttonLabel}
+  />
+)}
+
+{block.type === "rich_text" && (
+  <div class="plt-rich-text">{block.body}</div>
+)}
+
+{block.type === "product_grid" && (
+  <section class="plt-section" data-plt-block="product-grid">
+    {block.title && <h2>{block.title}</h2>}
+    <div data-product-handles={JSON.stringify(block.products)}></div>
+  </section>
+)}

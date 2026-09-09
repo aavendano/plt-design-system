@@ -1,94 +1,38 @@
-# PLT Design System
+# PlayLoveToys Platform
 
-Component design layer for Play, love & Toys, extracted from `aavendano/plt-frontend` and built explicitly on daisyUI 5 + Tailwind CSS 4.
+Monorepo for the reusable visual, editorial and Astro integration layers used by PlayLoveToys projects.
 
-## Scope
+## Packages
 
-This repository owns only the visual/component layer:
+- `@playlovetoys/design-system` — the daisyUI 5 + Tailwind CSS 4 component layer, including tokens, primitives, patterns and cross-platform visual renderers.
+- `@playlovetoys/editorial` — framework-neutral editorial contracts and schemas.
+- `@playlovetoys/astro` — Astro block rendering and integration built on the other two packages.
 
-- PLT design tokens (`--plt-*`)
-- typography and geometry
-- daisyUI `brand` theme
-- PLT visual extensions such as `theme-bordered`, `theme-elevated` and label typography
-- PLT-specific composite patterns
-- normalized Liquid/Astro renderers for those visual components
-
-It does not own editorial schemas, CMS logic, Shopify business behavior, routing, cart state or application lifecycle.
-
-## daisyUI-first invariant
-
-Every component with a daisyUI equivalent must use the official prefixed class as its base.
-
-```html
-<button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold">Shop now</button>
-
-<article class="d-card bg-base-100 theme-bordered theme-elevated">
-  <div class="d-card-body">
-    <h2 class="d-card-title theme-headline-sm">Title</h2>
-    <div class="d-card-actions">...</div>
-  </div>
-</article>
-
-<span class="d-badge d-badge-secondary theme-label-bold">New</span>
-<input class="d-input" type="email">
-```
-
-The project uses the same daisyUI prefix as `plt-frontend`: `d-`.
-
-Parallel primitive APIs such as `plt-button`, `plt-card`, `plt-badge`, `plt-input`, `plt-select`, `plt-textarea`, `plt-alert`, `plt-divider` and `plt-nav-link` are prohibited. Brand typography and treatment use `theme-*`; `plt-*` is reserved for compositions that daisyUI does not provide.
-
-Obsolete daisyUI modifiers removed in current v5 releases, including `d-input-bordered`, `d-select-bordered`, `d-textarea-bordered` and `d-card-bordered`, are also prohibited.
-
-## Installation / import
-
-```css
-@import "tailwindcss";
-@import "@playlovetoys/design-system";
-```
-
-The package configures daisyUI with the PLT `brand` theme and `d-` prefix. The supported daisyUI range starts at `5.7.8` because later 5.7 releases include prefix-related fixes used by this package; Tailwind CSS 4 is required.
-
-## Component contracts and renderers
-
-Shared visual contracts currently cover ProductCard, CollectionCard, Hero, PromoStrip, Newsletter, SectionHeader, EditorialCard, SplitCta, Breadcrumbs, Navbar, Footer, CartDrawer, CartLine, ProductGrid, ProductDetail, OptionPicker, QuantitySelector, CartSummary, FilterBar, SortSelect, SearchField, Pagination and EmptyState. Canonical inputs are documented in `contracts/components.md`.
-
-Equivalent platform renderers live in:
+Dependency direction:
 
 ```text
-renderers/liquid/
-renderers/astro/
+@playlovetoys/design-system ─┐
+                             ├─> @playlovetoys/astro ─> site/project
+@playlovetoys/editorial ─────┘
 ```
 
-Both renderer sets emit equivalent daisyUI anatomy plus the same PLT theme/composition classes. Platform-specific code must normalize data before invoking a renderer.
+The editorial package does not depend on Astro. The design system does not depend on editorial content, CMS logic, Shopify business behavior, routing, cart state or application lifecycle.
 
-```text
-Shopify product -> presenter -> ProductCard contract -> Liquid renderer
-API/content     -> presenter -> ProductCard contract -> Astro renderer
-```
+## Design-system contract
 
-## Design layering
+Every component with a daisyUI equivalent uses the official `d-`-prefixed class as its base. Brand typography and treatment use `theme-*`; `plt-*` is reserved for compositions daisyUI does not provide. Parallel primitive APIs and obsolete daisyUI 5 modifiers are prohibited.
 
-```text
-daisyUI 5 component anatomy
-        +
-PLT brand theme / tokens
-        +
-PLT theme-* extensions
-        +
-PLT-specific compositions
-```
+Shared visual contracts and their equivalent Liquid/Astro renderers live in `packages/design-system/contracts` and `packages/design-system/renderers`. Platform-specific code normalizes data before invoking a renderer.
 
-`--plt-*` values are the source of truth for PLT brand decisions. daisyUI consumes those values through the `brand` theme.
+See `packages/design-system/README.md` and `packages/design-system/DESIGN.md` for the complete design-system documentation.
 
 ## Verification
 
-Install development dependencies and run the complete check:
+Install development dependencies and run the complete workspace check:
 
 ```bash
 npm install
 npm run check
 ```
 
-`check:conformance` rejects parallel PLT primitives, obsolete daisyUI modifiers and incomplete renderer anatomy. `build:demo` compiles the Tailwind/daisyUI catalog and catches invalid plugin/theme integration. GitHub Actions runs the same check on pull requests and pushes to `main`.
-
-See `DESIGN.md`, `docs/daisyui-conformance.md`, `docs/primitives.md`, `docs/patterns.md`, `docs/renderers.md`, and `docs/adapters.md`.
+The design-system checks reject contract drift, unsafe Liquid output, parallel PLT primitives, obsolete daisyUI modifiers and incomplete renderer anatomy. The demo build verifies the Tailwind/daisyUI integration. GitHub Actions runs the same workspace check on pull requests and pushes to `main`.
