@@ -3,6 +3,8 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
+    "docs:build": "zensical build",
+    "docs:serve": "zensical serve",
     "check": "npm run check --workspaces --if-present"
   }
 }
