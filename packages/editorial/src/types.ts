@@ -50,3 +50,25 @@ export type EditorialPage = {
   locale?: string;
   blocks: EditorialBlock[];
 };
+
+export type HydrationMode = "load" | "idle" | "visible" | "interaction";
+
+export type HydratableComponent =
+  | "Hero"
+  | "PromoStrip"
+  | "Newsletter"
+  | "ProductGrid"
+  | "ProductCard"
+  | "CollectionCard"
+  | "SearchField"
+  | "FilterBar"
+  | "SortSelect"
+  | "Pagination"
+  | "EmptyState";
+
+export type HydrationIsland<TData extends Record<string, unknown> = Record<string, unknown>> = {
+  component: HydratableComponent;
+  id: string;
+  hydrate: HydrationMode;
+  data: TData;
+};
