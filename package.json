@@ -4,6 +4,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "docs:build": "zensical build",
+    "docs:build:all": "node scripts/build-docs-site.mjs",
     "docs:serve": "zensical serve",
     "check": "npm run check --workspaces --if-present"
   }

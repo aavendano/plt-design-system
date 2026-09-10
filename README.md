@@ -43,8 +43,40 @@ The documentation site is authored with Zensical from Markdown sources in `docs/
 
 ```bash
 python -m pip install -r requirements.txt
+npm install
 npm run docs:serve
-npm run docs:build
+npm run docs:build:all
 ```
 
-`zensical.toml` writes the generated site to `site/`, which is the publish directory for Cloudflare Pages or another static host.
+`zensical.toml` writes the generated site to `site/`. `npm run docs:build:all` also builds the design-system demo catalog into `site/catalog/`.
+
+### Cloudflare Pages
+
+The site deploys to Cloudflare Pages from `main` via `.github/workflows/deploy-docs.yml`.
+
+Required GitHub repository secrets:
+
+- `CLOUDFLARE_API_TOKEN` — API token with Cloudflare Pages edit permission
+- `CLOUDFLARE_ACCOUNT_ID` — Cloudflare account ID
+
+Create the Pages project once (if it does not exist yet):
+
+```bash
+npx wrangler pages project create plt-docs --production-branch=main
+```
+
+Manual deploy from a local build:
+
+```bash
+npm run docs:build:all
+npx wrangler pages deploy site --project-name=plt-docs
+```
+
+Alternative: connect the repository in the Cloudflare dashboard and use this build configuration:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `python -m pip install -r requirements.txt && npm ci && npm run docs:build:all` |
+| Build output directory | `site` |
+| Python version | `3.12` |
+| Node version | `20` |

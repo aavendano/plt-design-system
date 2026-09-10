@@ -28,6 +28,10 @@ npm run docs:build
 
 Zensical reads `zensical.toml`, uses `docs/` as the source directory and writes the generated site to `site/`.
 
+## Design system catalog
+
+Browse the interactive component catalog at [/catalog/](/catalog/) after building or deploying the site.
+
 ## Key documents
 
 - [Authoring with Zensical](authoring-with-zensical.md)
