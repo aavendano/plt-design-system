@@ -4,7 +4,9 @@
   --plt-radius-box: 0.25rem;
   --plt-size-selector: 0.25rem;
   --plt-size-field: 0.25rem;
-  --plt-border-width: 1.5px;
+  --plt-border-width: 2px;
   --plt-section-border-width: 3px;
-  --plt-shadow-offset: 2px;
+  --plt-shadow-offset: 4px;
+  --plt-shadow-hover-offset: 8px;
+  --plt-shadow-active-offset: 2px;
 }

@@ -36,3 +36,15 @@ npm run check
 ```
 
 The design-system checks reject contract drift, unsafe Liquid output, parallel PLT primitives, obsolete daisyUI modifiers and incomplete renderer anatomy. The demo build verifies the Tailwind/daisyUI integration. GitHub Actions runs the same workspace check on pull requests and pushes to `main`.
+
+## Documentation site
+
+The documentation site is authored with Zensical from Markdown sources in `docs/`.
+
+```bash
+python -m pip install -r requirements.txt
+npm run docs:serve
+npm run docs:build
+```
+
+`zensical.toml` writes the generated site to `site/`, which is the publish directory for Cloudflare Pages or another static host.

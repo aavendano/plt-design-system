@@ -1,0 +1,18 @@
+[project]
+site_name = "PlayLoveToys Design System"
+site_description = "Zensical documentation for PLT reusable storefront foundations, editorial contracts and hydrated component islands."
+site_author = "AA Digital Business"
+copyright = "&copy; AA Digital Business"
+docs_dir = "docs"
+site_dir = "site"
+dev_addr = "localhost:8000"
+watch = [
+  "packages/design-system",
+  "packages/editorial",
+  "packages/astro",
+]
+
+[project.extra]
+package_design_system = "@playlovetoys/design-system"
+package_editorial = "@playlovetoys/editorial"
+package_astro = "@playlovetoys/astro"
