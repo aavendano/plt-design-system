@@ -12,6 +12,14 @@ watch = [
   "packages/astro",
 ]
 
+extra_css = [
+  "stylesheets/plt-preview.css",
+  "stylesheets/plt-island-preview.css",
+]
+extra_javascript = [
+  "javascripts/plt-island-preview.js",
+]
+
 [project.extra]
 package_design_system = "@playlovetoys/design-system"
 package_editorial = "@playlovetoys/editorial"

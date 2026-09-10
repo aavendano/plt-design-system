@@ -1,3 +1,4 @@
 node_modules/
 packages/design-system/demo/dist.css
+docs/stylesheets/plt-preview.css
 site/
