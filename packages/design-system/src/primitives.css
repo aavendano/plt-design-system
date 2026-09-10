@@ -10,12 +10,12 @@
 
 .theme-elevated:hover {
   transform: translateY(-0.125rem);
-  box-shadow: calc(var(--plt-shadow-offset) * 2.5) calc(var(--plt-shadow-offset) * 2.5) 0 0 var(--plt-color-base-content);
+  box-shadow: var(--plt-shadow-hover-offset) var(--plt-shadow-hover-offset) 0 0 var(--plt-color-base-content);
 }
 
 .theme-elevated:active {
   transform: translateY(0.125rem);
-  box-shadow: none;
+  box-shadow: var(--plt-shadow-active-offset) var(--plt-shadow-active-offset) 0 0 var(--plt-color-base-content);
 }
 
 .theme-bordered {
@@ -42,5 +42,5 @@
 }
 
 .theme-sidebar-shadow {
-  box-shadow: calc(var(--plt-shadow-offset) * 2.5) 0 0 0 var(--plt-color-base-content);
+  box-shadow: var(--plt-shadow-hover-offset) 0 0 0 var(--plt-color-base-content);
 }
