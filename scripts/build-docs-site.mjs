@@ -9,8 +9,16 @@ function run(command) {
   execSync(command, { cwd: root, stdio: "inherit" });
 }
 
-run("zensical build");
 run("npm run build:demo --workspace=@playlovetoys/design-system");
+
+const stylesDir = join(root, "docs", "stylesheets");
+mkdirSync(stylesDir, { recursive: true });
+cpSync(
+  join(root, "packages", "design-system", "demo", "dist.css"),
+  join(stylesDir, "plt-preview.css"),
+);
+
+run("zensical build");
 
 const catalogDir = join(root, "site", "catalog");
 mkdirSync(catalogDir, { recursive: true });
