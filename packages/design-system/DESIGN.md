@@ -2,7 +2,7 @@
 
 ## Visual direction
 
-Editorial commerce with a soft neo-brutalist language: clean, bold, playful and high-contrast. Use near-white surfaces, uppercase display typography, visible 1.5–3px borders and hard offset shadows without blur.
+Editorial commerce with a soft neo-brutalist language: clean, bold, playful and high-contrast. Use near-white surfaces, uppercase display typography, visible 2–3px borders and hard offset shadows without blur.
 
 ## Component foundation
 
@@ -43,9 +43,11 @@ Do not create a parallel component implementation for something daisyUI already 
 
 ### Geometry
 - Field/box radius: `0.25rem`
-- Base component border: `1.5px`
+- Base component border: `2px`
 - PLT section/emphasis border: `3px`
-- Hard shadow offset: `2px`
+- Hard shadow offset: `4px`
+- Hard shadow hover offset: `8px`
+- Hard shadow active offset: `2px`
 - Avoid glassmorphism, soft gradients and pill-shaped UI as the default visual language.
 
 ## Source of truth
