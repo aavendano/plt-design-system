@@ -6,6 +6,7 @@
   "files": ["src", "schemas", "README.md"],
   "exports": {
     ".": "./src/types.ts",
-    "./page-schema": "./schemas/page.schema.json"
+    "./page-schema": "./schemas/page.schema.json",
+    "./hydration-island-schema": "./schemas/hydration-island.schema.json"
   }
 }
