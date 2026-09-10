@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://playlovetoys.dev/schemas/hydration-island.json",
+  "title": "PlayLoveToys Hydration Island",
+  "type": "object",
+  "required": ["component", "id", "hydrate", "data"],
+  "properties": {
+    "component": {
+      "type": "string",
+      "enum": [
+        "Hero",
+        "PromoStrip",
+        "Newsletter",
+        "ProductGrid",
+        "ProductCard",
+        "CollectionCard",
+        "SearchField",
+        "FilterBar",
+        "SortSelect",
+        "Pagination",
+        "EmptyState"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "hydrate": {
+      "type": "string",
+      "enum": ["load", "idle", "visible", "interaction"]
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
