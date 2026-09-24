@@ -109,6 +109,14 @@
 }
 .plt-hero__copy { display: grid; gap: 1.5rem; max-width: 42rem; }
 .plt-hero--media .plt-hero__content { color: var(--plt-color-base-100); }
+/* Outline actions over media: light outline at rest, light fill on hover
+ * (daisyUI variables carry the d- prefix). Overrides the dark border that
+ * theme-bordered applies. */
+.plt-hero--media .d-btn-outline {
+  --d-btn-color: var(--plt-color-base-100);
+  --d-btn-fg: var(--plt-color-base-content);
+  border-color: var(--plt-color-base-100);
+}
 .plt-hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 
 .plt-split-cta {
@@ -405,9 +413,18 @@
 @media (min-width: 64rem) {
   .plt-product-grid { --plt-product-grid-columns: 4; }
 }
+/* Column hints set the widest layout. Narrow viewports step down so cards
+ * never overflow a phone screen (a fixed 3-up grid at 390px is ~100px/card). */
 .plt-product-grid--cols-2 { --plt-product-grid-columns: 2; }
-.plt-product-grid--cols-3 { --plt-product-grid-columns: 3; }
-.plt-product-grid--cols-4 { --plt-product-grid-columns: 4; }
+.plt-product-grid--cols-3 { --plt-product-grid-columns: 1; }
+.plt-product-grid--cols-4 { --plt-product-grid-columns: 2; }
+@media (min-width: 40rem) {
+  .plt-product-grid--cols-3,
+  .plt-product-grid--cols-4 { --plt-product-grid-columns: 3; }
+}
+@media (min-width: 64rem) {
+  .plt-product-grid--cols-4 { --plt-product-grid-columns: 4; }
+}
 
 /* Product detail layout. */
 .plt-product-detail {

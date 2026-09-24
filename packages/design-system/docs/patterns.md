@@ -71,11 +71,14 @@ Product lookup, variants, quick-add, reviews, swatches and money formatting rema
       <p class="theme-body-lg">Hero supporting copy.</p>
       <div class="plt-hero__actions">
         <a class="d-btn d-btn-primary d-btn-lg theme-bordered theme-elevated theme-label-bold" href="#">Shop now</a>
+        <a class="d-btn d-btn-outline d-btn-lg theme-bordered theme-elevated theme-label-bold" href="#">Learn more</a>
       </div>
     </div>
   </div>
 </section>
 ```
+
+In `plt-hero--media`, `d-btn-outline` actions switch to a light outline (and a light fill on hover) so they stay legible over the image and overlay.
 
 ## Split CTA
 
