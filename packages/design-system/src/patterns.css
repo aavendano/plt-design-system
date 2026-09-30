@@ -219,6 +219,18 @@
   max-width: 12rem;
   padding: 0.25rem 0.5rem;
 }
+/* Logo home link: keep daisyUI ghost sizing but never paint a button surface
+   (NavLink sets aria-current="page", which otherwise triggers .d-btn-active). */
+.plt-navbar__brand.d-btn:hover,
+.plt-navbar__brand.d-btn:focus-visible,
+.plt-navbar__brand.d-btn.active,
+.plt-navbar__brand.d-btn.d-btn-active,
+.plt-navbar__brand.d-btn[aria-current="page"] {
+  --btn-bg: transparent;
+  --btn-border: transparent;
+  --btn-shadow: 0 0 0 0 oklch(0% 0 0 / 0);
+  background-image: none;
+}
 .plt-navbar__brand img {
   height: 2rem;
   width: auto;
