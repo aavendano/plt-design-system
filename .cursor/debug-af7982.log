@@ -1,0 +1,4 @@
+{"sessionId":"af7982","runId":"post-fix","hypothesisId":"D","location":"pre-user-verify","message":"GraphQL home indexed after match fix","data":{"data":{"homeConnection":{"totalCount":4},"home":{"title":"Home"}}},"timestamp":1790868667231}
+{"sessionId":"af7982","runId":"post-fix","hypothesisId":"D","location":"tina-home.server.ts:loadTinaHomeIndex","message":"home query result","data":{"relativePath":"us/en/index.md","hasHome":true,"title":"Home"},"timestamp":1790868746137}
+{"sessionId":"af7982","runId":"post-fix","hypothesisId":"D","location":"tina-home.server.ts:loadTinaHomeIndex","message":"home query result","data":{"relativePath":"us/en/index.md","hasHome":true,"title":"Home"},"timestamp":1790868747575}
+{"sessionId":"af7982","runId":"post-fix","hypothesisId":"D","location":"tina-home.server.ts:loadTinaHomeIndex","message":"home query result","data":{"relativePath":"us/en/index.md","hasHome":true,"title":"Home"},"timestamp":1790868797876}
