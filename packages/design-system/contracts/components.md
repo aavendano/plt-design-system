@@ -106,6 +106,15 @@ Quantity/remove controls are injected via a slot / render block.
 
 No required data props. Optional: `columns` hint (`2|3|4`). Children / render block supply ProductCard (or CollectionCard) instances.
 
+`columns` is the maximum on wide screens; narrow viewports step down so cards never overflow:
+
+| `columns` | < 40rem | 40–64rem | ≥ 64rem |
+| --- | --- | --- | --- |
+| _(none)_ | 2 | 3 | 4 |
+| `2` | 2 | 2 | 2 |
+| `3` | 1 | 3 | 3 |
+| `4` | 2 | 3 | 4 |
+
 ## ProductDetail
 
 Required: `title`, `price`.
