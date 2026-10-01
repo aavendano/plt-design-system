@@ -43,6 +43,8 @@ Use official `d-`-prefixed DaisyUI classes for primitives:
 
 Use `plt-*` only for compositions that DaisyUI does not provide, such as media-card layout, product-grid shell or cart-line composition.
 
+The storefront gap list — what to consume, what to define next, and what stays in the application — is in [Storefront component inventory](storefront-component-inventory.md). Do not add a new visual contract until that document says the unit is missing.
+
 ## Reusable storefront base
 
 The store template should start from these reusable units:

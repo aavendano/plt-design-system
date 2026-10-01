@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Atkinson+Hyperlegible:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap">
+  <style>
+    :root{
+      --plt-color-base-100:#FAF7F2; --plt-color-base-200:oklch(98% 0 0); --plt-color-base-300:oklch(95% 0 0);
+      --plt-color-base-content:oklch(37% 0.044 257.287);
+      --plt-color-primary:#533278; --plt-color-primary-content:#FAF7F2;
+      --plt-color-secondary:#F4436C; --plt-color-secondary-content:#FAF7F2;
+      --plt-color-accent:#0C7489; --plt-color-accent-content:#FAF7F2;
+      --plt-color-neutral:oklch(14% 0.005 285.823); --plt-color-neutral-content:oklch(92% 0.004 286.32);
+      --plt-color-info:oklch(90% 0.058 230.902); --plt-color-info-content:oklch(44% 0.11 240.79);
+      --plt-color-success:oklch(90% 0.093 164.15); --plt-color-success-content:oklch(37% 0.077 168.94);
+      --plt-color-warning:oklch(96% 0.059 95.617); --plt-color-warning-content:oklch(55% 0.163 48.998);
+      --plt-color-error:oklch(89% 0.058 10.001); --plt-color-error-content:oklch(27% 0.105 12.094);
+      --plt-font-display:'Fjalla One','Arial Narrow',sans-serif;
+      --plt-font-body:'Atkinson Hyperlegible',Arial,sans-serif;
+      --plt-font-accent:'Space Grotesk',Arial,sans-serif;
+      --plt-radius:0.25rem; --plt-border-width:2px; --plt-section-border-width:3px;
+      --plt-shadow-offset:4px; --plt-shadow-hover-offset:8px; --plt-shadow-active-offset:2px;
+    }
+    body{ margin:0; }
+    a{ color:var(--plt-color-accent); }
+    a:hover{ color:var(--plt-color-primary); }
+  </style>
+</helmet>
+
+<div style="background:var(--plt-color-base-100);color:var(--plt-color-base-content);font-family:var(--plt-font-body);min-height:100vh;">
+
+  <header style="position:sticky;top:0;z-index:40;background:var(--plt-color-base-200);border-bottom:var(--plt-section-border-width) solid var(--plt-color-base-content);padding:0 1.25rem;">
+    <div style="max-width:78rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:4rem;flex-wrap:wrap;padding-block:0.5rem;">
+      <div style="display:flex;align-items:baseline;gap:0.6rem;">
+        <span style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.025em;text-transform:uppercase;color:var(--plt-color-primary);">PLT</span>
+        <span style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;color:var(--plt-color-base-content);opacity:0.55;">Catálogo de componentes</span>
+      </div>
+      <nav style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+        <button onClick="{{ setFoundations }}" style="{{ navFoundations }}">Foundations</button>
+        <button onClick="{{ setPrimitives }}" style="{{ navPrimitives }}">Primitivos</button>
+        <button onClick="{{ setPatterns }}" style="{{ navPatterns }}">Patrones</button>
+        <button onClick="{{ setCommerce }}" style="{{ navCommerce }}">Commerce</button>
+        <button onClick="{{ setExamples }}" style="{{ navExamples }}">Ejemplos</button>
+      </nav>
+      <button onClick="{{ toggleCode }}" style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.025em;padding:0.5rem 0.9rem;border-radius:var(--plt-radius);cursor:pointer;background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);border:var(--plt-border-width) solid var(--plt-color-base-content);">{{ codeToggleLabel }}</button>
+    </div>
+  </header>
+
+  <main style="max-width:78rem;margin:0 auto;padding:2.5rem 1.25rem 6rem;display:grid;gap:3rem;">
+
+    <section style="display:grid;gap:0.75rem;border-bottom:var(--plt-section-border-width) solid var(--plt-color-base-content);padding-bottom:2rem;">
+      <span style="display:inline-flex;width:fit-content;font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.3rem 0.6rem;border-radius:var(--plt-radius);">23 contratos documentados</span>
+      <h1 style="font-family:var(--plt-font-display);font-size:clamp(2.25rem,4vw,3rem);line-height:1;font-weight:700;letter-spacing:-0.025em;text-transform:uppercase;margin:0;color:var(--plt-color-primary);">PLT Design System</h1>
+      <p style="font-family:var(--plt-font-body);font-size:1.125rem;line-height:1.625;max-width:42rem;margin:0;">Referencia visual y de contrato para el equipo de desarrollo. daisyUI 5 + Tailwind 4 en la base, tema de marca PLT y extensiones <code>theme-*</code> por encima. Usa el toggle "Ver código" para ver las clases exactas que debe emitir cada renderer (Liquid / Astro).</p>
+    </section>
+
+    <sc-if value="{{ showFoundations }}" hint-placeholder-val="{{ true }}">
+    <section style="display:grid;gap:2rem;">
+      <div>
+        <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0 0 0.35rem;">Color</h2>
+        <p style="margin:0 0 1rem;opacity:0.75;">Tokens en <code>src/tokens.css</code>, mapeados al tema daisyUI <code>brand</code>.</p>
+        <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));">
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:#FAF7F2;"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">base-100 · #FAF7F2</div><div style="font-size:0.8rem;opacity:0.65;">Fondo de página/tarjeta</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:oklch(98% 0 0);"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">base-200</div><div style="font-size:0.8rem;opacity:0.65;">Navbar</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:oklch(95% 0 0);"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">base-300</div><div style="font-size:0.8rem;opacity:0.65;">Footer, placeholders</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:oklch(37% 0.044 257.287);"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">base-content</div><div style="font-size:0.8rem;opacity:0.65;">Texto, bordes, sombras</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:#533278;"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">primary · #533278</div><div style="font-size:0.8rem;opacity:0.65;">CTAs, marca</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:#F4436C;"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">secondary · #F4436C</div><div style="font-size:0.8rem;opacity:0.65;">Badges, botón promo</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:#0C7489;"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">accent · #0C7489</div><div style="font-size:0.8rem;opacity:0.65;">Links, estado info</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:oklch(14% 0.005 285.823);"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;color:var(--plt-color-neutral);">neutral</div><div style="font-size:0.8rem;opacity:0.65;">Acentos fuertes</div></div>
+          <div><div style="height:5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:oklch(96% 0.059 95.617);"></div><div style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;margin-top:0.4rem;">warning</div><div style="font-size:0.8rem;opacity:0.65;">Hero, SplitCta</div></div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0 0 0.35rem;">Tipografía</h2>
+        <p style="margin:0 0 1rem;opacity:0.75;">Display: Fjalla One · Body: Atkinson Hyperlegible · Labels/Accent: Space Grotesk.</p>
+        <div style="display:grid;gap:1rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);padding:1.5rem;background:var(--plt-color-base-100);">
+          <div><code style="font-size:0.75rem;opacity:0.6;">theme-headline-lg</code><div style="font-family:var(--plt-font-display);font-size:clamp(2.25rem,4vw,3rem);line-height:1;font-weight:700;letter-spacing:-0.025em;text-transform:uppercase;">Shop bold.</div></div>
+          <div><code style="font-size:0.75rem;opacity:0.6;">theme-headline-sm</code><div style="font-family:var(--plt-font-display);font-size:clamp(1.25rem,2vw,1.5rem);line-height:1.1;font-weight:700;letter-spacing:-0.025em;text-transform:uppercase;">Product title</div></div>
+          <div><code style="font-size:0.75rem;opacity:0.6;">theme-label-bold</code><div style="font-family:var(--plt-font-accent);font-size:0.875rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;">Add to cart</div></div>
+          <div><code style="font-size:0.75rem;opacity:0.6;">theme-label-sm</code><div style="font-family:var(--plt-font-accent);font-size:0.75rem;letter-spacing:0.025em;text-transform:uppercase;">New arrivals</div></div>
+          <div><code style="font-size:0.75rem;opacity:0.6;">theme-body-lg</code><div style="font-family:var(--plt-font-body);font-size:1.125rem;line-height:1.625;">Editorial commerce con lenguaje neo-brutalista suave.</div></div>
+          <div><code style="font-size:0.75rem;opacity:0.6;">theme-meta</code><div style="font-family:var(--plt-font-body);font-size:0.875rem;opacity:0.6;">Vendor · Mar 8</div></div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0 0 0.35rem;">Geometría y sombra dura</h2>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end;">
+          <div style="text-align:center;"><div style="width:6rem;height:6rem;background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);box-shadow:var(--plt-shadow-offset) var(--plt-shadow-offset) 0 0 var(--plt-color-base-content);border-radius:var(--plt-radius);"></div><div style="font-size:0.75rem;margin-top:0.5rem;opacity:0.7;">default · 4px</div></div>
+          <div style="text-align:center;"><div style="width:6rem;height:6rem;background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);box-shadow:var(--plt-shadow-hover-offset) var(--plt-shadow-hover-offset) 0 0 var(--plt-color-base-content);border-radius:var(--plt-radius);"></div><div style="font-size:0.75rem;margin-top:0.5rem;opacity:0.7;">hover · 8px</div></div>
+          <div style="text-align:center;"><div style="width:6rem;height:6rem;background:var(--plt-color-base-100);border:var(--plt-section-border-width) solid var(--plt-color-base-content);box-shadow:var(--plt-shadow-active-offset) var(--plt-shadow-active-offset) 0 0 var(--plt-color-base-content);border-radius:var(--plt-radius);"></div><div style="font-size:0.75rem;margin-top:0.5rem;opacity:0.7;">active · 2px, borde sección 3px</div></div>
+        </div>
+      </div>
+
+      <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+      <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;">--plt-radius-selector: 0.25rem;
+--plt-border-width: 2px;
+--plt-section-border-width: 3px;
+--plt-shadow-offset: 4px;
+--plt-shadow-hover-offset: 8px;
+--plt-shadow-active-offset: 2px;</pre>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ showPrimitives }}" hint-placeholder-val="{{ false }}">
+    <section style="display:grid;gap:1.5rem;">
+      <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0;">Primitivos daisyUI-first</h2>
+      <p style="margin:0;opacity:0.75;max-width:46rem;">Cada primitivo usa la clase <code>d-*</code> oficial de daisyUI como base. <code>theme-*</code> añade tratamiento de marca. No existen APIs paralelas (<code>plt-button</code>, <code>plt-card</code>, etc.).</p>
+
+      <div style="background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.5rem;">
+        <h3 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;color:var(--plt-color-primary);margin:0 0 1rem;">Button</h3>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+          <button style="font-family:var(--plt-font-accent);font-size:0.875rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;padding:0.65rem 1.4rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);cursor:pointer;transition:transform 150ms ease,box-shadow 150ms ease;" style-hover="transform:translateY(-2px);box-shadow:8px 8px 0 0 var(--plt-color-base-content);" style-active="transform:translateY(2px);box-shadow:2px 2px 0 0 var(--plt-color-base-content);">Primary</button>
+          <button style="font-family:var(--plt-font-accent);font-size:0.875rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;padding:0.65rem 1.4rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);cursor:pointer;transition:transform 150ms ease,box-shadow 150ms ease;" style-hover="transform:translateY(-2px);box-shadow:8px 8px 0 0 var(--plt-color-base-content);">Secondary</button>
+          <button style="font-family:var(--plt-font-accent);font-size:0.875rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;padding:0.65rem 1.4rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:transparent;color:var(--plt-color-base-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);cursor:pointer;transition:transform 150ms ease,box-shadow 150ms ease;" style-hover="transform:translateY(-2px);box-shadow:8px 8px 0 0 var(--plt-color-base-content);">Outline</button>
+          <button disabled="" style="font-family:var(--plt-font-accent);font-size:0.875rem;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;padding:0.65rem 1.4rem;border-radius:var(--plt-radius);border:var(--plt-border-width) solid var(--plt-color-base-300);background:var(--plt-color-base-300);color:var(--plt-color-base-content);opacity:0.5;cursor:not-allowed;">Disabled</button>
+        </div>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold"&gt;Primary&lt;/button&gt;
+&lt;button class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold"&gt;Secondary&lt;/button&gt;
+&lt;button class="d-btn d-btn-outline theme-bordered theme-elevated theme-label-bold"&gt;Outline&lt;/button&gt;
+&lt;button class="d-btn" disabled&gt;Disabled&lt;/button&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.5rem;">
+        <h3 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;color:var(--plt-color-primary);margin:0 0 1rem;">Card</h3>
+        <div style="max-width:22rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.25rem;display:grid;gap:0.6rem;">
+          <span style="display:inline-flex;width:fit-content;font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.25rem 0.55rem;border-radius:var(--plt-radius);">Default badge</span>
+          <h4 style="font-family:var(--plt-font-display);font-size:1.25rem;text-transform:uppercase;margin:0;">Portable surface</h4>
+          <p style="margin:0;">Anatomía base de daisyUI, identidad visual PLT encima.</p>
+          <a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;">Ver formularios →</a>
+        </div>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;article class="d-card bg-base-100 theme-bordered theme-elevated"&gt;
+  &lt;div class="d-card-body"&gt;
+    &lt;span class="d-badge d-badge-secondary theme-label-bold"&gt;Default badge&lt;/span&gt;
+    &lt;h2 class="d-card-title theme-headline-sm"&gt;Portable surface&lt;/h2&gt;
+    &lt;p&gt;Base anatomy from daisyUI, PLT visual identity on top.&lt;/p&gt;
+    &lt;div class="d-card-actions"&gt;&lt;a class="d-link d-link-hover theme-label-bold" href="#"&gt;View forms&lt;/a&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.5rem;">
+        <h3 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;color:var(--plt-color-primary);margin:0 0 1rem;">Badge</h3>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+          <span style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.25rem 0.55rem;border-radius:var(--plt-radius);">Secondary</span>
+          <span style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-accent);color:var(--plt-color-accent-content);padding:0.25rem 0.55rem;border-radius:var(--plt-radius);">Accent</span>
+          <span style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:transparent;border:var(--plt-border-width) solid var(--plt-color-base-content);padding:0.2rem 0.5rem;border-radius:var(--plt-radius);">Outline</span>
+        </div>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;span class="d-badge d-badge-secondary theme-label-bold"&gt;New&lt;/span&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.5rem;">
+        <h3 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;color:var(--plt-color-primary);margin:0 0 1rem;">Form controls</h3>
+        <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));max-width:38rem;">
+          <label style="display:grid;gap:0.4rem;font-size:0.85rem;">Text input
+            <input value="Play, love &amp; Toys" style="font-family:var(--plt-font-body);padding:0.6rem 0.75rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:var(--plt-color-base-100);">
+          </label>
+          <label style="display:grid;gap:0.4rem;font-size:0.85rem;">Select
+            <select style="font-family:var(--plt-font-body);padding:0.6rem 0.75rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:var(--plt-color-base-100);"><option>Canada</option><option>United States</option></select>
+          </label>
+          <label style="display:grid;gap:0.4rem;font-size:0.85rem;">Textarea
+            <textarea rows="3" style="font-family:var(--plt-font-body);padding:0.6rem 0.75rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);background:var(--plt-color-base-100);">Editorial commerce</textarea>
+          </label>
+        </div>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;input class="d-input" type="email"&gt;
+&lt;select class="d-select"&gt;&lt;option&gt;Canada&lt;/option&gt;&lt;/select&gt;
+&lt;textarea class="d-textarea"&gt;&lt;/textarea&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.5rem;">
+        <h3 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;color:var(--plt-color-primary);margin:0 0 1rem;">Divider &amp; Alert</h3>
+        <div style="border-top:var(--plt-section-border-width) solid var(--plt-color-base-content);margin-block:0.5rem;"></div>
+        <div style="display:grid;gap:0.6rem;margin-top:1rem;">
+          <div style="background:var(--plt-color-info);color:var(--plt-color-info-content);padding:0.75rem 1rem;border-radius:var(--plt-radius);">Information notice</div>
+          <div style="background:var(--plt-color-success);color:var(--plt-color-success-content);padding:0.75rem 1rem;border-radius:var(--plt-radius);">Success notice</div>
+          <div style="background:var(--plt-color-warning);color:var(--plt-color-warning-content);padding:0.75rem 1rem;border-radius:var(--plt-radius);">Warning notice</div>
+          <div style="background:var(--plt-color-error);color:var(--plt-color-error-content);padding:0.75rem 1rem;border-radius:var(--plt-radius);">Error notice</div>
+        </div>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;div class="d-divider"&gt;&lt;/div&gt;
+&lt;div class="d-alert d-alert-info"&gt;Information notice&lt;/div&gt;
+&lt;div class="d-alert d-alert-error"&gt;Error notice&lt;/div&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--plt-color-base-100);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.5rem;">
+        <h3 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;color:var(--plt-color-primary);margin:0 0 1rem;">Links, Tabs &amp; Breadcrumbs</h3>
+        <div style="display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
+          <a href="#" style="font-family:var(--plt-font-accent);font-size:0.85rem;font-weight:700;text-transform:uppercase;">Home</a>
+          <a href="#" style="font-family:var(--plt-font-accent);font-size:0.85rem;font-weight:700;text-transform:uppercase;">Collections</a>
+          <div style="display:flex;border-bottom:var(--plt-border-width) solid var(--plt-color-base-300);">
+            <button style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.5rem 0.9rem;border:none;background:transparent;border-bottom:var(--plt-section-border-width) solid var(--plt-color-primary);color:var(--plt-color-primary);cursor:pointer;">Featured</button>
+            <button style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.5rem 0.9rem;border:none;background:transparent;opacity:0.6;cursor:pointer;">New</button>
+          </div>
+        </div>
+        <nav aria-label="Breadcrumb" style="font-family:var(--plt-font-body);font-size:0.875rem;display:flex;gap:0.4rem;opacity:0.75;">
+          <a href="/">Home</a><span>/</span><a href="/collections">Collections</a><span>/</span><span aria-current="page" style="opacity:0.6;">Current page</span>
+        </nav>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;div role="tablist" class="d-tabs d-tabs-border"&gt;
+  &lt;button role="tab" class="d-tab d-tab-active"&gt;Featured&lt;/button&gt;
+&lt;/div&gt;
+&lt;nav class="d-breadcrumbs plt-breadcrumbs" aria-label="Breadcrumb"&gt;
+  &lt;ul&gt;&lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;span aria-current="page"&gt;Current page&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;/nav&gt;</pre>
+        </sc-if>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ showPatterns }}" hint-placeholder-val="{{ false }}">
+    <section style="display:grid;gap:1.5rem;">
+      <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0;">Patrones editoriales</h2>
+      <p style="margin:0;opacity:0.75;max-width:46rem;">Composiciones <code>plt-*</code> sobre primitivos daisyUI. Ver <code>contracts/components.md</code> para los inputs requeridos/opcionales de cada renderer.</p>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">SectionHeader — requiere: title</div>
+        <header style="border-bottom:var(--plt-section-border-width) solid var(--plt-color-base-content);padding-bottom:1.25rem;display:grid;gap:0.6rem;">
+          <span style="display:inline-flex;width:fit-content;font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.25rem 0.55rem;border-radius:var(--plt-radius);">Journal</span>
+          <h2 style="font-family:var(--plt-font-display);font-size:clamp(2.25rem,4vw,3rem);text-transform:uppercase;margin:0;color:var(--plt-color-primary);">Open conversations</h2>
+          <p style="max-width:42rem;margin:0;opacity:0.8;">Editorial introduction.</p>
+        </header>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;header class="plt-section-header"&gt;
+  &lt;span class="d-badge d-badge-secondary theme-label-bold plt-section-header__eyebrow"&gt;Journal&lt;/span&gt;
+  &lt;h1 class="theme-headline-lg plt-section-header__title"&gt;Open conversations&lt;/h1&gt;
+  &lt;p class="theme-body-lg plt-section-header__description"&gt;Editorial introduction.&lt;/p&gt;
+&lt;/header&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">Hero — requiere: heading</div>
+        <section style="position:relative;overflow:hidden;border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-warning);border-radius:var(--plt-radius);">
+          <div style="position:relative;z-index:1;padding:3rem 2rem;display:grid;gap:1.25rem;max-width:36rem;">
+            <span style="display:inline-flex;width:fit-content;font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.25rem 0.55rem;border-radius:var(--plt-radius);">New drop</span>
+            <h3 style="font-family:var(--plt-font-display);font-size:clamp(2.25rem,4vw,3rem);text-transform:uppercase;margin:0;">Shop bold.</h3>
+            <p style="margin:0;font-size:1.125rem;">Soft neo-brutalist commerce with hard borders and offset shadows.</p>
+            <div><a href="#" style="display:inline-flex;font-family:var(--plt-font-accent);font-size:1rem;font-weight:700;text-transform:uppercase;padding:0.85rem 1.75rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);">Shop now</a></div>
+          </div>
+        </section>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;section class="d-hero plt-hero"&gt;
+  &lt;div class="d-hero-content plt-hero__content"&gt;
+    &lt;div class="plt-hero__copy"&gt;
+      &lt;span class="d-badge d-badge-secondary theme-label-bold"&gt;New drop&lt;/span&gt;
+      &lt;h1 class="theme-headline-lg"&gt;Shop bold.&lt;/h1&gt;
+      &lt;p class="theme-body-lg"&gt;Soft neo-brutalist commerce with hard borders and offset shadows.&lt;/p&gt;
+      &lt;div class="plt-hero__actions"&gt;
+        &lt;a class="d-btn d-btn-primary d-btn-lg theme-bordered theme-elevated theme-label-bold" href="#"&gt;Shop now&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">SplitCta — requiere: heading (composición sin equivalente daisyUI directo)</div>
+        <section style="display:grid;grid-template-columns:1fr 1fr;border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-warning);border-radius:var(--plt-radius);overflow:hidden;">
+          <div style="padding:2rem;display:grid;gap:0.85rem;align-content:center;">
+            <span style="display:inline-flex;width:fit-content;font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.25rem 0.55rem;border-radius:var(--plt-radius);">New</span>
+            <h3 style="font-family:var(--plt-font-display);font-size:1.75rem;text-transform:uppercase;margin:0;">Editorial callout</h3>
+            <p style="margin:0;">Supporting copy.</p>
+            <div><a href="#" style="display:inline-flex;font-family:var(--plt-font-accent);font-size:0.85rem;font-weight:700;text-transform:uppercase;padding:0.6rem 1.2rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);">Learn more</a></div>
+          </div>
+          <div style="background:var(--plt-color-base-300);border-left:var(--plt-section-border-width) solid var(--plt-color-base-content);min-height:14rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;opacity:0.5;">imagen</div>
+        </section>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;section class="plt-split-cta"&gt;
+  &lt;div class="plt-split-cta__content"&gt;...&lt;/div&gt;
+  &lt;div class="plt-split-cta__media"&gt;&lt;img src="feature.jpg" alt=""&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;!-- plt-split-cta--media-left invierte el orden en desktop --&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">PromoStrip — requiere: heading · tone: primary | warning</div>
+        <div style="display:grid;gap:0.75rem;">
+          <section style="padding:1.25rem 1.5rem;border-block:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div><div style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;">Free shipping over $75</div><div style="font-size:0.95rem;opacity:0.9;">Worldwide delivery.</div></div>
+            <a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.55rem 1.1rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);">Claim offer</a>
+          </section>
+        </div>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;section class="plt-promo-strip"&gt; &lt;!-- plt-promo-strip--warning para tono editorial --&gt;
+  &lt;div class="plt-promo-strip__inner"&gt;
+    &lt;div class="plt-promo-strip__copy"&gt;&lt;h2 class="theme-headline-sm"&gt;Free shipping over $75&lt;/h2&gt;&lt;p class="theme-body-lg"&gt;Worldwide delivery.&lt;/p&gt;&lt;/div&gt;
+    &lt;a class="d-btn d-btn-secondary theme-bordered theme-elevated theme-label-bold" href="#"&gt;Claim offer&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">Newsletter — requiere: heading</div>
+        <section style="max-width:32rem;margin:0 auto;padding:2rem;text-align:center;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);display:grid;gap:0.85rem;">
+          <h3 style="font-family:var(--plt-font-display);font-size:1.75rem;text-transform:uppercase;margin:0;">Join the underground</h3>
+          <p style="margin:0;">Get updates directly to your inbox.</p>
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;">
+            <input placeholder="EMAIL@STORE.COM" style="font-family:var(--plt-font-body);padding:0.6rem 0.75rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);flex:1;min-width:12rem;">
+            <button style="font-family:var(--plt-font-accent);font-size:0.85rem;font-weight:700;text-transform:uppercase;padding:0.6rem 1.2rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);">Subscribe</button>
+          </div>
+        </section>
+        <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+        <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;margin-top:1rem;">&lt;section class="plt-newsletter"&gt;
+  &lt;div class="d-card bg-base-100 theme-bordered theme-elevated plt-newsletter__card"&gt;
+    &lt;div class="d-card-body plt-newsletter__content"&gt;
+      &lt;h2 class="d-card-title theme-headline-lg"&gt;Join the underground&lt;/h2&gt;
+      &lt;form class="plt-newsletter__form"&gt;
+        &lt;input class="d-input" type="email" placeholder="EMAIL@STORE.COM"&gt;
+        &lt;button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold"&gt;Subscribe&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+        </sc-if>
+      </div>
+
+      <div style="display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));">
+        <div>
+          <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">ProductCard — requiere: title, url, price</div>
+          <article style="border:var(--plt-border-width) solid var(--plt-color-base-content);border-bottom:var(--plt-section-border-width) solid var(--plt-color-primary);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);overflow:hidden;">
+            <div style="aspect-ratio:1;background:var(--plt-color-base-300);border-bottom:var(--plt-section-border-width) solid var(--plt-color-base-content);display:flex;align-items:center;justify-content:center;font-size:0.8rem;opacity:0.5;">producto</div>
+            <div style="padding:0.9rem;display:grid;gap:0.5rem;">
+              <span style="display:inline-flex;width:fit-content;font-family:var(--plt-font-accent);font-size:0.65rem;font-weight:700;text-transform:uppercase;background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);padding:0.2rem 0.5rem;border-radius:var(--plt-radius);">New</span>
+              <h4 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;margin:0;color:var(--plt-color-primary);">Product title</h4>
+              <p style="margin:0;font-size:0.85rem;opacity:0.6;">Vendor</p>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.4rem;">
+                <span style="font-family:var(--plt-font-accent);font-size:0.85rem;font-weight:700;color:var(--plt-color-primary);">$49.00</span>
+                <a href="#" style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;text-transform:uppercase;padding:0.4rem 0.8rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-secondary);color:var(--plt-color-secondary-content);">View</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div>
+          <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">CollectionCard — requiere: title, url</div>
+          <a href="#" style="display:block;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);overflow:hidden;color:inherit;text-decoration:none;">
+            <div style="aspect-ratio:1;background:var(--plt-color-base-300);border-bottom:var(--plt-section-border-width) solid var(--plt-color-base-content);display:flex;align-items:center;justify-content:center;font-size:0.8rem;opacity:0.5;">colección</div>
+            <div style="padding:0.9rem;display:grid;gap:0.4rem;">
+              <h4 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;margin:0;color:var(--plt-color-primary);">Collection title</h4>
+              <p style="margin:0;font-size:0.85rem;opacity:0.6;">Short description.</p>
+            </div>
+          </a>
+        </div>
+        <div>
+          <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">EditorialCard — requiere: title, url</div>
+          <article style="border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);overflow:hidden;">
+            <div style="aspect-ratio:16/9;background:var(--plt-color-accent);color:var(--plt-color-accent-content);display:flex;align-items:center;justify-content:center;font-size:0.8rem;">artículo</div>
+            <div style="padding:0.9rem;display:grid;gap:0.4rem;">
+              <h4 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;margin:0;color:var(--plt-color-primary);">Editorial title</h4>
+              <p style="margin:0;font-size:0.8rem;opacity:0.6;">Mar 8 · Team</p>
+              <p style="margin:0;">Excerpt from the journal.</p>
+              <a href="#" style="font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;text-transform:uppercase;">Read more →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+      <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+      <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;">&lt;article class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-product-card"&gt;
+  &lt;a class="plt-media-card__media" href="#"&gt;&lt;img src="product.jpg" alt="Product"&gt;&lt;/a&gt;
+  &lt;div class="d-card-body plt-media-card__body"&gt;
+    &lt;span class="d-badge d-badge-secondary theme-label-bold"&gt;New&lt;/span&gt;
+    &lt;h3 class="d-card-title theme-headline-sm plt-media-card__title"&gt;&lt;a href="#"&gt;Product title&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class="d-card-actions plt-media-card__actions"&gt;
+      &lt;span class="plt-product-card__price"&gt;$49.00&lt;/span&gt;
+      &lt;a class="d-btn d-btn-secondary d-btn-sm theme-bordered theme-elevated theme-label-bold" href="#"&gt;View&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</pre>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ showCommerce }}" hint-placeholder-val="{{ false }}">
+    <section style="display:grid;gap:1.5rem;">
+      <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0;">Commerce shell</h2>
+      <p style="margin:0;opacity:0.75;max-width:46rem;">Estado del carrito, filtros y estado de la aplicación quedan fuera de este paquete: estos son solo los shells visuales.</p>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">Navbar — requiere: site_name, links[]</div>
+        <header style="background:var(--plt-color-base-200);border:var(--plt-section-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);padding:0 1.25rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;min-height:3.5rem;flex-wrap:wrap;gap:1rem;">
+            <span style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;">PLT</span>
+            <nav style="display:flex;gap:1.25rem;"><a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;">Collections</a><a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;">Journal</a></nav>
+            <span style="font-size:1.1rem;">🛍</span>
+          </div>
+        </header>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">Footer — requiere: site_name</div>
+        <footer style="background:var(--plt-color-base-300);border:var(--plt-section-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);padding:2rem;display:grid;gap:0.5rem;justify-items:center;text-align:center;">
+          <span style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;">Play, love &amp; Toys</span>
+          <p style="margin:0;font-size:0.9rem;opacity:0.7;">Footer shell with newsletter slot.</p>
+        </footer>
+      </div>
+
+      <div style="display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));">
+        <div>
+          <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">CartLine — requiere: title, price</div>
+          <article style="display:grid;grid-template-columns:4rem 1fr auto;gap:0.75rem;align-items:start;padding-bottom:1rem;border-bottom:var(--plt-border-width) solid var(--plt-color-base-300);">
+            <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);"></div>
+            <div><div style="font-family:var(--plt-font-display);font-size:1rem;text-transform:uppercase;color:var(--plt-color-primary);">Cart line</div><div style="font-size:0.8rem;opacity:0.6;">Size M · Qty 1</div></div>
+            <div style="font-family:var(--plt-font-accent);font-weight:700;">$49.00</div>
+          </article>
+        </div>
+        <div>
+          <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">CartSummary — requiere: subtotal</div>
+          <aside style="border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:4px 4px 0 0 var(--plt-color-base-content);padding:1.25rem;display:grid;gap:0.85rem;">
+            <h4 style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;margin:0;">Order summary</h4>
+            <div style="display:flex;justify-content:space-between;font-family:var(--plt-font-accent);font-weight:700;text-transform:uppercase;font-size:0.85rem;"><span>Subtotal</span><span>$49.00</span></div>
+            <a href="#" style="text-align:center;font-family:var(--plt-font-accent);font-size:0.85rem;font-weight:700;text-transform:uppercase;padding:0.65rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);">Checkout</a>
+          </aside>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">CartDrawer — requiere: title</div>
+        <aside style="max-width:22rem;border:var(--plt-section-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);box-shadow:5px 0 0 0 var(--plt-color-base-content);">
+          <header style="display:flex;justify-content:space-between;align-items:center;padding:1rem;border-bottom:var(--plt-border-width) solid var(--plt-color-base-300);"><span style="font-family:var(--plt-font-display);font-size:1.1rem;text-transform:uppercase;">Cart drawer</span><span style="cursor:pointer;">×</span></header>
+          <div style="padding:1rem;font-size:0.9rem;opacity:0.7;">Line items slot here.</div>
+        </aside>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">ProductGrid — columns hint: 2 | 3 | 4</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
+          <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-bottom:var(--plt-section-border-width) solid var(--plt-color-primary);border-radius:var(--plt-radius);display:flex;align-items:center;justify-content:center;font-size:0.7rem;opacity:0.5;">1</div>
+          <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-bottom:var(--plt-section-border-width) solid var(--plt-color-primary);border-radius:var(--plt-radius);display:flex;align-items:center;justify-content:center;font-size:0.7rem;opacity:0.5;">2</div>
+          <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-bottom:var(--plt-section-border-width) solid var(--plt-color-primary);border-radius:var(--plt-radius);display:flex;align-items:center;justify-content:center;font-size:0.7rem;opacity:0.5;">3</div>
+          <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-bottom:var(--plt-section-border-width) solid var(--plt-color-primary);border-radius:var(--plt-radius);display:flex;align-items:center;justify-content:center;font-size:0.7rem;opacity:0.5;">4</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">ProductDetail, OptionPicker &amp; QuantitySelector</div>
+        <div style="display:grid;gap:1.5rem;grid-template-columns:1.1fr 0.9fr;">
+          <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-section-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);display:flex;align-items:center;justify-content:center;font-size:0.8rem;opacity:0.5;">galería</div>
+          <div style="display:grid;gap:1rem;align-content:start;">
+            <h4 style="font-family:var(--plt-font-display);font-size:1.5rem;text-transform:uppercase;margin:0;color:var(--plt-color-primary);">Product title</h4>
+            <div style="font-family:var(--plt-font-accent);font-size:1.2rem;font-weight:700;color:var(--plt-color-primary);">$49.00</div>
+            <div>
+              <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;margin-bottom:0.4rem;opacity:0.7;">Size</div>
+              <div style="display:flex;gap:0.5rem;">
+                <button style="padding:0.4rem 0.9rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-primary);background:var(--plt-color-primary);color:var(--plt-color-primary-content);font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;">M</button>
+                <button style="padding:0.4rem 0.9rem;border-radius:var(--plt-radius);border:var(--plt-border-width) solid var(--plt-color-base-content);background:transparent;font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;">L</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:stretch;">
+              <div style="display:inline-flex;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);">
+                <button style="padding:0.5rem 0.8rem;border:none;background:transparent;font-weight:700;cursor:pointer;">−</button>
+                <input value="1" style="width:2.5rem;border:none;border-left:var(--plt-border-width) solid var(--plt-color-base-content);border-right:var(--plt-border-width) solid var(--plt-color-base-content);text-align:center;">
+                <button style="padding:0.5rem 0.8rem;border:none;background:transparent;font-weight:700;cursor:pointer;">+</button>
+              </div>
+              <button style="flex:1;font-family:var(--plt-font-accent);font-weight:700;text-transform:uppercase;font-size:0.85rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);">Add to cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">FilterBar, SortSelect, SearchField &amp; Pagination</div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:end;padding-block:0.75rem;border-bottom:var(--plt-border-width) solid var(--plt-color-base-300);">
+          <label style="display:grid;gap:0.3rem;font-size:0.8rem;min-width:9rem;">Size<select style="padding:0.5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);"><option>All</option></select></label>
+          <label style="display:grid;gap:0.3rem;font-size:0.8rem;min-width:9rem;">Sort by<select style="padding:0.5rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);"><option>Best selling</option></select></label>
+          <div style="display:flex;gap:0.5rem;flex:1;min-width:14rem;"><input placeholder="Search products" style="flex:1;padding:0.5rem 0.75rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);"><button style="padding:0.5rem 0.9rem;border-radius:var(--plt-radius);border:var(--plt-border-width) solid var(--plt-color-base-content);background:var(--plt-color-base-content);color:var(--plt-color-base-100);">Go</button></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;justify-content:center;padding-block:1.5rem;">
+          <span style="padding:0.4rem 0.8rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);font-family:var(--plt-font-accent);font-weight:700;font-size:0.8rem;">1</span>
+          <span style="padding:0.4rem 0.8rem;border-radius:var(--plt-radius);border:var(--plt-border-width) solid var(--plt-color-base-content);font-family:var(--plt-font-accent);font-weight:700;font-size:0.8rem;">2</span>
+          <span style="padding:0.4rem 0.8rem;border-radius:var(--plt-radius);border:var(--plt-border-width) solid var(--plt-color-base-content);font-family:var(--plt-font-accent);font-weight:700;font-size:0.8rem;">→</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--plt-font-accent);font-size:0.7rem;font-weight:700;opacity:0.5;text-transform:uppercase;margin-bottom:0.5rem;">EmptyState — requiere: heading · tone: info | warning | error</div>
+        <div style="padding:2rem;display:grid;gap:0.75rem;justify-items:start;border:var(--plt-border-width) dashed var(--plt-color-base-content);border-radius:var(--plt-radius);">
+          <h4 style="font-family:var(--plt-font-display);font-size:1.3rem;text-transform:uppercase;margin:0;">No results found</h4>
+          <p style="margin:0;opacity:0.7;">Try removing a filter or searching a different term.</p>
+          <a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;">Clear filters</a>
+        </div>
+      </div>
+      <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+      <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;">&lt;div class="plt-product-grid plt-product-grid--cols-4"&gt;
+  &lt;!-- ProductCard × n --&gt;
+&lt;/div&gt;
+&lt;aside class="d-card bg-base-100 theme-bordered theme-elevated plt-cart-summary"&gt;
+  &lt;div class="d-card-body"&gt;
+    &lt;h3 class="d-card-title theme-headline-sm"&gt;Order summary&lt;/h3&gt;
+    &lt;div class="plt-cart-summary__row theme-label-bold"&gt;&lt;span&gt;Subtotal&lt;/span&gt;&lt;span&gt;$49.00&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="d-card-actions"&gt;&lt;a class="d-btn d-btn-primary d-btn-block theme-bordered theme-elevated theme-label-bold" href="#"&gt;Checkout&lt;/a&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/aside&gt;</pre>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ showExamples }}" hint-placeholder-val="{{ false }}">
+    <section style="display:grid;gap:1.5rem;">
+      <h2 style="font-family:var(--plt-font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.025em;color:var(--plt-color-primary);margin:0;">Ejemplos de página completa</h2>
+      <p style="margin:0;opacity:0.75;max-width:46rem;">Homepage armada con islas de hidratación declaradas en Markdown (Zensical) y resueltas por el store template — ver <code>docs/examples/home-page.md</code>.</p>
+
+      <div style="border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);overflow:hidden;">
+        <section style="padding:3rem 2rem;background:var(--plt-color-warning);border-bottom:var(--plt-section-border-width) solid var(--plt-color-base-content);display:grid;gap:1rem;max-width:34rem;">
+          <h3 style="font-family:var(--plt-font-display);font-size:2rem;text-transform:uppercase;margin:0;">Play bold</h3>
+          <p style="margin:0;">A reusable storefront hero declared in Markdown and hydrated by the PLT store template.</p>
+          <div style="display:flex;gap:0.75rem;"><a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.6rem 1.1rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);">Shop new arrivals</a><a href="#" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.6rem 1.1rem;">Read the guide</a></div>
+        </section>
+        <section style="padding:2rem;display:grid;gap:1rem;">
+          <h4 style="font-family:var(--plt-font-display);font-size:1.3rem;text-transform:uppercase;margin:0;color:var(--plt-color-primary);">Featured products</h4>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+            <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);"></div>
+            <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);"></div>
+            <div style="aspect-ratio:1;background:var(--plt-color-base-300);border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);"></div>
+          </div>
+        </section>
+        <section style="padding:2rem;background:var(--plt-color-base-300);border-top:var(--plt-section-border-width) solid var(--plt-color-base-content);text-align:center;display:grid;gap:0.75rem;justify-content:center;">
+          <h4 style="font-family:var(--plt-font-display);font-size:1.3rem;text-transform:uppercase;margin:0;">Join the list</h4>
+          <p style="margin:0;">Get product education, buying guides and launch notes.</p>
+        </section>
+      </div>
+      <sc-if value="{{ showCode }}" hint-placeholder-val="{{ false }}">
+      <pre style="background:var(--plt-color-neutral);color:var(--plt-color-neutral-content);font-family:Consolas,monospace;font-size:0.8rem;line-height:1.6;padding:1rem;border-radius:var(--plt-radius);overflow-x:auto;white-space:pre;">&lt;div data-plt-island="Hero" data-plt-island-id="homepage-hero" data-plt-hydrate="load"&gt;
+  &lt;script type="application/json" data-plt-props&gt;
+    { "heading": "Play bold", "primaryLabel": "Shop new arrivals", "primaryUrl": "/collections/new" }
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;div data-plt-island="ProductGrid" data-plt-island-id="homepage-featured-products" data-plt-hydrate="visible"&gt;
+  &lt;script type="application/json" data-plt-props&gt;
+    { "title": "Featured products", "products": ["product-handle-1","product-handle-2","product-handle-3"] }
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;div data-plt-island="Newsletter" data-plt-island-id="homepage-newsletter" data-plt-hydrate="interaction"&gt;
+  &lt;script type="application/json" data-plt-props&gt;
+    { "heading": "Join the list", "buttonLabel": "Subscribe" }
+  &lt;/script&gt;
+&lt;/div&gt;</pre>
+      </sc-if>
+
+      <div>
+        <h3 style="font-family:var(--plt-font-display);font-size:1.2rem;text-transform:uppercase;margin:1rem 0 0.75rem;color:var(--plt-color-primary);">Estados de componentes</h3>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;padding:1.25rem;border:var(--plt-border-width) solid var(--plt-color-base-content);border-radius:var(--plt-radius);">
+          <div><div style="font-size:0.75rem;opacity:0.55;margin-bottom:0.4rem;">Default</div><button style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.55rem 1.1rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);">Add to cart</button></div>
+          <div><div style="font-size:0.75rem;opacity:0.55;margin-bottom:0.4rem;">Hover (pasa el mouse)</div><button style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.55rem 1.1rem;border-radius:var(--plt-radius);border:var(--plt-section-border-width) solid var(--plt-color-base-content);background:var(--plt-color-primary);color:var(--plt-color-primary-content);box-shadow:4px 4px 0 0 var(--plt-color-base-content);transition:transform 150ms ease,box-shadow 150ms ease;" style-hover="transform:translateY(-2px);box-shadow:8px 8px 0 0 var(--plt-color-base-content);">Add to cart</button></div>
+          <div><div style="font-size:0.75rem;opacity:0.55;margin-bottom:0.4rem;">Disabled</div><button disabled="" style="font-family:var(--plt-font-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;padding:0.55rem 1.1rem;border-radius:var(--plt-radius);border:var(--plt-border-width) solid var(--plt-color-base-300);background:var(--plt-color-base-300);opacity:0.5;">Add to cart</button></div>
+          <div><div style="font-size:0.75rem;opacity:0.55;margin-bottom:0.4rem;">Input error</div><input value="not-an-email" style="padding:0.55rem 0.75rem;border:var(--plt-border-width) solid var(--plt-color-error);border-radius:var(--plt-radius);background:var(--plt-color-base-100);"></div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'foundations', showCode: false };
+
+  go(tab) { this.setState({ tab }); }
+
+  renderVals() {
+    const t = this.state.tab;
+    const base = "font-family:var(--plt-font-accent);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.025em;padding:0.5rem 0.9rem;border-radius:var(--plt-radius);cursor:pointer;";
+    const active = base + "background:var(--plt-color-primary);color:var(--plt-color-primary-content);border:var(--plt-border-width) solid var(--plt-color-base-content);";
+    const inactive = base + "background:transparent;color:var(--plt-color-base-content);border:var(--plt-border-width) solid transparent;";
+    return {
+      showCode: this.state.showCode,
+      codeToggleLabel: this.state.showCode ? 'Ocultar código' : 'Ver código',
+      toggleCode: () => this.setState(s => ({ showCode: !s.showCode })),
+      setFoundations: () => this.go('foundations'),
+      setPrimitives: () => this.go('primitives'),
+      setPatterns: () => this.go('patterns'),
+      setCommerce: () => this.go('commerce'),
+      setExamples: () => this.go('examples'),
+      navFoundations: t === 'foundations' ? active : inactive,
+      navPrimitives: t === 'primitives' ? active : inactive,
+      navPatterns: t === 'patterns' ? active : inactive,
+      navCommerce: t === 'commerce' ? active : inactive,
+      navExamples: t === 'examples' ? active : inactive,
+      showFoundations: t === 'foundations',
+      showPrimitives: t === 'primitives',
+      showPatterns: t === 'patterns',
+      showCommerce: t === 'commerce',
+      showExamples: t === 'examples',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -162,6 +162,10 @@ Required: `heading`.
 
 Optional: `body`, `tone` (`info|warning|error`), `action_label`, `action_url`.
 
+## Pending storefront units
+
+Contracts above are the implemented set. Units the website still needs (`MegaMenu`, `Price`, `Faq`, and the rest) are listed in the repository doc `docs/storefront-component-inventory.md`. Do not add a contract here until that unit is requested.
+
 ## daisyUI rendering invariant
 
 Contracts describe data only. They never replace component anatomy. Renderers must map these values into the daisyUI-first structures documented in `docs/daisyui-conformance.md`.

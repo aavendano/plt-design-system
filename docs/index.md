@@ -37,5 +37,6 @@ Browse the interactive component catalog at [/catalog/](/catalog/) after buildin
 - [Authoring with Zensical](authoring-with-zensical.md)
 - [Hydration islands](hydration-islands.md)
 - [Component foundation](component-foundation.md)
+- [Storefront component inventory](storefront-component-inventory.md)
 - [Store template contract](store-template-contract.md)
 - [Homepage example](examples/home-page.md)

@@ -35,6 +35,8 @@ The renderer layer maps normalized component contracts to platform syntax while 
 
 Each component has a Liquid renderer under `renderers/liquid/` and an Astro renderer under `renderers/astro/`.
 
+Units the website still needs, and units that must stay in the application, are listed in the repository doc `docs/storefront-component-inventory.md`. Do not add a renderer until that inventory marks the unit as missing.
+
 ## Boundary
 
 Renderers accept normalized values. They do not own Shopify product objects, money formatting, variants, swatches, quick-add, cart state, translations, CMS lookups or Astro content collection resolution.
