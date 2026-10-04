@@ -14,7 +14,7 @@
 
 .theme-headline-lg {
   font-family: var(--plt-font-display);
-  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-size: var(--plt-text-display);
   line-height: 1;
   font-weight: var(--plt-heading-weight);
   letter-spacing: var(--plt-heading-tracking);
@@ -23,7 +23,7 @@
 
 .theme-headline-sm {
   font-family: var(--plt-font-display);
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-size: var(--plt-text-heading);
   line-height: 1.1;
   font-weight: var(--plt-heading-weight);
   letter-spacing: var(--plt-heading-tracking);
@@ -54,7 +54,7 @@
 
 .theme-body-lg {
   font-family: var(--plt-font-body);
-  font-size: 1.125rem;
+  font-size: var(--plt-text-body);
   line-height: 1.625;
 }
 
