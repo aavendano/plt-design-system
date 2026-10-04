@@ -93,6 +93,11 @@
   --plt-price-tracking: normal;
 }
 
+/* Product cards: the media edge uses the border color, not the primary. */
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
 /* Surfaces: an edge, not a hard shadow, and no lift on hover. */
 .theme-elevated,
 .theme-elevated:hover,

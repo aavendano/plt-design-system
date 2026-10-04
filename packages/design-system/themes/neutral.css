@@ -56,6 +56,11 @@
   --plt-price-tracking: normal;
 }
 
+/* Product cards: the media edge uses the border color, not the primary. */
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
 /* Surfaces: a hairline and a soft shadow instead of a hard offset. */
 .theme-elevated {
   box-shadow: 0 1px 2px color-mix(in oklab, var(--plt-color-base-content) 15%, transparent);
