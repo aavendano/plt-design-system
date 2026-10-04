@@ -32,6 +32,8 @@ An application can pick the theme at build time (for example from a `THEME` envi
 - Colors: `--plt-color-{base-100,base-200,base-300,base-content,primary,secondary,accent,neutral,info,success,warning,error}` and their `-content` pairs.
 - Shape: `--plt-radius-{selector,field,box}`, `--plt-size-{selector,field}`, `--plt-border-width`, `--plt-section-border-width`, `--plt-border-color`.
 - Elevation: `--plt-shadow-color`, `--plt-shadow-offset`, `--plt-shadow-hover-offset`, `--plt-shadow-active-offset` (set the offsets to `0px` to remove hard shadows).
+- Surface relief: `--plt-elevation-inset` (an inset `box-shadow` list). Cards (`.d-card.theme-elevated`) paint it on an overlay above their children, so a photo or banner that fills one side of the card gets the same relief as the rest. Empty by default. Do not set inset shadows on the card's own `box-shadow`: media covers them.
+- Media: `--plt-media-background` (ground behind photos) and `--plt-media-fit` (`contain` or `cover`).
 - Type: `--plt-font-{display,body,accent}`, `--plt-heading-{weight,tracking,transform}`, `--plt-label-{weight,tracking,transform}`, `--plt-price-tracking`.
 - Layout: `--plt-page-width`, `--plt-page-margin`, `--plt-section-gap-min`.
 
@@ -44,3 +46,9 @@ Unset tokens fall back to the PLT defaults in `src/tokens.css`, `src/geometry.cs
 3. Run `npm run build:themes`; it compiles the demo once per theme and fails if a theme does not compile.
 
 Brand values belong in the token overrides, never in new selectors that duplicate the patterns.
+
+Rules for theme selectors:
+
+- A theme changes tokens. Add a selector only for a signature a token cannot express, and say why in a comment.
+- Never set `position`, `display` or `z-index` on a shared class (`.theme-elevated`, `.d-*`): daisyUI components rely on their own (a menu is `position: absolute`) and an unlayered theme rule wins over them.
+- Effects that must show over media or children go on an overlay, not on the container's own background.

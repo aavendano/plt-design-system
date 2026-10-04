@@ -18,6 +18,23 @@
   box-shadow: var(--plt-shadow-active-offset) var(--plt-shadow-active-offset) 0 0 var(--plt-shadow-color);
 }
 
+/* Relief that has to sit above a card's children.
+ * A card whose photo or banner fills one side hides anything painted on the
+ * card's own background, so inset shadows set on the card never reach that
+ * side. A theme sets `--plt-elevation-inset` (an inset box-shadow list) and
+ * this overlay paints it above the children. Empty by default, so themes that
+ * do not set it are unchanged. `.d-card` is already positioned and has no
+ * pseudo-elements of its own. */
+.d-card.theme-elevated::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: var(--plt-elevation-inset, none);
+  pointer-events: none;
+}
+
 .theme-bordered {
   border-width: var(--plt-section-border-width);
   border-style: solid;
