@@ -14,6 +14,7 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `workbench` | `themes/workbench.css` | Production tool as printed matter: warm paper, coral, slate, mustard and olive inks, 1px rules, flat minimal shadows, IBM Plex Serif, Sans and Mono. |
 | `playlovetoys` | `themes/playlovetoys.css` | The live storefront brand: white and cool paper, purple structure, hot-pink call to action, teal accent, Roboto Condensed with Fredoka, 6px corners, soft cool shadows, springy motion, gradient hero. |
 | `playdoh` | `themes/playdoh.css` | Claymorphism: soft squishy clay with big radii (20 to 40px), two inset shadows plus a pastel drop shadow, on warm cream. Nectarine, Peche, Menthe and Lagune pastels with deep teal ink, Fredoka with Nunito, springy lift and press. |
+| `cheesecake` | `themes/cheesecake.css` | The original PlayLoveToys look, neobrutalist: 2-3px borders, hard offset shadows, capitalised Fjalla One display type, Atkinson Hyperlegible and Space Grotesk, purple, hot pink and teal on near-white paper. Same tokens as `plt`. |
 
 ## Using one
 

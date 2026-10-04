@@ -1,0 +1,9 @@
+/* Theme: Cheesecake. The original PlayLoveToys look, neobrutalist: visible
+ * 2-3px borders, hard offset shadows without blur, display type in capitals
+ * (Fjalla One), Atkinson Hyperlegible for reading and Space Grotesk for
+ * labels, on near-white paper with purple, hot pink and teal.
+ *
+ * It is the default token set, so this file only imports the stock
+ * stylesheet. `plt` is kept as an alias of the same look.
+ */
+@import "../src/index.css";
