@@ -1,0 +1,266 @@
+/* Theme: Playdoh. Claymorphism: every surface looks like soft, squishy clay.
+ * The recipe has three parts, kept as tokens so the rules below stay short:
+ * a big corner radius (20 to 40px), two inset shadows (light on the top-left,
+ * dark on the bottom-right) that fake rounded volume, and a pastel drop shadow
+ * that floats the piece above the page.
+ *
+ * Palette: Nectarine, Peche, Menthe and Lagune on warm cream. The pastels are
+ * too light for white text (Nectarine 2.7:1, Lagune 3.2:1), so fills carry a
+ * deep teal ink (#1c2a30, 4.6:1 to 8.5:1) and links use a darker Lagune.
+ * Fredoka for headlines and Nunito for the body, both rounded and loaded by
+ * the consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #fff8f0;
+  --plt-color-base-200: #f6ece0;
+  --plt-color-base-300: #e8d9c8;
+  --plt-color-base-content: #2a3d44;
+  --plt-color-primary: #6398a9;
+  --plt-color-primary-content: #1c2a30;
+  --plt-color-secondary: #d7897f;
+  --plt-color-secondary-content: #1c2a30;
+  --plt-color-accent: #f9b95c;
+  --plt-color-accent-content: #1c2a30;
+  --plt-color-neutral: #2a3d44;
+  --plt-color-neutral-content: #fff8f0;
+  --plt-color-info: #6398a9;
+  --plt-color-info-content: #1c2a30;
+  --plt-color-success: #96c7b3;
+  --plt-color-success-content: #1c2a30;
+  --plt-color-warning: #f9b95c;
+  --plt-color-warning-content: #1c2a30;
+  --plt-color-error: #d7897f;
+  --plt-color-error-content: #1c2a30;
+
+  /* Extras used by the rules below. */
+  --plt-ink: #1c2a30;
+  --plt-link: #35667a;
+  --plt-clay-light: rgba(255, 255, 255, 0.8);
+  --plt-clay-shade: rgba(42, 61, 68, 0.22);
+  --plt-clay-float: rgba(99, 152, 169, 0.45);
+  --plt-clay-inset: inset 5px 5px 10px var(--plt-clay-light),
+    inset -6px -6px 12px var(--plt-clay-shade);
+  --plt-clay-pressed: inset 5px 5px 10px var(--plt-clay-shade),
+    inset -5px -5px 10px var(--plt-clay-light);
+  --plt-clay-drop: 10px 14px 26px -8px var(--plt-clay-float);
+  --plt-clay-drop-lift: 12px 20px 32px -8px var(--plt-clay-float);
+  --plt-squish: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --plt-border-color: transparent;
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 9999px;
+  --plt-radius-field: 1.25rem;
+  --plt-radius-box: 1.75rem;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 0px;
+  --plt-section-border-width: 0px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --plt-font-body: "Nunito", system-ui, sans-serif;
+  --plt-font-accent: "Nunito", system-ui, sans-serif;
+  --plt-heading-weight: 600;
+  --plt-heading-tracking: -0.01em;
+  --plt-heading-transform: none;
+  --plt-label-weight: 800;
+  --plt-label-tracking: 0.04em;
+  --plt-label-transform: none;
+  --plt-price-tracking: 0;
+
+  --plt-page-width: 90rem;
+  --plt-page-margin: 1.5rem;
+  --plt-section-gap-min: 3rem;
+
+  --plt-elevation: var(--plt-clay-inset), var(--plt-clay-drop);
+  --plt-elevation-hover: var(--plt-clay-inset), var(--plt-clay-drop-lift);
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  line-height: 1.15;
+  color: var(--plt-ink);
+}
+
+a {
+  color: var(--plt-link);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-accent) 55%, transparent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--plt-link);
+  outline-offset: 3px;
+}
+
+.plt-product-card {
+  --plt-card-media-border: transparent;
+}
+
+/* Cards and panels: raised clay. They rise a little on hover. */
+.theme-elevated {
+  background-color: var(--plt-color-base-100);
+  border-radius: var(--plt-radius-box);
+  box-shadow: var(--plt-elevation);
+  transition: box-shadow 260ms ease, transform 260ms var(--plt-squish);
+}
+
+.theme-elevated:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--plt-elevation-hover);
+}
+
+.theme-elevated:active {
+  transform: none;
+}
+
+.theme-sidebar-shadow {
+  box-shadow: var(--plt-clay-drop);
+}
+
+.theme-bordered {
+  border-radius: var(--plt-radius-box);
+}
+
+/* Cards clip their media to the rounded corners. */
+.plt-media-card {
+  overflow: hidden;
+}
+
+/* The hero is a slab of two-tone clay. */
+.plt-hero {
+  background: linear-gradient(135deg, #6398a9 0%, #96c7b3 100%);
+  color: var(--plt-ink);
+  border-radius: 2rem;
+  box-shadow: var(--plt-clay-inset), var(--plt-clay-drop);
+}
+
+/* Buttons: pill-shaped lumps. Hover lifts, press squashes in. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 800;
+  border: 0;
+  background-image: none;
+  box-shadow: var(--plt-clay-inset), var(--plt-clay-drop);
+  transition: box-shadow 200ms ease, transform 200ms var(--plt-squish),
+    filter 200ms ease;
+}
+
+.d-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--plt-clay-inset), var(--plt-clay-drop-lift);
+  filter: brightness(1.04);
+}
+
+.d-btn:active {
+  transform: translateY(1px);
+  box-shadow: var(--plt-clay-pressed);
+}
+
+.d-btn-primary {
+  background: var(--plt-color-primary);
+  color: var(--plt-color-primary-content);
+}
+
+.d-btn-secondary {
+  background: var(--plt-color-secondary);
+  color: var(--plt-color-secondary-content);
+}
+
+.d-btn-accent {
+  background: var(--plt-color-accent);
+  color: var(--plt-color-accent-content);
+}
+
+.d-btn-neutral {
+  background: var(--plt-color-neutral);
+  color: var(--plt-color-neutral-content);
+}
+
+.d-btn-outline,
+.d-btn-ghost {
+  background: var(--plt-color-base-200);
+  color: var(--plt-ink);
+}
+
+.d-btn-ghost {
+  box-shadow: none;
+}
+
+.d-btn-ghost:hover {
+  box-shadow: var(--plt-clay-inset);
+  transform: none;
+}
+
+/* Fields are pressed into the page: the shadows flip. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: var(--plt-color-base-200);
+  border: 0;
+  border-radius: var(--plt-radius-field);
+  box-shadow: var(--plt-clay-pressed);
+}
+
+.d-input:focus,
+.d-select:focus,
+.d-textarea:focus {
+  outline: 3px solid var(--plt-link);
+  outline-offset: 2px;
+}
+
+/* Badges and chips are small pills of clay. */
+.d-badge {
+  border: 0;
+  font-weight: 800;
+  letter-spacing: var(--plt-label-tracking);
+  /* Small pieces get a lighter touch so the pastel stays pastel. */
+  box-shadow: inset 2px 2px 4px var(--plt-clay-light),
+    inset -2px -2px 4px rgba(42, 61, 68, 0.14);
+}
+
+.d-tab {
+  border-radius: 9999px;
+}
+
+.d-dropdown-content,
+.d-modal-box {
+  border-radius: var(--plt-radius-box);
+  box-shadow: var(--plt-clay-inset), var(--plt-clay-drop-lift);
+}
+
+/* Squish is motion: drop it for people who ask for less. */
+@media (prefers-reduced-motion: reduce) {
+  .theme-elevated,
+  .d-btn {
+    transition: none;
+  }
+
+  .theme-elevated:hover,
+  .d-btn:hover,
+  .d-btn:active {
+    transform: none;
+  }
+}
