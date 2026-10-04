@@ -107,6 +107,11 @@ h4 {
   outline-offset: 3px;
 }
 
+/* Product cards: the media edge is the hairline, not the charcoal primary. */
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
 /* Surfaces: a soft shadow that deepens slightly on hover; no lift. */
 .theme-elevated {
   box-shadow: var(--plt-elevation);
