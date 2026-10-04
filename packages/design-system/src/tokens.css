@@ -27,4 +27,8 @@
   --plt-spacing-scale: 1;
   --plt-page-width: 110rem;
   --plt-page-margin: 1.5rem;
+
+  /* Behind product and catalog images. Photos come on white, so a lighter or
+     darker box would show as bands when an image does not fill it. */
+  --plt-media-background: #ffffff;
 }
