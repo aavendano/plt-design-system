@@ -3,3 +3,4 @@ packages/design-system/demo/dist.css
 docs/stylesheets/plt-preview.css
 site/
 .cursor/debug*
+packages/design-system/demo/dist-*.css

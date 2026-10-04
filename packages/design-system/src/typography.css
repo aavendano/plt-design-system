@@ -2,24 +2,32 @@
   --plt-font-display: "Fjalla One", "Arial Narrow", sans-serif;
   --plt-font-body: "Atkinson Hyperlegible", Arial, sans-serif;
   --plt-font-accent: "Space Grotesk", Arial, sans-serif;
+
+  --plt-heading-weight: 700;
+  --plt-heading-tracking: -0.025em;
+  --plt-heading-transform: uppercase;
+  --plt-label-weight: 700;
+  --plt-label-tracking: 0.025em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0.04em;
 }
 
 .theme-headline-lg {
   font-family: var(--plt-font-display);
   font-size: clamp(2.25rem, 4vw, 3rem);
   line-height: 1;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  text-transform: var(--plt-heading-transform);
 }
 
 .theme-headline-sm {
   font-family: var(--plt-font-display);
   font-size: clamp(1.25rem, 2vw, 1.5rem);
   line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  text-transform: var(--plt-heading-transform);
 }
 
 .theme-headline-underline {
@@ -32,16 +40,16 @@
 .theme-label-bold {
   font-family: var(--plt-font-accent);
   font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.025em;
-  text-transform: uppercase;
+  font-weight: var(--plt-label-weight);
+  letter-spacing: var(--plt-label-tracking);
+  text-transform: var(--plt-label-transform);
 }
 
 .theme-label-sm {
   font-family: var(--plt-font-accent);
   font-size: 0.75rem;
-  letter-spacing: 0.025em;
-  text-transform: uppercase;
+  letter-spacing: var(--plt-label-tracking);
+  text-transform: var(--plt-label-transform);
 }
 
 .theme-body-lg {

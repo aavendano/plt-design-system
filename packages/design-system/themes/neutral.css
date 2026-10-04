@@ -1,0 +1,72 @@
+/* Theme: neutral. Stock daisyUI "light" values with no brand treatment: thin
+ * borders, soft shadows, system fonts, no capitals. Use it as a base or to see
+ * the structure without a brand. */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: oklch(100% 0 0);
+  --plt-color-base-200: oklch(98% 0 0);
+  --plt-color-base-300: oklch(95% 0 0);
+  --plt-color-base-content: oklch(21% 0.006 285.885);
+  --plt-color-primary: oklch(45% 0.24 277.023);
+  --plt-color-primary-content: oklch(93% 0.034 272.788);
+  --plt-color-secondary: oklch(65% 0.241 354.308);
+  --plt-color-secondary-content: oklch(94% 0.028 342.258);
+  --plt-color-accent: oklch(77% 0.152 181.912);
+  --plt-color-accent-content: oklch(38% 0.063 188.416);
+  --plt-color-neutral: oklch(14% 0.005 285.823);
+  --plt-color-neutral-content: oklch(92% 0.004 286.32);
+  --plt-color-info: oklch(74% 0.16 232.661);
+  --plt-color-info-content: oklch(29% 0.066 243.157);
+  --plt-color-success: oklch(76% 0.177 163.223);
+  --plt-color-success-content: oklch(37% 0.077 168.94);
+  --plt-color-warning: oklch(82% 0.189 84.429);
+  --plt-color-warning-content: oklch(41% 0.112 45.904);
+  --plt-color-error: oklch(71% 0.194 13.428);
+  --plt-color-error-content: oklch(27% 0.105 12.094);
+
+  --plt-border-color: var(--plt-color-base-300);
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 0.5rem;
+  --plt-radius-field: 0.25rem;
+  --plt-radius-box: 0.5rem;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 1px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: ui-sans-serif, system-ui, sans-serif;
+  --plt-font-body: ui-sans-serif, system-ui, sans-serif;
+  --plt-font-accent: ui-sans-serif, system-ui, sans-serif;
+  --plt-heading-weight: 700;
+  --plt-heading-tracking: normal;
+  --plt-heading-transform: none;
+  --plt-label-weight: 700;
+  --plt-label-tracking: normal;
+  --plt-label-transform: none;
+  --plt-price-tracking: normal;
+}
+
+/* Surfaces: a hairline and a soft shadow instead of a hard offset. */
+.theme-elevated {
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--plt-color-base-content) 15%, transparent);
+}
+
+.theme-elevated:hover,
+.theme-elevated:active {
+  transform: none;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--plt-color-base-content) 15%, transparent);
+}
+
+.theme-sidebar-shadow {
+  box-shadow: none;
+}

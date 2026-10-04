@@ -1,0 +1,4 @@
+/* Theme: PlayLoveToys. The original look: bold borders, hard shadows, display
+ * type in capitals. It is the default token set, so this file only imports the
+ * stock stylesheet. */
+@import "../src/index.css";

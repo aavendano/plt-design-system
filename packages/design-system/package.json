@@ -8,10 +8,12 @@
     "build:demo": "tailwindcss -i ./demo/demo.css -o ./demo/dist.css --minify",
     "check:conformance": "node scripts/check-daisyui-conformance.mjs",
     "check:renderers": "node scripts/check-renderer-safety.mjs",
-    "check": "npm run check:conformance && npm run check:renderers && npm run build:demo"
+    "check": "npm run check:conformance && npm run check:renderers && npm run build:demo && npm run build:themes",
+    "build:themes": "node scripts/build-themes.mjs"
   },
   "files": [
     "src",
+    "themes",
     "adapters",
     "contracts",
     "renderers",
@@ -32,7 +34,9 @@
     "./astro": "./adapters/astro.css",
     "./contracts": "./contracts/components.md",
     "./renderers/liquid/*": "./renderers/liquid/*",
-    "./renderers/astro/*": "./renderers/astro/*"
+    "./renderers/astro/*": "./renderers/astro/*",
+    "./base": "./src/base.css",
+    "./themes/*": "./themes/*.css"
   },
   "peerDependencies": {
     "daisyui": ">=5.7.8 <6",
