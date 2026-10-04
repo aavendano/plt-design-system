@@ -119,17 +119,31 @@ a {
   --plt-card-media-border: transparent;
 }
 
-/* Cards and panels: raised clay. They rise a little on hover. */
+/* Cards and panels: raised clay. The drop shadow floats the whole container;
+ * the two inset shadows live on an overlay above the children, so media that
+ * fills a side of the card (a product photo on white) gets the same relief
+ * as the rest instead of hiding it. They rise a little on hover. */
 .theme-elevated {
+  position: relative;
   background-color: var(--plt-color-base-100);
   border-radius: var(--plt-radius-box);
-  box-shadow: var(--plt-elevation);
+  box-shadow: var(--plt-clay-drop);
   transition: box-shadow 260ms ease, transform 260ms var(--plt-squish);
+}
+
+.theme-elevated::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: var(--plt-clay-inset);
+  pointer-events: none;
 }
 
 .theme-elevated:hover {
   transform: translateY(-3px);
-  box-shadow: var(--plt-elevation-hover);
+  box-shadow: var(--plt-clay-drop-lift);
 }
 
 .theme-elevated:active {
