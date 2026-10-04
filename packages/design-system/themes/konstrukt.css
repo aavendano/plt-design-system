@@ -1,0 +1,226 @@
+/* Theme: Konstrukt. Bauhaus/Swiss structure printed onto paper: desaturated
+ * riso inks (red, blue, ochre) on warm paper, flat blocks and fine rules, no
+ * shadows, square corners, uppercase labels, a serif for headlines and a
+ * geometric sans for controls. Hover swaps colour; it never fades.
+ *
+ * Derived from the "Konstrukt" design system (tokens/*.css, readme; the bundle
+ * is the printed revision the kit later renamed Workbench, but its look is
+ * Konstrukt's). The grain texture is an inline SVG filter, no image assets.
+ * Source Serif 4, Jost and IBM Plex Mono are named here and loaded by the
+ * consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #f1eadc;
+  --plt-color-base-200: #eae0cb;
+  --plt-color-base-300: #ded0b0;
+  --plt-color-base-content: #2a2622;
+  --plt-color-primary: #2b4c6f;
+  --plt-color-primary-content: #faf6ec;
+  --plt-color-secondary: #c1442d;
+  --plt-color-secondary-content: #faf6ec;
+  --plt-color-accent: #c99a2e;
+  --plt-color-accent-content: #2a2622;
+  --plt-color-neutral: #2a2622;
+  --plt-color-neutral-content: #faf6ec;
+  --plt-color-info: #33587d;
+  --plt-color-info-content: #faf6ec;
+  --plt-color-success: #3f6b44;
+  --plt-color-success-content: #faf6ec;
+  --plt-color-warning: #b07a1e;
+  --plt-color-warning-content: #2a2622;
+  --plt-color-error: #a23a2c;
+  --plt-color-error-content: #faf6ec;
+
+  --plt-paper-white: #faf6ec;
+  --plt-ink-red-dark: #9e3520;
+  --plt-ink-blue-dark: #1f3a57;
+  --plt-ink-charcoal: #2a2622;
+  --plt-paper-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+
+  --plt-border-color: #2a2622;
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 0;
+  --plt-radius-field: 0;
+  --plt-radius-box: 0;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 2px;
+  --plt-section-border-width: 4px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "Source Serif 4", Georgia, serif;
+  --plt-font-body: "Jost", "Helvetica Neue", Inter, sans-serif;
+  --plt-font-accent: "Jost", "Helvetica Neue", Inter, sans-serif;
+  --plt-font-mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  --plt-heading-weight: 700;
+  --plt-heading-tracking: -0.005em;
+  --plt-heading-transform: uppercase;
+  --plt-label-weight: 500;
+  --plt-label-tracking: 0.12em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0.04em;
+
+  --plt-page-width: 82rem;
+  --plt-page-margin: 1.5rem;
+  --plt-section-gap-min: 4rem;
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  text-transform: var(--plt-heading-transform);
+  line-height: 1.05;
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--plt-font-mono);
+}
+
+::selection {
+  background: var(--plt-color-accent);
+  color: var(--plt-ink-charcoal);
+}
+
+:focus-visible {
+  outline: 2px solid var(--plt-color-secondary);
+  outline-offset: 2px;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+/* Flat: depth is borders and paper layering, never shadow. */
+.theme-elevated,
+.theme-elevated:hover,
+.theme-elevated:active,
+.theme-sidebar-shadow {
+  box-shadow: none;
+  transform: none;
+}
+
+.plt-hero {
+  background: var(--plt-color-primary);
+  color: var(--plt-paper-white);
+  position: relative;
+}
+
+/* Paper grain on the expressive surface only: never on fields or tables. */
+.plt-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--plt-paper-noise);
+  background-size: 140px 140px;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Buttons: flat blocks that swap ink on hover. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: none;
+  background-image: none;
+  border: 2px solid var(--plt-ink-charcoal);
+  transition: background-color 120ms linear, color 120ms linear;
+}
+
+.d-btn-primary {
+  background: var(--plt-color-primary);
+  border-color: var(--plt-color-primary);
+  color: var(--plt-paper-white);
+}
+
+.d-btn-primary:hover {
+  background: var(--plt-ink-charcoal);
+  border-color: var(--plt-ink-charcoal);
+}
+
+.d-btn-secondary {
+  background: var(--plt-color-secondary);
+  border-color: var(--plt-color-secondary);
+  color: var(--plt-paper-white);
+}
+
+.d-btn-secondary:hover {
+  background: var(--plt-ink-red-dark);
+  border-color: var(--plt-ink-red-dark);
+}
+
+.d-btn-outline {
+  background: transparent;
+  color: var(--plt-ink-charcoal);
+}
+
+.d-btn-outline:hover {
+  background: var(--plt-ink-charcoal);
+  color: var(--plt-paper-white);
+}
+
+.d-btn-ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
+.d-btn-ghost:hover {
+  background: var(--plt-ink-charcoal);
+  color: var(--plt-paper-white);
+}
+
+/* Fields stay clean: no texture, a plain 2px frame. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: var(--plt-paper-white);
+  border: 2px solid var(--plt-ink-charcoal);
+  box-shadow: none;
+}
+
+.d-input:focus,
+.d-select:focus,
+.d-textarea:focus {
+  border-color: var(--plt-color-secondary);
+  outline: none;
+}
+
+.d-badge {
+  font-family: var(--plt-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-width: 1px;
+}
+
+/* A fine rule for editorial dividers. */
+.rule-h {
+  border: 0;
+  border-top: 1px solid var(--plt-ink-charcoal);
+}
+
+.rule-h-thick {
+  border: 0;
+  border-top: 4px solid var(--plt-ink-charcoal);
+}

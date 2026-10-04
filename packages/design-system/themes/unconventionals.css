@@ -1,0 +1,253 @@
+/* Theme: Unconventionals. Neobrutalist editorial: thick ink borders, hard
+ * offset shadows with no blur, flat saturated colour on warm paper, heavy
+ * uppercase display type with an editorial serif for long reads. Elements
+ * shift toward their shadow on hover and land in it on press.
+ *
+ * Derived from the "Unconventionals" design system (tokens/*.css, readme):
+ * the PLAYROOM palette (magenta primary, coral, amber, teal, indigo). Warning
+ * and error reuse amber and coral as in the kit; coral/amber text on paper is
+ * for large type only. Lexend Mega, Public Sans, Proza Libre and IBM Plex Mono
+ * are named here and loaded by the consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #f7f2e9;
+  --plt-color-base-200: #ece4d5;
+  --plt-color-base-300: #ddd2bd;
+  --plt-color-base-content: #14131a;
+  --plt-color-primary: #982062;
+  --plt-color-primary-content: #ffffff;
+  --plt-color-secondary: #f86041;
+  --plt-color-secondary-content: #14131a;
+  --plt-color-accent: #ffa646;
+  --plt-color-accent-content: #14131a;
+  --plt-color-neutral: #343779;
+  --plt-color-neutral-content: #f7f2e9;
+  --plt-color-info: #33a9ac;
+  --plt-color-info-content: #14131a;
+  --plt-color-success: #1f9e6b;
+  --plt-color-success-content: #ffffff;
+  --plt-color-warning: #ffa646;
+  --plt-color-warning-content: #14131a;
+  --plt-color-error: #e2492a;
+  --plt-color-error-content: #ffffff;
+
+  --plt-ink: #14131a;
+  --plt-ink-soft: #3a3845;
+  --plt-primary-hover: #7c1a50;
+  --plt-secondary-hover: #e2492a;
+  --plt-accent-hover: #f08f23;
+  --plt-magenta-tint: #f0cfe0;
+  --plt-snap: cubic-bezier(0.77, 0, 0.18, 1);
+
+  --plt-border-color: #14131a;
+  --plt-shadow-color: #14131a;
+
+  --plt-radius-selector: 4px;
+  --plt-radius-field: 4px;
+  --plt-radius-box: 4px;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 3px;
+  --plt-section-border-width: 4px;
+  --plt-shadow-offset: 4px;
+  --plt-shadow-hover-offset: 2px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "Lexend Mega", "Arial Black", sans-serif;
+  --plt-font-body: "Public Sans", system-ui, -apple-system, sans-serif;
+  --plt-font-accent: "Lexend Mega", "Arial Black", sans-serif;
+  --plt-font-editorial: "Proza Libre", Georgia, serif;
+  --plt-font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --plt-heading-weight: 900;
+  --plt-heading-tracking: -0.01em;
+  --plt-heading-transform: uppercase;
+  --plt-label-weight: 900;
+  --plt-label-tracking: 0.08em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0;
+
+  --plt-page-width: 71.25rem;
+  --plt-page-margin: 1.5rem;
+  --plt-section-gap-min: 4rem;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--plt-ink-soft);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  text-transform: var(--plt-heading-transform);
+  letter-spacing: var(--plt-heading-tracking);
+  line-height: 1;
+  color: var(--plt-ink);
+}
+
+a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+::selection {
+  background: var(--plt-color-accent);
+  color: var(--plt-ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--plt-ink);
+  outline-offset: 2px;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-ink);
+}
+
+/* Long-form editorial reading. */
+.plt-prose {
+  font-family: var(--plt-font-editorial);
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 42.5rem;
+  color: var(--plt-ink);
+}
+
+/* Surfaces: hard shadow; shift toward it on hover, land in it on press. */
+.theme-elevated {
+  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 0 var(--plt-ink);
+  transition: transform 160ms var(--plt-snap), box-shadow 160ms var(--plt-snap);
+}
+
+.theme-elevated:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--plt-ink);
+}
+
+.theme-elevated:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.plt-hero {
+  background: var(--plt-color-neutral);
+  color: var(--plt-color-base-100);
+}
+
+/* Buttons: heavy uppercase, ink border, hard shadow. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 3px solid var(--plt-ink);
+  background-image: none;
+  box-shadow: 4px 4px 0 0 var(--plt-ink);
+  transition: transform 120ms var(--plt-snap), box-shadow 120ms var(--plt-snap),
+    background-color 120ms var(--plt-snap);
+}
+
+.d-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--plt-ink);
+}
+
+.d-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.d-btn-primary {
+  background: var(--plt-color-primary);
+  color: var(--plt-color-primary-content);
+}
+
+.d-btn-primary:hover {
+  background: var(--plt-primary-hover);
+  border-color: var(--plt-ink);
+}
+
+.d-btn-secondary {
+  background: var(--plt-color-secondary);
+  color: var(--plt-ink);
+}
+
+.d-btn-secondary:hover {
+  background: var(--plt-secondary-hover);
+}
+
+.d-btn-accent {
+  background: var(--plt-color-accent);
+  color: var(--plt-ink);
+}
+
+.d-btn-accent:hover {
+  background: var(--plt-accent-hover);
+}
+
+.d-btn-outline {
+  background: #ffffff;
+  color: var(--plt-ink);
+}
+
+.d-btn-ghost {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.d-btn:disabled,
+.d-btn[disabled] {
+  background: #cccccc;
+  color: #888888;
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* Fields: ink frame, white ground, offset focus shadow. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: #ffffff;
+  border: 3px solid var(--plt-ink);
+  box-shadow: none;
+}
+
+.d-input:focus,
+.d-select:focus,
+.d-textarea:focus {
+  outline: 3px solid var(--plt-ink);
+  outline-offset: 2px;
+  box-shadow: 4px 4px 0 0 var(--plt-ink);
+}
+
+/* Badges and chips are the one pill shape. */
+.d-badge {
+  border: 2px solid var(--plt-ink);
+  border-radius: 999px;
+  font-family: var(--plt-font-display);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.d-toggle {
+  --radius-selector: 999px;
+}
+
+/* Alternating bands. */
+.plt-band-alt {
+  background: var(--plt-color-base-200);
+}

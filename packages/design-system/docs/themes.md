@@ -8,6 +8,10 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `neutral` | `themes/neutral.css` | Stock daisyUI `light` values: thin borders, soft shadows, system fonts, no capitals. |
 | `nocturne` | `themes/nocturne.css` | Dark, compact, one accent (`#9184d9`), 8px radii, Inter at medium weight, outlined primary buttons. From the Nocturne kit. |
 | `capricho` | `themes/capricho.css` | Quiet editorial luxury (Lunar Caprice): cream ground, charcoal ink, matte gold, marble-dark hero, Bodoni Moda display with Jost, square corners, hairline borders, soft shadows. |
+| `broadsheet` | `themes/broadsheet.css` | Printed-newspaper register: cool newsprint ground, near-black ink, Source Serif 4 throughout, cyan accent and magenta second ink, no dark bands or section dividers, small radii, soft ink shadows. |
+| `konstrukt` | `themes/konstrukt.css` | Bauhaus/Swiss on paper: riso red, blue and ochre, flat blocks, 2px charcoal borders, no shadows, square corners, uppercase Source Serif 4 headlines with Jost and IBM Plex Mono. |
+| `unconventionals` | `themes/unconventionals.css` | Neobrutalist editorial: 3px ink borders, hard offset shadows, PLAYROOM palette (magenta, coral, amber, teal, indigo), Lexend Mega display with Public Sans and Proza Libre. |
+| `workbench` | `themes/workbench.css` | Production tool as printed matter: warm paper, coral, slate, mustard and olive inks, 1px rules, flat minimal shadows, IBM Plex Serif, Sans and Mono. |
 
 ## Using one
 
