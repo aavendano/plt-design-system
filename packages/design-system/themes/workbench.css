@@ -1,0 +1,244 @@
+/* Theme: Workbench. A production tool dressed as printed matter: warm paper,
+ * desaturated riso inks (coral, slate, mustard, olive), fine 1px rules,
+ * near-square corners and minimal flat shadows. Serif for headlines and big
+ * numbers, sans for the interface, mono for IDs and data. Pressing a control
+ * nudges it 1px, like a stamp. Status is a bordered uppercase label.
+ *
+ * Derived from the "Workbench" design system (tokens/*.css, readme). The kit's
+ * paper-grain PNGs are not shipped; the one texture here is an inline SVG
+ * filter, kept off fields, tables and data. IBM Plex Serif, Sans and Mono are
+ * named here and loaded by the consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #f1e8d3;
+  --plt-color-base-200: #e7dbbe;
+  --plt-color-base-300: #dccea9;
+  --plt-color-base-content: #2a2521;
+  --plt-color-primary: #2a2521;
+  --plt-color-primary-content: #faf5e9;
+  --plt-color-secondary: #c6482f;
+  --plt-color-secondary-content: #faf5e9;
+  --plt-color-accent: #4e6270;
+  --plt-color-accent-content: #faf5e9;
+  --plt-color-neutral: #2a2521;
+  --plt-color-neutral-content: #faf5e9;
+  --plt-color-info: #3e4f5b;
+  --plt-color-info-content: #faf5e9;
+  --plt-color-success: #586640;
+  --plt-color-success-content: #faf5e9;
+  --plt-color-warning: #c9932a;
+  --plt-color-warning-content: #2a2521;
+  --plt-color-error: #b03d28;
+  --plt-color-error-content: #faf5e9;
+
+  --plt-paper-white: #faf5e9;
+  --plt-surface-work: #fcfaf3;
+  --plt-ink-coral-dim: #b03d28;
+  --plt-ink-slate-dim: #3e4f5b;
+  --plt-ink-carbon-70: #4a433c;
+  --plt-paper-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+
+  --plt-border-color: rgba(42, 37, 33, 0.14);
+  --plt-border-strong: #b3a896;
+  --plt-shadow-color: rgba(42, 37, 33, 0.08);
+
+  --plt-radius-selector: 2px;
+  --plt-radius-field: 2px;
+  --plt-radius-box: 4px;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 1px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "IBM Plex Serif", Georgia, serif;
+  --plt-font-body: "IBM Plex Sans", -apple-system, Helvetica, Arial, sans-serif;
+  --plt-font-accent: "IBM Plex Sans", -apple-system, Helvetica, Arial, sans-serif;
+  --plt-font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --plt-heading-weight: 600;
+  --plt-heading-tracking: -0.01em;
+  --plt-heading-transform: none;
+  --plt-label-weight: 600;
+  --plt-label-tracking: 0.09em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0;
+
+  --plt-page-width: 80rem;
+  --plt-page-margin: 1.5rem;
+  --plt-section-gap-min: 3.5rem;
+
+  --plt-elevation: 0 1px 0 rgba(42, 37, 33, 0.14), 0 2px 6px rgba(42, 37, 33, 0.08);
+  --plt-elevation-hover: 1px 2px 0 #b3a896, 0 4px 10px rgba(42, 37, 33, 0.1);
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  line-height: 1.1;
+}
+
+code,
+kbd,
+samp,
+.plt-mono {
+  font-family: var(--plt-font-mono);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-secondary) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--plt-color-secondary);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--plt-ink-slate-dim);
+  text-decoration-color: var(--plt-border-strong);
+}
+
+a:hover {
+  color: var(--plt-ink-coral-dim);
+  text-decoration-color: currentColor;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+/* Sheets: a hairline edge and a thin flat shadow; no lift. */
+.theme-elevated {
+  box-shadow: var(--plt-elevation);
+  transition: box-shadow 180ms cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.theme-elevated:hover,
+.theme-elevated:active {
+  transform: none;
+  box-shadow: var(--plt-elevation-hover);
+}
+
+.theme-sidebar-shadow {
+  box-shadow: none;
+}
+
+.plt-hero {
+  background: var(--plt-color-base-200);
+  color: var(--plt-color-base-content);
+  position: relative;
+}
+
+/* Grain on the editorial surface only. */
+.plt-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--plt-paper-noise);
+  background-size: 160px 160px;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Buttons: carbon primary, coral secondary; a 1px stamp on press. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: none;
+  background-image: none;
+  border: 1px solid transparent;
+  transition: background-color 180ms cubic-bezier(0.2, 0.6, 0.2, 1),
+    color 180ms cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.d-btn:active {
+  transform: translate(1px, 1px);
+}
+
+.d-btn-primary {
+  background: var(--plt-color-primary);
+  border-color: var(--plt-color-primary);
+  color: var(--plt-paper-white);
+}
+
+.d-btn-primary:hover {
+  background: var(--plt-ink-carbon-70);
+  border-color: var(--plt-ink-carbon-70);
+}
+
+.d-btn-secondary {
+  background: var(--plt-color-secondary);
+  border-color: var(--plt-color-secondary);
+  color: var(--plt-paper-white);
+}
+
+.d-btn-secondary:hover {
+  background: var(--plt-ink-coral-dim);
+  border-color: var(--plt-ink-coral-dim);
+}
+
+.d-btn-outline {
+  background: transparent;
+  border-color: var(--plt-border-strong);
+  color: var(--plt-color-base-content);
+}
+
+.d-btn-outline:hover {
+  background: var(--plt-surface-work);
+  border-color: var(--plt-ink-carbon-70);
+}
+
+.d-btn-ghost {
+  background: transparent;
+}
+
+.d-btn-ghost:hover {
+  text-decoration: underline;
+}
+
+/* Fields sit on the cleanest surface and carry no texture. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: var(--plt-surface-work);
+  border: 1px solid var(--plt-border-strong);
+  box-shadow: none;
+}
+
+.d-input:focus,
+.d-select:focus,
+.d-textarea:focus {
+  border-color: var(--plt-color-secondary);
+  outline: none;
+}
+
+/* Status as a stamp: bordered, uppercase, tight pill. */
+.d-badge {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--plt-font-mono);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}

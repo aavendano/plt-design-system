@@ -1,0 +1,189 @@
+/* Theme: Broadsheet. A printed-newspaper register: cool newsprint ground, near
+ * black ink, one serif for everything, a cyan accent and a magenta second ink.
+ * No dark surfaces and no section dividers; type, rules and white space do the
+ * structuring. Small radii, hairline borders, soft ink-tinted shadows.
+ *
+ * Derived from the "Broadsheet" design system (styles.css tokens, theme.json).
+ * The kit has no success/warning/info roles; those are muted press inks chosen
+ * for this ground. Primary uses the kit's accent-700 (#006786) rather than
+ * #0088b0 so white button text clears 4.5:1; #0088b0 stays the accent role.
+ * The kit's CMYK/halftone image treatments need SVG filter defs and markup the
+ * storefront does not have, so they are not ported. Source Serif 4 is named
+ * here and loaded by the consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #f3f2f2;
+  --plt-color-base-200: #eae9e9;
+  --plt-color-base-300: #d7d3d3;
+  --plt-color-base-content: #201e1d;
+  --plt-color-primary: #006786;
+  --plt-color-primary-content: #ffffff;
+  --plt-color-secondary: #d6006c;
+  --plt-color-secondary-content: #ffffff;
+  --plt-color-accent: #0088b0;
+  --plt-color-accent-content: #ffffff;
+  --plt-color-neutral: #2d2b2b;
+  --plt-color-neutral-content: #f8f4f4;
+  --plt-color-info: #1186ac;
+  --plt-color-info-content: #ffffff;
+  --plt-color-success: #3f6b44;
+  --plt-color-success-content: #ffffff;
+  --plt-color-warning: #c99400;
+  --plt-color-warning-content: #201e1d;
+  --plt-color-error: #aa0b56;
+  --plt-color-error-content: #ffffff;
+
+  --plt-primary-hover: #004961;
+  --plt-accent-tint: #e9f8ff;
+  --plt-accent-2-tint: #fff1f4;
+  --plt-ink: #201e1d;
+
+  --plt-border-color: color-mix(in srgb, #201e1d 16%, transparent);
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 1px;
+  --plt-radius-field: 2px;
+  --plt-radius-box: 2px;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 0px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --plt-font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --plt-font-accent: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --plt-heading-weight: 600;
+  --plt-heading-tracking: -0.005em;
+  --plt-heading-transform: none;
+  --plt-label-weight: 600;
+  --plt-label-tracking: 0.08em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0;
+
+  --plt-page-width: 80rem;
+  --plt-page-margin: 1.5rem;
+  --plt-section-gap-min: 3.5rem;
+
+  --plt-elevation: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+  --plt-elevation-hover: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
+}
+
+body {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  line-height: 1.12;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-accent) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--plt-color-accent);
+  outline-offset: 2px;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+/* Surfaces: a soft ink-tinted shadow; no lift on hover. */
+.theme-elevated {
+  box-shadow: var(--plt-elevation);
+  transition: box-shadow 160ms ease;
+}
+
+.theme-elevated:hover,
+.theme-elevated:active {
+  transform: none;
+  box-shadow: var(--plt-elevation-hover);
+}
+
+.theme-sidebar-shadow {
+  box-shadow: none;
+}
+
+/* No dark band: the hero stays on the paper surface. */
+.plt-hero {
+  background: var(--plt-color-base-200);
+  color: var(--plt-color-base-content);
+}
+
+/* Buttons: solid accent fill for the primary; magenta for the secondary. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 600;
+  box-shadow: none;
+  background-image: none;
+  border: 1px solid transparent;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.d-btn-primary {
+  background: var(--plt-color-primary);
+  border-color: var(--plt-color-primary);
+  color: var(--plt-color-primary-content);
+}
+
+.d-btn-primary:hover {
+  background: var(--plt-primary-hover);
+  border-color: var(--plt-primary-hover);
+}
+
+.d-btn-secondary {
+  background: var(--plt-color-secondary);
+  border-color: var(--plt-color-secondary);
+  color: var(--plt-color-secondary-content);
+}
+
+.d-btn-outline {
+  background: transparent;
+  border-color: var(--plt-ink);
+  color: var(--plt-ink);
+}
+
+.d-btn-outline:hover {
+  background: var(--plt-ink);
+  color: var(--plt-color-base-100);
+}
+
+.d-btn-ghost {
+  background: transparent;
+  color: var(--plt-color-primary);
+}
+
+/* Tags and badges are tinted, not filled. */
+.d-badge {
+  border-color: transparent;
+  background: var(--plt-accent-tint);
+  color: var(--plt-color-primary);
+  font-weight: 600;
+}
+
+.d-badge-secondary {
+  background: var(--plt-accent-2-tint);
+  color: var(--plt-color-error);
+}
+
+/* Links read as links in a newspaper: underlined, ink-coloured. */
+a {
+  text-underline-offset: 0.18em;
+}
