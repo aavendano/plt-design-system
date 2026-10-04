@@ -159,6 +159,26 @@ h4 {
     border-color 180ms var(--plt-ease);
 }
 
+/* Narrow screens: the 0.28em tracking makes a label wider than a half-width
+ * card, so tighten it and let the button grow to a second line. */
+@media (max-width: 40rem) {
+  .d-btn {
+    /* daisyUI sets flex-shrink: 0, so a long label would run past the card. */
+    flex-shrink: 1;
+    max-width: 100%;
+    letter-spacing: 0.14em;
+    white-space: normal;
+    height: auto;
+    min-height: var(--size);
+    padding-block: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .d-tab {
+    letter-spacing: 0.14em;
+  }
+}
+
 .d-btn-primary {
   background: var(--plt-color-primary);
   color: var(--plt-cream);

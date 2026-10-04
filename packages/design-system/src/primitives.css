@@ -44,3 +44,13 @@
 .theme-sidebar-shadow {
   box-shadow: var(--plt-shadow-hover-offset) 0 0 0 var(--plt-shadow-color);
 }
+
+/* Badges grow with their text. daisyUI fixes the height, so a label that wraps
+ * (long copy, uppercase, wide tracking) would spill out of its chip. */
+.d-badge {
+  height: auto;
+  min-height: var(--size);
+  padding-block: 0.125rem;
+  text-align: start;
+  white-space: normal;
+}
