@@ -12,6 +12,7 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `konstrukt` | `themes/konstrukt.css` | Bauhaus/Swiss on paper: riso red, blue and ochre, flat blocks, 2px charcoal borders, no shadows, square corners, uppercase Source Serif 4 headlines with Jost and IBM Plex Mono. |
 | `unconventionals` | `themes/unconventionals.css` | Neobrutalist editorial: 3px ink borders, hard offset shadows, PLAYROOM palette (magenta, coral, amber, teal, indigo), Lexend Mega display with Public Sans and Proza Libre. |
 | `workbench` | `themes/workbench.css` | Production tool as printed matter: warm paper, coral, slate, mustard and olive inks, 1px rules, flat minimal shadows, IBM Plex Serif, Sans and Mono. |
+| `playlovetoys` | `themes/playlovetoys.css` | The live storefront brand: white and cool paper, purple structure, hot-pink call to action, teal accent, Roboto Condensed with Fredoka, 6px corners, soft cool shadows, springy motion, gradient hero. |
 
 ## Using one
 

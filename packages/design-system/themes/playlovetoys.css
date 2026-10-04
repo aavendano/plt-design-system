@@ -1,0 +1,229 @@
+/* Theme: PlayLoveToys. The live storefront's brand: a playful, body-positive
+ * look on white and cool paper, purple for structure, hot pink for the call to
+ * action, teal as the secondary accent. Roboto Condensed for the interface,
+ * Fredoka for headline moments, friendly 6px corners, soft cool-tinted
+ * shadows and a quick, slightly springy motion.
+ *
+ * Derived from the PlayLoveToys design system handoff (tokens/*.css, readme),
+ * itself a layer over the b-style framework; only tokens and signature rules
+ * are carried over. Pink on white is 3.7:1, so the primary action button uses
+ * the handoff's deeper pink (#d62a54, 4.7:1) and #f4436c stays the accent for
+ * links, badges and glows. Roboto Condensed and Fredoka are named here and
+ * loaded by the consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #ffffff;
+  --plt-color-base-200: #fafafb;
+  --plt-color-base-300: #e4e4e9;
+  --plt-color-base-content: #545c52;
+  --plt-color-primary: #533278;
+  --plt-color-primary-content: #ffffff;
+  --plt-color-secondary: #d62a54;
+  --plt-color-secondary-content: #ffffff;
+  --plt-color-accent: #f4436c;
+  --plt-color-accent-content: #ffffff;
+  --plt-color-neutral: #2e2b35;
+  --plt-color-neutral-content: #ffffff;
+  --plt-color-info: #0c7489;
+  --plt-color-info-content: #ffffff;
+  --plt-color-success: #48c78e;
+  --plt-color-success-content: #12281f;
+  --plt-color-warning: #ffb70f;
+  --plt-color-warning-content: #2e2b35;
+  --plt-color-error: #ff5a78;
+  --plt-color-error-content: #2e2b35;
+
+  /* Brand extras used by the rules below. */
+  --plt-purple-deep: #3a2456;
+  --plt-purple-soft: #efeaf5;
+  --plt-pink-soft: #fde7ed;
+  --plt-teal-soft: #e0f1f4;
+  --plt-charcoal: #2e2b35;
+  --plt-gradient: linear-gradient(115deg, #231f20 0%, #533278 50%, #f4436c 100%);
+  --plt-glow-pink: 0 10px 28px -8px hsla(346, 89%, 55%, 0.45);
+  --plt-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --plt-glide: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --plt-border-color: #e4e4e9;
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 0.375rem;
+  --plt-radius-field: 0.25rem;
+  --plt-radius-box: 0.75rem;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 0px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "Fredoka", "Roboto Condensed", system-ui, sans-serif;
+  --plt-font-body: "Roboto Condensed", "Inter", system-ui, sans-serif;
+  --plt-font-accent: "Roboto Condensed", "Inter", system-ui, sans-serif;
+  --plt-heading-weight: 600;
+  --plt-heading-tracking: -0.02em;
+  --plt-heading-transform: none;
+  --plt-label-weight: 600;
+  --plt-label-tracking: 0.12em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0;
+
+  --plt-page-width: 90rem;
+  --plt-page-margin: 1.5rem;
+  --plt-section-gap-min: 3rem;
+
+  /* Elevation: soft, cool-tinted, low. */
+  --plt-elevation: 0 0.5em 1em -0.125em hsla(268, 20%, 20%, 0.1), 0 0 0 1px hsla(268, 20%, 20%, 0.02);
+  --plt-elevation-hover: 0 8px 24px -6px hsla(268, 24%, 22%, 0.18);
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  line-height: 1.1;
+  color: var(--plt-color-neutral);
+}
+
+a {
+  color: var(--plt-color-accent);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-accent) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--plt-color-accent);
+  outline-offset: 2px;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+/* Cards: white, hairline, soft shadow; they lift a little on hover. */
+.theme-elevated {
+  box-shadow: var(--plt-elevation);
+  transition: box-shadow 240ms var(--plt-glide), transform 240ms var(--plt-glide);
+}
+
+.theme-elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--plt-elevation-hover);
+}
+
+.theme-elevated:active {
+  transform: none;
+}
+
+.theme-sidebar-shadow {
+  box-shadow: none;
+}
+
+/* Heroes and banners wear the signature gradient. */
+.plt-hero {
+  background: var(--plt-gradient);
+  color: #ffffff;
+}
+
+.plt-hero .d-btn-primary {
+  box-shadow: var(--plt-glow-pink);
+}
+
+/* Buttons: pink call to action, purple secondary; brighten on hover, shrink
+ * on press. The bounce is dropped for people who prefer reduced motion. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 700;
+  box-shadow: none;
+  background-image: none;
+  border: 1px solid transparent;
+  transition: filter 240ms var(--plt-glide), transform 240ms var(--plt-glide),
+    background-color 240ms var(--plt-glide);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .d-btn {
+    transition-timing-function: var(--plt-bounce);
+  }
+
+  .d-btn:active {
+    transform: scale(0.97);
+  }
+}
+
+.d-btn:hover {
+  filter: brightness(1.1);
+}
+
+.d-btn-primary,
+.d-btn-secondary {
+  background: var(--plt-color-secondary);
+  border-color: var(--plt-color-secondary);
+  color: #ffffff;
+}
+
+.d-btn-neutral,
+.d-btn-info {
+  color: #ffffff;
+}
+
+.d-btn-outline {
+  background: transparent;
+  color: var(--plt-color-primary);
+  border-color: var(--plt-color-primary);
+}
+
+.d-btn-outline:hover {
+  background: var(--plt-purple-soft);
+}
+
+.d-btn-ghost {
+  background: transparent;
+  color: var(--plt-color-primary);
+}
+
+/* Fields: white, 4px corners, a hairline that turns pink on focus. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: #ffffff;
+  border: 1px solid #cfcfd6;
+  box-shadow: none;
+}
+
+.d-input:focus,
+.d-select:focus,
+.d-textarea:focus {
+  border-color: var(--plt-color-accent);
+  outline: none;
+}
+
+/* Badges are the sharp shape; chips are pills. */
+.d-badge {
+  border-radius: 2px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.d-badge-outline {
+  border-radius: 9999px;
+}
