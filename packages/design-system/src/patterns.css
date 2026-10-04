@@ -57,6 +57,20 @@
   margin-top: auto;
 }
 
+/* Phones: cards are narrow, and daisyUI buttons never shrink (flex-shrink: 0,
+ * one line, fixed height), so a long label runs past the card. Let it wrap. */
+@media (max-width: 40rem) {
+  .plt-media-card__actions .d-btn {
+    flex-shrink: 1;
+    max-width: 100%;
+    height: auto;
+    min-height: var(--size);
+    padding-block: 0.375rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+
 .plt-product-card { --plt-card-media-border: var(--plt-color-primary); }
 .plt-product-card__price {
   display: inline-flex;
