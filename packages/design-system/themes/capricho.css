@@ -1,0 +1,242 @@
+/* Theme: Capricho (Lunar Caprice). Quiet, editorial luxury for beauty, jewelry
+ * and wear: cream ground, charcoal ink, matte gold used sparingly, marble-dark
+ * sections, a high-contrast serif for display and a wide-tracked geometric sans.
+ * Square corners, hairline borders, soft shadows, fades only.
+ *
+ * Derived from the "Lunar Caprice Design System" project (tokens/*.css, readme).
+ * The project has no info/warning roles; those two are warm, low-chroma values
+ * chosen for this ground. Bodoni Moda stands in for Didot, as in the project.
+ * Fonts are named here and loaded by the consuming app (Bodoni Moda, Jost).
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #f4f0ea;
+  --plt-color-base-200: #ece5d8;
+  --plt-color-base-300: #e3d8c4;
+  --plt-color-base-content: #1a1a1a;
+  --plt-color-primary: #1a1a1a;
+  --plt-color-primary-content: #f4f0ea;
+  --plt-color-secondary: #c5a880;
+  --plt-color-secondary-content: #1a1a1a;
+  --plt-color-accent: #c5a880;
+  --plt-color-accent-content: #1a1a1a;
+  --plt-color-neutral: #121110;
+  --plt-color-neutral-content: #f4f0ea;
+  --plt-color-info: #6b7f8f;
+  --plt-color-info-content: #f4f0ea;
+  --plt-color-success: #5c6e4f;
+  --plt-color-success-content: #f4f0ea;
+  --plt-color-warning: #b8935a;
+  --plt-color-warning-content: #1a1a1a;
+  --plt-color-error: #8b4a3c;
+  --plt-color-error-content: #f4f0ea;
+
+  /* Brand extras used by the rules below. */
+  --plt-charcoal-soft: #2b2926;
+  --plt-gold-deep: #a8875f;
+  --plt-gold-light: #dcc7a1;
+  --plt-marble: #121110;
+  --plt-cream: #f4f0ea;
+  --plt-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --plt-border-color: rgba(26, 26, 26, 0.12);
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 0;
+  --plt-radius-field: 0;
+  --plt-radius-box: 0;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 1px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: "Bodoni Moda", "Times New Roman", serif;
+  --plt-font-body: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --plt-font-accent: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --plt-heading-weight: 400;
+  --plt-heading-tracking: 0;
+  --plt-heading-transform: none;
+  --plt-label-weight: 500;
+  --plt-label-tracking: 0.12em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: 0.02em;
+
+  --plt-page-width: 90rem;
+  --plt-page-margin: 2rem;
+  --plt-section-gap-min: 4.5rem;
+
+  /* Elevation: soft, never a hard offset. */
+  --plt-elevation: 0 1px 2px rgba(26, 26, 26, 0.04), 0 8px 24px rgba(26, 26, 26, 0.06);
+  --plt-elevation-hover: 0 2px 4px rgba(26, 26, 26, 0.05), 0 16px 40px rgba(26, 26, 26, 0.09);
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  line-height: 1.1;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-accent) 35%, transparent);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 1px solid var(--plt-gold-deep);
+  outline-offset: 3px;
+}
+
+/* Surfaces: a soft shadow that deepens slightly on hover; no lift. */
+.theme-elevated {
+  box-shadow: var(--plt-elevation);
+  transition: box-shadow 320ms var(--plt-ease);
+}
+
+.theme-elevated:hover,
+.theme-elevated:active {
+  transform: none;
+  box-shadow: var(--plt-elevation-hover);
+}
+
+.theme-sidebar-shadow {
+  box-shadow: none;
+}
+
+/* Dark marble hero; the copy stays cream. */
+.plt-hero {
+  background: var(--plt-marble);
+  color: var(--plt-cream);
+}
+
+/* Product imagery: a slow, quiet zoom on hover (no motion preference only). */
+@media (prefers-reduced-motion: no-preference) {
+  .plt-media-card__media img {
+    transition: transform 560ms var(--plt-ease);
+  }
+
+  .plt-media-card:hover .plt-media-card__media img {
+    transform: scale(1.04);
+  }
+}
+
+/* Buttons: uppercase, widely tracked, square. Primary is solid charcoal; the
+ * gold variant is the secondary; outline and ghost stay on transparent. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  box-shadow: none;
+  background-image: none;
+  transition: background-color 180ms var(--plt-ease), color 180ms var(--plt-ease),
+    border-color 180ms var(--plt-ease);
+}
+
+.d-btn-primary {
+  background: var(--plt-color-primary);
+  color: var(--plt-cream);
+  border-color: var(--plt-color-primary);
+}
+
+.d-btn-primary:hover {
+  background: var(--plt-charcoal-soft);
+  border-color: var(--plt-charcoal-soft);
+}
+
+.d-btn-secondary,
+.d-btn-accent {
+  background: var(--plt-color-secondary);
+  color: var(--plt-color-base-content);
+  border-color: var(--plt-color-secondary);
+}
+
+.d-btn-secondary:hover,
+.d-btn-accent:hover {
+  background: var(--plt-gold-deep);
+  border-color: var(--plt-gold-deep);
+}
+
+.d-btn-outline {
+  background: transparent;
+  color: var(--plt-color-base-content);
+  border-color: var(--plt-color-base-content);
+}
+
+.d-btn-outline:hover {
+  background: var(--plt-color-base-content);
+  color: var(--plt-cream);
+}
+
+.d-btn-ghost {
+  background: transparent;
+  color: var(--plt-color-base-content);
+  border-color: transparent;
+}
+
+.d-btn-ghost:hover {
+  background: transparent;
+  color: var(--plt-gold-deep);
+}
+
+.d-btn:disabled,
+.d-btn[disabled] {
+  opacity: 0.4;
+}
+
+/* Fields: a line under the text, gold on focus. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--plt-border-color);
+  box-shadow: none;
+  outline: none;
+  transition: border-color 180ms var(--plt-ease);
+}
+
+.d-input:focus,
+.d-input:focus-within,
+.d-select:focus,
+.d-textarea:focus {
+  border-bottom-color: var(--plt-color-accent);
+  outline: none;
+}
+
+/* Toggles are the one round shape. */
+.d-toggle {
+  --radius-selector: 999px;
+}
+
+/* Tabs: a gold underline marks the active one. */
+.d-tab {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.d-tab-active,
+.d-tab[aria-selected="true"] {
+  border-bottom: 1px solid var(--plt-color-accent);
+}

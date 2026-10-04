@@ -7,6 +7,7 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `plt` | `themes/plt.css` | The original PlayLoveToys look: bold borders, hard shadows, display type in capitals. Same output as `src/index.css`. |
 | `neutral` | `themes/neutral.css` | Stock daisyUI `light` values: thin borders, soft shadows, system fonts, no capitals. |
 | `nocturne` | `themes/nocturne.css` | Dark, compact, one accent (`#9184d9`), 8px radii, Inter at medium weight, outlined primary buttons. From the Nocturne kit. |
+| `capricho` | `themes/capricho.css` | Quiet editorial luxury (Lunar Caprice): cream ground, charcoal ink, matte gold, marble-dark hero, Bodoni Moda display with Jost, square corners, hairline borders, soft shadows. |
 
 ## Using one
 
