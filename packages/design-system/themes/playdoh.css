@@ -236,7 +236,9 @@ a {
   border: 0;
   font-weight: 800;
   letter-spacing: var(--plt-label-tracking);
-  box-shadow: var(--plt-clay-inset);
+  /* Small pieces get a lighter touch so the pastel stays pastel. */
+  box-shadow: inset 2px 2px 4px var(--plt-clay-light),
+    inset -2px -2px 4px rgba(42, 61, 68, 0.14);
 }
 
 .d-tab {
