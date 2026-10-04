@@ -119,31 +119,33 @@ a {
   --plt-card-media-border: transparent;
 }
 
-/* Cards and panels: raised clay. The drop shadow floats the whole container;
- * the two inset shadows live on an overlay above the children, so media that
- * fills a side of the card (a product photo on white) gets the same relief
- * as the rest instead of hiding it. They rise a little on hover. */
+/* Raised clay. Cards get the drop shadow on the container and the inset
+ * relief from the base overlay (`--plt-elevation-inset`), which paints above
+ * their children so a photo that fills one side is shaped like the rest.
+ * Other elevated things (panels, menus) take both shadows directly. They rise
+ * a little on hover. No `position` here: menus are absolutely positioned. */
+:root {
+  --plt-elevation-inset: var(--plt-clay-inset);
+}
+
 .theme-elevated {
-  position: relative;
   background-color: var(--plt-color-base-100);
   border-radius: var(--plt-radius-box);
   box-shadow: var(--plt-clay-drop);
   transition: box-shadow 260ms ease, transform 260ms var(--plt-squish);
 }
 
-.theme-elevated::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-  box-shadow: var(--plt-clay-inset);
-  pointer-events: none;
+.theme-elevated:where(:not(.d-card)) {
+  box-shadow: var(--plt-clay-inset), var(--plt-clay-drop);
 }
 
 .theme-elevated:hover {
   transform: translateY(-3px);
   box-shadow: var(--plt-clay-drop-lift);
+}
+
+.theme-elevated:where(:not(.d-card)):hover {
+  box-shadow: var(--plt-clay-inset), var(--plt-clay-drop-lift);
 }
 
 .theme-elevated:active {
@@ -235,6 +237,13 @@ a {
   background: var(--plt-color-base-200);
   border: 0;
   border-radius: var(--plt-radius-field);
+  box-shadow: var(--plt-clay-pressed);
+}
+
+.d-input:hover,
+.d-select:hover,
+.d-textarea:hover {
+  transform: none;
   box-shadow: var(--plt-clay-pressed);
 }
 
