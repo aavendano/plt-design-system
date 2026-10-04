@@ -1,0 +1,9 @@
+/* Structure shared by every theme: typography hooks, utilities, primitives and
+ * composite patterns. It reads --plt-* tokens and defines none of the brand
+ * values itself (the defaults it carries live in tokens.css, geometry.css and
+ * typography.css), so a theme only has to override tokens.
+ */
+@import "./typography.css";
+@import "./utilities.css";
+@import "./primitives.css";
+@import "./patterns.css";

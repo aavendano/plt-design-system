@@ -2,6 +2,10 @@
 
 Adapters connect the PLT component/design layer to platform conventions without becoming the source of truth for design values.
 
+## Themes
+
+See [themes.md](themes.md): the stylesheet can be consumed as `@playlovetoys/design-system` (PLT look) or through one file in `themes/`.
+
 ## Rule
 
 Canonical values live in `--plt-*` tokens. Adapters may alias or expose them, but must not duplicate colors, typography, geometry, spacing or shadows. daisyUI remains the component foundation in every consuming platform.
