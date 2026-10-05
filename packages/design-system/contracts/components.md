@@ -12,6 +12,12 @@ Optional: `image_url`, `image_alt`, `vendor`, `compare_at_price`, `badge`, `acti
 
 The renderer receives already formatted price strings. Secondary-image selection, variants, money formatting, reviews, swatches and quick-add behavior stay outside the contract because they are platform/application behavior.
 
+Style hooks the stylesheet owns (an application can add them to its markup; the Astro and Liquid renderers do not need them):
+
+- `plt-product-card__hover-media`: a second image layered over the photo, shown on hover and focus on devices that can hover.
+- `plt-media-card__actions`: the price/action row; it wraps under a long price, and on phones the button takes the full width.
+- `plt-product-card--row`: row layout on phones (photo left, details right) inside a `plt-product-grid`, which then goes to one column.
+
 ## CollectionCard
 
 Required: `title`, `url`.
