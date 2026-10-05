@@ -641,6 +641,26 @@
   max-width: 32rem;
 }
 .plt-search-field .d-input { flex: 1; min-width: 12rem; }
+/* Search results: a list of rows (photo or text link). Moved from the storefront. */
+.plt-result-list {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plt-result-item a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.plt-result-item img {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: var(--plt-media-fit);
+  border: var(--plt-border-width) solid var(--plt-color-base-300);
+  background: var(--plt-media-background);
+}
 .plt-pagination {
   display: flex;
   flex-wrap: wrap;
