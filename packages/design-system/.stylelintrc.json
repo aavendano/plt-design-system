@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "color-no-hex": [true, {"message": "Use a --plt-* token: raw colours belong in tokens.css and the themes."}],
+    "function-disallowed-list": [
+      ["rgb", "rgba", "hsl", "hsla", "hwb", "lab", "lch", "oklab", "oklch"],
+      {"message": "Use a --plt-* token (color-mix() with tokens is fine): raw colours belong in tokens.css and the themes."}
+    ],
+    "declaration-no-important": [true, {"message": "Avoid !important; if it must win over a utility, add a comment: stylelint-disable-next-line declaration-no-important."}],
+    "declaration-property-value-allowed-list": [
+      {"font-family": ["/^var\\(--plt-font-/"]},
+      {"message": "Fonts come from the theme: use var(--plt-font-*)."}
+    ]
+  }
+}

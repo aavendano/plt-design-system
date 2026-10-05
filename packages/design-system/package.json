@@ -8,8 +8,10 @@
     "build:demo": "tailwindcss -i ./demo/demo.css -o ./demo/dist.css --minify",
     "check:conformance": "node scripts/check-daisyui-conformance.mjs",
     "check:renderers": "node scripts/check-renderer-safety.mjs",
-    "check": "npm run check:conformance && npm run check:renderers && npm run build:demo && npm run build:themes",
-    "build:themes": "node scripts/build-themes.mjs"
+    "check": "npm run check:conformance && npm run check:renderers && npm run check:css && npm run check:themes && npm run build:demo && npm run build:themes",
+    "build:themes": "node scripts/build-themes.mjs",
+    "check:css": "stylelint \"src/patterns.css\" \"src/primitives.css\" \"src/typography.css\" \"src/base.css\" \"src/utilities.css\" \"src/geometry.css\"",
+    "check:themes": "node scripts/check-theme-rules.mjs"
   },
   "files": [
     "src",
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@tailwindcss/cli": ">=4 <5",
     "daisyui": ">=5.7.8 <6",
+    "stylelint": "^17.16.0",
     "tailwindcss": ">=4 <5"
   }
 }

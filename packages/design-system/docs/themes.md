@@ -50,5 +50,6 @@ Brand values belong in the token overrides, never in new selectors that duplicat
 Rules for theme selectors:
 
 - A theme changes tokens. Add a selector only for a signature a token cannot express, and say why in a comment.
-- Never set `position`, `display` or `z-index` on a shared class (`.theme-elevated`, `.d-*`): daisyUI components rely on their own (a menu is `position: absolute`) and an unlayered theme rule wins over them.
+- Never set `position`, `display` or `z-index` on a shared class (`.theme-elevated`, `.d-*`): daisyUI components rely on their own (a menu is `position: absolute`) and an unlayered theme rule wins over them. `npm run check:themes` enforces this (also `overflow`, `float`, `inset`); pseudo-elements and single-use `.plt-*` classes are fine, and a deliberate exception takes a `/* theme-rules-ok: reason */` comment above the declaration.
 - Effects that must show over media or children go on an overlay, not on the container's own background.
+- The base styles (`src/patterns.css`, `primitives.css`, `typography.css`, `base.css`, `utilities.css`, `geometry.css`) use tokens: no hex or `rgb()`/`oklch()` colours, no literal `font-family`, no `!important`. `npm run check:css` (stylelint) enforces it; an exception needs a `stylelint-disable-next-line` comment that says why.

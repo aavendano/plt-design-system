@@ -326,6 +326,8 @@
 .plt-navbar__brand.d-btn[aria-current="page"] {
   --btn-bg: transparent;
   --btn-border: transparent;
+  /* A fully transparent zero shadow: it only has to override daisyUI's --btn-shadow. */
+  /* stylelint-disable-next-line function-disallowed-list */
   --btn-shadow: 0 0 0 0 oklch(0% 0 0 / 0);
   background-image: none;
 }
@@ -356,6 +358,8 @@
 @media (min-width: 64rem) {
   .plt-navbar__links { display: flex; }
   .plt-navbar__menu-toggle { display: none; }
+  /* !important: the mobile menu is shown by daisyUI/Tailwind utilities that load later. */
+  /* stylelint-disable-next-line declaration-no-important */
   .plt-navbar__mobile { display: none !important; }
 }
 
