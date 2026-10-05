@@ -499,6 +499,33 @@
   align-items: center;
   margin-top: 0.5rem;
 }
+/* Forms inside the controls (quantity, remove) must not add a box of their own. */
+.plt-cart-line__controls form { display: contents; }
+/* The list of cart lines, and the lines nested under a parent line. */
+.plt-cart-lines {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plt-cart-line-children {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding-left: 1.5rem;
+  border-left: var(--plt-border-width) solid var(--plt-color-base-300);
+}
+.plt-cart-line-children .plt-cart-line { grid-template-columns: 3.5rem 1fr auto; }
+/* Free-shipping progress: message above a daisyUI progress bar. */
+.plt-free-shipping {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: var(--plt-border-width) solid var(--plt-color-base-300);
+  border-radius: var(--plt-radius-box);
+  background: var(--plt-color-base-200);
+}
+.plt-free-shipping__message { margin: 0; }
 
 /* Product grid layout. */
 .plt-product-grid {
