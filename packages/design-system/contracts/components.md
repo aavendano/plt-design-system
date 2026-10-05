@@ -18,6 +18,10 @@ Style hooks the stylesheet owns (an application can add them to its markup; the 
 - `plt-media-card__actions`: the price/action row; it wraps under a long price, and on phones the button takes the full width.
 - `plt-product-card--row`: row layout on phones (photo left, details right) inside a `plt-product-grid`, which then goes to one column.
 
+## Search results
+
+Style hooks only (no renderer): a `plt-result-list` (`ul` or `div`) of `plt-result-item` rows, each with a link `a` that may hold a 3.5rem product `img`. The photo sits on `--plt-media-background` and follows `--plt-media-fit`.
+
 ## CollectionCard
 
 Required: `title`, `url`.
