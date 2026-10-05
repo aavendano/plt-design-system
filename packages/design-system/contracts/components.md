@@ -139,6 +139,10 @@ Gallery override, option pickers and add-to-cart actions are injected via slots 
 
 Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
 
+## Swatch, Faq and rich text
+
+Style hooks only. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside). `plt-faq` wraps stacked daisyUI `d-collapse` blocks. `plt-prose` styles Shopify/Tina rich text (headings, links, lists, images, blockquotes); themes may override its typography.
+
 ## OptionPicker
 
 Required: `name`, `options` — array of `{ label, value, selected?, disabled? }`.
