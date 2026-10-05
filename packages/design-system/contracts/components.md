@@ -15,7 +15,7 @@ The renderer receives already formatted price strings. Secondary-image selection
 Style hooks the stylesheet owns (an application can add them to its markup; the Astro and Liquid renderers do not need them):
 
 - `plt-product-card__hover-media`: a second image layered over the photo, shown on hover and focus on devices that can hover.
-- `plt-media-card__actions`: the price/action row; it wraps under a long price, and on phones the button takes the full width.
+- `plt-media-card__actions`: the price/action row; it wraps under a long price, and the button takes the full width when the card is narrow (14rem or less). `plt-product-card` is an inline-size container (`plt-product-card`), so this follows the card's own width, not the viewport; give the card a width from its parent (a grid cell or a column).
 - `plt-product-card--row`: row layout on phones (photo left, details right) inside a `plt-product-grid`, which then goes to one column.
 
 ## Cart
