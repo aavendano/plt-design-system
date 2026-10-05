@@ -137,6 +137,8 @@ Optional: `vendor`, `compare_at_price`, `badge`, `description`, `images` — arr
 
 Gallery override, option pickers and add-to-cart actions are injected via slots / render blocks.
 
+Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
+
 ## OptionPicker
 
 Required: `name`, `options` — array of `{ label, value, selected?, disabled? }`.

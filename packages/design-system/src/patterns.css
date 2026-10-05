@@ -600,6 +600,24 @@
   gap: 1.25rem;
   align-content: start;
 }
+/* Sticky add-to-cart: a fixed bottom bar on phones and tablets, shown while the main button is off screen. */
+.plt-buy-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem var(--plt-page-margin) calc(0.75rem + env(safe-area-inset-bottom));
+  border-top: var(--plt-border-width) solid var(--plt-color-base-300);
+  background: var(--plt-color-base-100);
+  transform: translateY(110%);
+  transition: transform 200ms ease;
+}
+.plt-buy-bar[data-visible="true"] { transform: translateY(0); }
+.plt-buy-bar > form { display: flex; flex: 1; }
+@media (min-width: 64rem) { .plt-buy-bar { display: none; } }
 .plt-product-detail__price {
   display: inline-flex;
   align-items: baseline;
