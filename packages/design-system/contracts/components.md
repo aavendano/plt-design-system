@@ -161,6 +161,10 @@ Required: `subtotal`.
 
 Optional: `heading`, `checkout_url`, `checkout_label`, `note`.
 
+## Collection filters, Marquee and CollapsibleText
+
+Style hooks only. `plt-collection-filters` wraps a `d-collapse` panel (`plt-collection-filters__panel`, collapsed on small screens, always open from 64rem), a `plt-filter-bar`, a `plt-sort-select` and an active-filter list (`plt-collection-filters__active`). `plt-marquee` is a scrolling band (`__track`, `__group`, `__item`, `__separator`; `--plt-marquee-speed` and `--plt-marquee-direction` set the motion; it stands still under reduced motion). `plt-collapsible` clamps `__text` to `--plt-collapsible-lines` lines on small screens (unless `data-expanded`) and hides `__toggle` from 40.0625rem.
+
 ## FilterBar
 
 Required: `filters` — array of `{ id, label, options: [{ label, value, selected? }] }`.
