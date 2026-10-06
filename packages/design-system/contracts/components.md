@@ -92,6 +92,14 @@ Optional: `logo_url`, `logo_alt`, `home_url`.
 
 Interactive slots (search, cart, mobile toggle) stay outside the contract; platforms inject them via named slots / render blocks.
 
+## MegaMenu
+
+Panel shown under a `Navbar` link whose menu item has grandchildren. Text columns only; images and featured products are not part of the contract.
+
+Required: `id`, `label`, `columns` — array of `{ title, url, children }` where `children` is an array of `{ label, url, current? }`.
+
+The panel is a child of the navbar item (`.plt-megamenu`, `data-open="true|false"`). Opening on hover or focus, closing on Escape, and `aria-expanded` / `aria-controls` stay in the platform; the contract only fixes the anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`.
+
 ## Footer
 
 Required: `site_name`.
