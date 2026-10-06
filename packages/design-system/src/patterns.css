@@ -368,7 +368,8 @@
   display: none;
   position: absolute;
   inset-inline: 0;
-  top: 100%;
+  /* Below the bar's own bottom border (the padding box ends above it). */
+  top: calc(100% + var(--plt-section-border-width));
   z-index: 1;
   max-height: calc(80vh - 4rem);
   overflow-y: auto;
