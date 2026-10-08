@@ -6,22 +6,29 @@ interface Props {
   locale?: string;
 }
 
-const { rating, maxRating = 5, count, locale = 'en-US' } = Astro.props;
-const displayRating = Math.max(0, Math.min(rating, maxRating));
+const { rating, maxRating, count, locale = 'en-US' } = Astro.props;
+
+const parsedMaxRating = Number.isFinite(Number(maxRating)) && Number(maxRating) > 0 ? Math.floor(Number(maxRating)) : 5;
+const safeMaxRating = Math.min(parsedMaxRating, 10); // cap excessive values
+
+const parsedRating = Number.isFinite(Number(rating)) ? Number(rating) : 0;
+const displayRating = Math.max(0, Math.min(parsedRating, safeMaxRating));
+
+const safeCount = (Number.isFinite(Number(count)) && Number(count) >= 0) ? Number(count) : undefined;
 
 const i18n = {
-  'en-US': { rating: `Rating: ${displayRating} out of ${maxRating}`, noReviews: 'No reviews' },
-  'en-CA': { rating: `Rating: ${displayRating} out of ${maxRating}`, noReviews: 'No reviews' },
-  'fr-CA': { rating: `Note: ${displayRating} sur ${maxRating}`, noReviews: 'Aucun avis' },
-  'es-US': { rating: `Calificación: ${displayRating} de ${maxRating}`, noReviews: 'Sin reseñas' }
+  'en-US': { rating: `Rating: ${displayRating} out of ${safeMaxRating}`, noReviews: 'No reviews' },
+  'en-CA': { rating: `Rating: ${displayRating} out of ${safeMaxRating}`, noReviews: 'No reviews' },
+  'fr-CA': { rating: `Note: ${displayRating} sur ${safeMaxRating}`, noReviews: 'Aucun avis' },
+  'es-US': { rating: `Calificación: ${displayRating} de ${safeMaxRating}`, noReviews: 'Sin reseñas' }
 };
 
 const labels = i18n[locale as keyof typeof i18n] || i18n['en-US'];
-const ariaLabel = count === 0 ? labels.noReviews : labels.rating;
+const ariaLabel = safeCount === 0 ? labels.noReviews : labels.rating;
 ---
 
 <div class="d-rating d-rating-sm" role="img" aria-label={ariaLabel}>
-  {Array.from({ length: maxRating }).map((_, i) => {
+  {Array.from({ length: safeMaxRating }).map((_, i) => {
     const starValue = i + 1;
     let starClass = "d-mask d-mask-star-2 bg-warning";
     if (starValue > displayRating && starValue - displayRating < 1) {
@@ -33,5 +40,5 @@ const ariaLabel = count === 0 ? labels.noReviews : labels.rating;
       <span class={starClass} aria-hidden="true"></span>
     );
   })}
-  {count !== undefined && <span class="ml-2 text-sm text-base-content/70">({count})</span>}
+  {safeCount !== undefined && <span class="ml-2 text-sm text-base-content/70">({safeCount})</span>}
 </div>

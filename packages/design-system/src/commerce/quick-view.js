@@ -1,10 +1,12 @@
+const openDialogs = new Set();
+let previousOverflow = '';
+
 class ProductQuickView extends HTMLElement {
   constructor() {
     super();
     this.dialog = null;
     this.openBtn = null;
     this.closeBtn = null;
-    this.previousOverflow = '';
     this.previousFocus = null;
 
     this.open = this.open.bind(this);
@@ -44,19 +46,33 @@ class ProductQuickView extends HTMLElement {
     if (this.dialog) {
       this.dialog.removeEventListener('click', this.handleOutsideClick);
       this.dialog.removeEventListener('close', this.handleDialogClose);
+
+      // If removed from DOM while open, clean up
+      if (openDialogs.has(this)) {
+        openDialogs.delete(this);
+        if (openDialogs.size === 0) {
+          document.body.style.overflow = previousOverflow;
+        }
+      }
     }
   }
 
   open() {
-    if (!this.dialog) return;
+    if (!this.dialog || openDialogs.has(this)) return;
+
     this.previousFocus = document.activeElement;
-    this.previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+
+    if (openDialogs.size === 0) {
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
+
+    openDialogs.add(this);
     this.dialog.showModal();
   }
 
   close() {
-    if (!this.dialog) return;
+    if (!this.dialog || !openDialogs.has(this)) return;
     this.dialog.close();
   }
 
@@ -77,7 +93,14 @@ class ProductQuickView extends HTMLElement {
   }
 
   handleDialogClose() {
-    document.body.style.overflow = this.previousOverflow;
+    if (openDialogs.has(this)) {
+      openDialogs.delete(this);
+
+      if (openDialogs.size === 0) {
+        document.body.style.overflow = previousOverflow;
+      }
+    }
+
     if (this.previousFocus && typeof this.previousFocus.focus === 'function') {
       this.previousFocus.focus();
     }
