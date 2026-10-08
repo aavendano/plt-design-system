@@ -28,8 +28,10 @@ const {
 const primary = images[0];
 ---
 
+<script src="../../../src/commerce/gallery.js"></script>
+
 <section class="plt-product-detail">
-  <div class="plt-product-detail__gallery">
+  <plt-product-gallery class="plt-product-detail__gallery">
     <slot name="gallery">
       {primary && (
         <div class="plt-product-detail__gallery-main">
@@ -46,7 +48,7 @@ const primary = images[0];
         </div>
       )}
     </slot>
-  </div>
+  </plt-product-gallery>
 
   <div class="plt-product-detail__buybox">
     {badge && <span class="d-badge d-badge-secondary theme-label-bold">{badge}</span>}

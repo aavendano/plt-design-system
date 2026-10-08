@@ -1,0 +1,33 @@
+---
+import ReviewRating from "./ReviewRating.astro";
+
+interface Props {
+  rating: number;
+  count: number;
+  distribution?: { stars: number; count: number; percentage: number }[];
+}
+
+const { rating, count, distribution = [] } = Astro.props;
+---
+<div class="plt-review-summary d-card bg-base-100 theme-bordered theme-elevated p-6">
+  <div class="flex flex-col md:flex-row gap-8">
+    <div class="flex-shrink-0 flex flex-col items-center justify-center">
+      <div class="text-5xl font-bold theme-headline-lg">{rating.toFixed(1)}</div>
+      <ReviewRating rating={rating} />
+      <div class="text-sm mt-2 text-base-content/70">Based on {count} reviews</div>
+    </div>
+
+    <div class="flex-grow flex flex-col gap-2">
+      {distribution.map(dist => (
+        <div class="flex items-center gap-4 text-sm">
+          <span class="w-12 text-right">{dist.stars} Stars</span>
+          <progress class="d-progress d-progress-warning w-full" value={dist.percentage} max="100"></progress>
+          <span class="w-12">{dist.percentage}%</span>
+        </div>
+      ))}
+      {distribution.length === 0 && count === 0 && (
+        <div class="text-base-content/60 italic mt-4">No reviews yet.</div>
+      )}
+    </div>
+  </div>
+</div>

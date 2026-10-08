@@ -1,6 +1,6 @@
 {% comment %} PLT ProductDetail renderer. Options/actions provided by the platform. {% endcomment %}
 <section class="plt-product-detail">
-  <div class="plt-product-detail__gallery">
+  <plt-product-gallery class="plt-product-detail__gallery">
     {% if gallery != blank %}
       {{ gallery }}
     {% else %}
@@ -20,7 +20,7 @@
         </div>
       {% endif %}
     {% endif %}
-  </div>
+  </plt-product-gallery>
   <div class="plt-product-detail__buybox">
     {% if badge != blank %}<span class="d-badge d-badge-secondary theme-label-bold">{{ badge | escape }}</span>{% endif %}
     <h1 class="theme-headline-lg">{{ title | escape }}</h1>

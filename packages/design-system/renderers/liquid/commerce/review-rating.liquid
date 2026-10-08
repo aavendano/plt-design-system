@@ -1,0 +1,51 @@
+{% comment %}
+  ReviewRating liquid renderer.
+  Expects: rating, max_rating, count, locale
+{% endcomment %}
+
+{% assign raw_max = max_rating | default: 5 | plus: 0 %}
+{% if raw_max <= 0 %}{% assign raw_max = 5 %}{% endif %}
+{% assign safe_max_r = raw_max | at_most: 10 %}
+
+{% assign raw_rating = rating | default: 0 | plus: 0 %}
+{% assign disp_rating = raw_rating | at_least: 0 | at_most: safe_max_r %}
+
+{% assign loc = locale | default: 'en-US' %}
+
+{% if loc == 'fr-CA' %}
+  {% capture aria_label_rating %}Note: {{ disp_rating }} sur {{ safe_max_r }}{% endcapture %}
+  {% assign aria_label_no_reviews = "Aucun avis" %}
+{% elsif loc == 'es-US' %}
+  {% capture aria_label_rating %}Calificación: {{ disp_rating }} de {{ safe_max_r }}{% endcapture %}
+  {% assign aria_label_no_reviews = "Sin reseñas" %}
+{% else %}
+  {% capture aria_label_rating %}Rating: {{ disp_rating }} out of {{ safe_max_r }}{% endcapture %}
+  {% assign aria_label_no_reviews = "No reviews" %}
+{% endif %}
+
+{% if count == 0 or count == "0" %}
+  {% assign aria_label = aria_label_no_reviews %}
+{% else %}
+  {% assign aria_label = aria_label_rating %}
+{% endif %}
+
+<div class="d-rating d-rating-sm" role="img" aria-label="{{ aria_label | escape }}">
+  {% for i in (1..safe_max_r) %}
+    {% assign diff = i | minus: disp_rating %}
+    {% if diff > 0 and diff < 1 %}
+      {% assign star_class = "d-mask d-mask-star-2 d-mask-half-1 bg-warning" %}
+    {% elsif i > disp_rating %}
+      {% assign star_class = "d-mask d-mask-star-2 bg-base-300" %}
+    {% else %}
+      {% assign star_class = "d-mask d-mask-star-2 bg-warning" %}
+    {% endif %}
+
+    <span class="{{ star_class }}" aria-hidden="true"></span>
+  {% endfor %}
+  {% if count != blank %}
+    {% assign parsed_count = count | plus: 0 %}
+    {% if parsed_count >= 0 %}
+      <span class="ml-2 text-sm text-base-content/70">({{ parsed_count | escape }})</span>
+    {% endif %}
+  {% endif %}
+</div>

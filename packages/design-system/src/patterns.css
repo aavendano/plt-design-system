@@ -618,6 +618,20 @@
   .plt-product-grid--cols-4 { --plt-product-grid-columns: 4; }
 }
 
+/* Product quick view modal */
+plt-quick-view { display: inline-block; }
+plt-quick-view dialog::backdrop {
+  background-color: var(--plt-shadow-color);
+  opacity: 0.5;
+}
+
+/* Review components */
+.plt-review-summary { display: flex; flex-direction: column; gap: 1rem; }
+.plt-review-card { display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* Incentive Bar */
+.plt-incentive-bar { display: block; }
+
 /* Product detail layout. */
 .plt-product-detail {
   display: grid;
