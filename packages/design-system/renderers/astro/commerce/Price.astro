@@ -1,0 +1,28 @@
+---
+import type { Money } from "../../../src/commerce/format-money.ts";
+import { formatPriceDisplay } from "../../../src/commerce/format-money.ts";
+
+interface Props {
+  locale: string;
+  price: Money;
+  compareAtPrice?: Money | null;
+  minPrice?: Money;
+  maxPrice?: Money;
+  class?: string;
+}
+
+const { locale, price, compareAtPrice, minPrice, maxPrice, class: className } = Astro.props;
+
+const { display, compareDisplay } = formatPriceDisplay(locale, price, {
+  compareAtPrice,
+  minPrice,
+  maxPrice,
+});
+---
+
+<span class:list={["plt-price", className]}>
+  <span class="plt-product-card__price">
+    {display}
+    {compareDisplay && <span class="plt-product-card__compare-price">{compareDisplay}</span>}
+  </span>
+</span>

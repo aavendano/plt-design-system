@@ -1,0 +1,24 @@
+---
+export type StockAvailability = "available" | "unavailable" | "low" | "unknown";
+
+interface Props {
+  state: StockAvailability;
+  label: string;
+  class?: string;
+}
+
+const { state, label, class: className } = Astro.props;
+
+const toneClass =
+  state === "unavailable"
+    ? "text-error"
+    : state === "low"
+      ? "text-warning"
+      : state === "available"
+        ? "text-success"
+        : "theme-meta";
+---
+
+<p class:list={["plt-stock theme-meta m-0", toneClass, className]} data-stock-state={state}>
+  {label}
+</p>

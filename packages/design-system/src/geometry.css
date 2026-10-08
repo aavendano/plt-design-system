@@ -1,12 +1,2 @@
-:root {
-  --plt-radius-selector: 0.25rem;
-  --plt-radius-field: 0.25rem;
-  --plt-radius-box: 0.25rem;
-  --plt-size-selector: 0.25rem;
-  --plt-size-field: 0.25rem;
-  --plt-border-width: 2px;
-  --plt-section-border-width: 3px;
-  --plt-shadow-offset: 4px;
-  --plt-shadow-hover-offset: 8px;
-  --plt-shadow-active-offset: 2px;
-}
+@import "./tokens/radius.css";
+@import "./tokens/shadows.css";

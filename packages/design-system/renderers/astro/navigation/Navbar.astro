@@ -1,0 +1,82 @@
+---
+interface NavLink {
+  label: string;
+  url: string;
+  current?: boolean;
+}
+
+interface Props {
+  siteName: string;
+  links?: NavLink[];
+  logoUrl?: string;
+  logoAlt?: string;
+  homeUrl?: string;
+}
+
+const {
+  siteName,
+  links = [],
+  logoUrl,
+  logoAlt = siteName,
+  homeUrl = "/",
+} = Astro.props;
+---
+
+<header class="d-navbar plt-navbar" data-plt-navbar>
+  <div class="plt-navbar__inner">
+    <div class="d-navbar-start gap-2">
+      <button
+        type="button"
+        class="d-btn d-btn-ghost d-btn-square plt-navbar__menu-toggle"
+        data-plt-navbar-toggle
+        aria-expanded="false"
+        aria-controls="plt-navbar-mobile"
+        aria-label="Open menu"
+      >
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="d-btn d-btn-ghost plt-navbar__brand" href={homeUrl} aria-label={siteName}>
+        {logoUrl ? <img src={logoUrl} alt={logoAlt} /> : <span class="theme-headline-sm">{siteName}</span>}
+      </a>
+    </div>
+
+    <div class="d-navbar-center plt-navbar__links">
+      <ul class="d-menu d-menu-horizontal px-0">
+        {links.map((link) => (
+          <li>
+            <a
+              class="theme-label-bold"
+              href={link.url}
+              aria-current={link.current ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="d-navbar-end plt-navbar__actions">
+      <slot name="actions" />
+    </div>
+  </div>
+
+  <div class="plt-navbar__mobile" id="plt-navbar-mobile" data-open="false" hidden>
+    <ul class="d-menu w-full">
+      {links.map((link) => (
+        <li>
+          <a
+            class="theme-label-bold"
+            href={link.url}
+            aria-current={link.current ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="plt-navbar__actions">
+      <slot name="mobile-actions" />
+    </div>
+  </div>
+</header>

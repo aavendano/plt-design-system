@@ -1,0 +1,19 @@
+---
+interface Props {
+  columns?: 2 | 3 | 4;
+}
+
+const { columns } = Astro.props;
+const columnsClass =
+  columns === 2
+    ? "plt-product-grid--cols-2"
+    : columns === 3
+      ? "plt-product-grid--cols-3"
+      : columns === 4
+        ? "plt-product-grid--cols-4"
+        : undefined;
+---
+
+<div class:list={["plt-product-grid", columnsClass]}>
+  <slot />
+</div>

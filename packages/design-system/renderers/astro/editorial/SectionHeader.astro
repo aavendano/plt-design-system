@@ -1,0 +1,20 @@
+---
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+  as?: "h1" | "h2" | "h3";
+}
+
+const { title, eyebrow, description, as: HeadingTag = "h1" } = Astro.props;
+---
+
+<header class="plt-section-header">
+  {eyebrow && (
+    <span class="d-badge d-badge-secondary theme-label-bold plt-section-header__eyebrow">
+      {eyebrow}
+    </span>
+  )}
+  <HeadingTag class="theme-headline-lg plt-section-header__title">{title}</HeadingTag>
+  {description && <p class="theme-body-lg plt-section-header__description">{description}</p>}
+</header>

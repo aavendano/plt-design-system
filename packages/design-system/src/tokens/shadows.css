@@ -1,0 +1,5 @@
+:root {
+  --plt-shadow-offset: 4px;
+  --plt-shadow-hover-offset: 8px;
+  --plt-shadow-active-offset: 2px;
+}

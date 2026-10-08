@@ -1,0 +1,7 @@
+:root {
+  /* Reference widths used in fluid type and catalog patterns (not media-query tokens). */
+  --plt-breakpoint-fluid-min: 20rem;
+  --plt-breakpoint-fluid-max: 80rem;
+  --plt-breakpoint-catalog-sm: 40rem;
+  --plt-breakpoint-catalog-md: 64rem;
+}

@@ -203,9 +203,23 @@ Required: `heading`.
 
 Optional: `body`, `tone` (`info|warning|error`), `action_label`, `action_url`.
 
+## Price
+
+Required: `locale` (BCP 47 tag for `Intl.NumberFormat`), `price` — `{ amount, currencyCode }` (decimal string amount, ISO 4217 code).
+
+Optional: `compareAtPrice`, `minPrice`, `maxPrice` (same money shape). When `minPrice` and `maxPrice` are both set, the renderer shows a range instead of `price`.
+
+Money parsing, market rules, and Shopify `MoneyV2` mapping stay outside the contract. The Astro renderer must not hardcode a locale (for example `en-US`).
+
+## Stock
+
+Required: `state` — `available` | `unavailable` | `low` | `unknown`; `label` — human-readable copy supplied by the adapter (translations and threshold logic stay outside the contract).
+
+The renderer does not interpret inventory quantities or Shopify `quantityAvailable`; it only reflects the normalized `state` and `label`.
+
 ## Pending storefront units
 
-Contracts above are the implemented set. Units the website still needs (`MegaMenu`, `Price`, `Faq`, and the rest) are listed in the repository doc `docs/storefront-component-inventory.md`. Do not add a contract here until that unit is requested.
+Contracts above are the implemented set. Units the website still needs (`MegaMenu`, `Faq`, and the rest) are listed in the repository doc `docs/storefront-component-inventory.md`. Do not add a contract here until that unit is requested.
 
 ## daisyUI rendering invariant
 

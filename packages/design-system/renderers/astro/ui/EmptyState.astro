@@ -1,0 +1,36 @@
+---
+interface Props {
+  heading: string;
+  body?: string;
+  tone?: "info" | "warning" | "error";
+  actionLabel?: string;
+  actionUrl?: string;
+}
+
+const {
+  heading,
+  body,
+  tone = "info",
+  actionLabel,
+  actionUrl,
+} = Astro.props;
+
+const toneClass =
+  tone === "warning"
+    ? "d-alert-warning"
+    : tone === "error"
+      ? "d-alert-error"
+      : "d-alert-info";
+---
+
+<div class:list={["d-alert", toneClass, "plt-empty-state"]} role="status">
+  <div>
+    <h2 class="theme-headline-sm">{heading}</h2>
+    {body && <p class="theme-body-lg">{body}</p>}
+    {actionLabel && actionUrl && (
+      <a class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold mt-2" href={actionUrl}>
+        {actionLabel}
+      </a>
+    )}
+  </div>
+</div>

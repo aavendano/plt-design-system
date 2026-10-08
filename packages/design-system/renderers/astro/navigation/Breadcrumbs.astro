@@ -1,0 +1,30 @@
+---
+interface Crumb {
+  label: string;
+  url?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  ariaLabel?: string;
+}
+
+const { items, ariaLabel = "Breadcrumb" } = Astro.props;
+---
+
+<nav class="d-breadcrumbs plt-breadcrumbs" aria-label={ariaLabel}>
+  <ul>
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      return (
+        <li>
+          {item.url && !isLast ? (
+            <a href={item.url}>{item.label}</a>
+          ) : (
+            <span aria-current={isLast ? "page" : undefined}>{item.label}</span>
+          )}
+        </li>
+      );
+    })}
+  </ul>
+</nav>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  subtotal: string;
+  heading?: string;
+  checkoutUrl?: string;
+  checkoutLabel?: string;
+  note?: string;
+}
+
+const {
+  subtotal,
+  heading = "Order summary",
+  checkoutUrl,
+  checkoutLabel = "Checkout",
+  note,
+} = Astro.props;
+---
+
+<aside class="d-card bg-base-100 theme-bordered theme-elevated plt-cart-summary">
+  <div class="d-card-body">
+    <h2 class="d-card-title theme-headline-sm">{heading}</h2>
+    <div class="plt-cart-summary__row theme-label-bold">
+      <span>Subtotal</span>
+      <span>{subtotal}</span>
+    </div>
+    {note && <p class="theme-meta">{note}</p>}
+    <div class="d-card-actions">
+      {checkoutUrl && (
+        <a class="d-btn d-btn-primary d-btn-block theme-bordered theme-elevated theme-label-bold" href={checkoutUrl}>
+          {checkoutLabel}
+        </a>
+      )}
+      <slot />
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,45 @@
+---
+interface FilterOption {
+  label: string;
+  value: string;
+  selected?: boolean;
+}
+
+interface FilterField {
+  id: string;
+  label: string;
+  options: FilterOption[];
+}
+
+interface Props {
+  filters: FilterField[];
+  action?: string;
+  method?: "get" | "post";
+  submitLabel?: string;
+}
+
+const {
+  filters,
+  action = "",
+  method = "get",
+  submitLabel = "Apply",
+} = Astro.props;
+---
+
+<form class="plt-filter-bar" action={action} method={method}>
+  {filters.map((filter) => (
+    <div class="plt-filter-bar__field">
+      <label class="theme-label-bold" for={`filter-${filter.id}`}>{filter.label}</label>
+      <select class="d-select" id={`filter-${filter.id}`} name={filter.id}>
+        {filter.options.map((option) => (
+          <option value={option.value} selected={option.selected}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  ))}
+  <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">
+    {submitLabel}
+  </button>
+</form>

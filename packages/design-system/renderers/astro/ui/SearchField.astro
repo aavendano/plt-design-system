@@ -1,0 +1,33 @@
+---
+interface Props {
+  action?: string;
+  method?: "get" | "post";
+  inputName?: string;
+  placeholder?: string;
+  value?: string;
+  submitLabel?: string;
+}
+
+const {
+  action = "/shop/products",
+  method = "get",
+  inputName = "q",
+  placeholder = "Search products",
+  value = "",
+  submitLabel = "Search",
+} = Astro.props;
+---
+
+<form class="plt-search-field" action={action} method={method} role="search">
+  <input
+    class="d-input"
+    type="search"
+    name={inputName}
+    value={value}
+    placeholder={placeholder}
+    aria-label={placeholder}
+  />
+  <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">
+    {submitLabel}
+  </button>
+</form>

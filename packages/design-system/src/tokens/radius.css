@@ -1,0 +1,9 @@
+:root {
+  --plt-radius-selector: 0.25rem;
+  --plt-radius-field: 0.25rem;
+  --plt-radius-box: 0.25rem;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 2px;
+  --plt-section-border-width: 3px;
+}
