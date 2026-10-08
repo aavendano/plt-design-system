@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Tim Port Preview</title>
+  <link rel="stylesheet" href="dist.css">
+</head>
+<body class="p-8 space-y-12">
+  <section>
+    <h2 class="text-2xl font-bold mb-4">Product Quick View & Gallery</h2>
+    <plt-quick-view>
+      <button type="button" class="d-btn d-btn-outline theme-bordered theme-elevated" data-quick-view-open>
+        Quick View
+      </button>
+      <dialog class="d-modal" id="quick-view-modal">
+        <div class="d-modal-box w-11/12 max-w-5xl bg-base-100 theme-bordered theme-elevated">
+          <form method="dialog">
+            <button class="d-btn d-btn-sm d-btn-circle d-btn-ghost absolute right-2 top-2" data-quick-view-close>✕</button>
+          </form>
+
+          <!-- Mocked ProductDetail -->
+          <section class="plt-product-detail">
+            <plt-product-gallery class="plt-product-detail__gallery">
+              <div class="plt-product-detail__gallery-main">
+                <img src="https://placehold.co/600x600/png" alt="Primary">
+              </div>
+              <div class="plt-product-detail__thumbs">
+                <button type="button" class="plt-product-detail__thumb" aria-current="true">
+                  <img src="https://placehold.co/600x600/png" alt="Thumb 1">
+                </button>
+                <button type="button" class="plt-product-detail__thumb">
+                  <img src="https://placehold.co/600x600/EEE/31343C/png" alt="Thumb 2">
+                </button>
+              </div>
+            </plt-product-gallery>
+
+            <div class="plt-product-detail__buybox">
+              <h1 class="theme-headline-lg">Test Product</h1>
+              <div class="plt-product-detail__price">
+                <span>$99.99</span>
+              </div>
+            </div>
+          </section>
+
+        </div>
+        <form method="dialog" class="d-modal-backdrop">
+          <button data-quick-view-close>close</button>
+        </form>
+      </dialog>
+    </plt-quick-view>
+  </section>
+
+  <script src="../src/commerce/quick-view.js"></script>
+  <script src="../src/commerce/gallery.js"></script>
+</body>
+</html>

@@ -48,6 +48,27 @@ Required: `heading`.
 
 Optional: `body`, `action_label`, `action_url`, `tone` (`primary|warning`).
 
+## ProductQuickView
+
+Required: same as `ProductDetail`.
+
+Optional: `trigger_label` (defaults to "Quick View").
+
+Presents a modal wrapping a `ProductDetail` renderer. Focus management and escape behavior are handled natively by HTML `<dialog>` and `<plt-quick-view>`.
+
+## Reviews
+
+- **ReviewRating**: Required `rating`. Optional `max_rating` (defaults to 5), `count`. Displays a visual star rating.
+- **ReviewSummary**: Required `rating`, `count`. Optional `distribution` (array of objects with `stars`, `count`, `percentage`). Shows aggregate review metrics.
+- **ReviewCard**: Required `author`, `date`, `rating`, `body`. Optional `title`. Displays a single customer review.
+
+## IncentiveBar
+
+Required: `incentives` (array of objects with `title` and `description`).
+Optional: `icon` per incentive (HTML/SVG string).
+
+Displays a banner or grid of feature promos/incentives (e.g. Free Shipping, 24/7 Support).
+
 Promotions, eligibility and localization stay outside the contract.
 
 ## Newsletter

@@ -1,0 +1,28 @@
+---
+import ReviewRating from "./ReviewRating.astro";
+
+interface Props {
+  author: string;
+  date: string;
+  rating: number;
+  title?: string;
+  body: string;
+}
+
+const { author, date, rating, title, body } = Astro.props;
+---
+<article class="plt-review-card d-card bg-base-100 theme-border-y py-6 rounded-none">
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-between items-start">
+      <div>
+        <ReviewRating rating={rating} />
+        {title && <h3 class="font-bold mt-2">{title}</h3>}
+      </div>
+      <div class="text-sm text-base-content/60">{date}</div>
+    </div>
+    <div class="text-sm font-medium mt-1">{author}</div>
+    <div class="mt-2 text-base-content/80 theme-body">
+      {body}
+    </div>
+  </div>
+</article>

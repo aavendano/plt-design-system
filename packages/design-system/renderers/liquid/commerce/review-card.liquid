@@ -1,0 +1,19 @@
+{% comment %}
+  ReviewCard liquid renderer.
+  Expects: author, date, rating, title, body
+{% endcomment %}
+<article class="plt-review-card d-card bg-base-100 theme-border-y py-6 rounded-none">
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-between items-start">
+      <div>
+        {% include 'commerce/review-rating' with rating: rating %}
+        {% if title != blank %}<h3 class="font-bold mt-2">{{ title | escape }}</h3>{% endif %}
+      </div>
+      <div class="text-sm text-base-content/60">{{ date | escape }}</div>
+    </div>
+    <div class="text-sm font-medium mt-1">{{ author | escape }}</div>
+    <div class="mt-2 text-base-content/80 theme-body">
+      {{ body | escape }}
+    </div>
+  </div>
+</article>

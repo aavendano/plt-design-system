@@ -1,0 +1,37 @@
+---
+import ProductDetail from "./ProductDetail.astro";
+import type { ComponentProps } from "astro/types";
+
+interface Props extends ComponentProps<typeof ProductDetail> {
+  triggerLabel?: string;
+}
+
+const {
+  triggerLabel = "Quick View",
+  ...productProps
+} = Astro.props;
+---
+<script src="../../../src/commerce/quick-view.js"></script>
+<script src="../../../src/commerce/gallery.js"></script>
+
+<plt-quick-view>
+  <button type="button" class="d-btn d-btn-outline theme-bordered theme-elevated" data-quick-view-open>
+    {triggerLabel}
+  </button>
+  <dialog class="d-modal">
+    <div class="d-modal-box w-11/12 max-w-5xl bg-base-100 theme-bordered theme-elevated">
+      <form method="dialog">
+        <button class="d-btn d-btn-sm d-btn-circle d-btn-ghost absolute right-2 top-2" aria-label="Close" data-quick-view-close>✕</button>
+      </form>
+      <ProductDetail {...productProps}>
+        <slot name="gallery" slot="gallery" />
+        <slot name="price" slot="price" />
+        <slot name="options" slot="options" />
+        <slot name="actions" slot="actions" />
+      </ProductDetail>
+    </div>
+    <form method="dialog" class="d-modal-backdrop">
+      <button data-quick-view-close>close</button>
+    </form>
+  </dialog>
+</plt-quick-view>

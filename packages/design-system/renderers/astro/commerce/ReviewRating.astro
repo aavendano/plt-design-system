@@ -1,0 +1,33 @@
+---
+interface Props {
+  rating: number;
+  maxRating?: number;
+  count?: number;
+}
+
+const { rating, maxRating = 5, count } = Astro.props;
+const displayRating = Math.max(0, Math.min(rating, maxRating));
+const groupId = Math.random().toString(36).substring(7);
+---
+
+<div class="d-rating d-rating-sm" aria-label={`Rating: ${displayRating} out of ${maxRating}`}>
+  {Array.from({ length: maxRating }).map((_, i) => {
+    const starValue = i + 1;
+    let starClass = "d-mask d-mask-star-2 bg-warning";
+    if (starValue > displayRating && starValue - displayRating < 1) {
+      starClass = "d-mask d-mask-star-2 d-mask-half-1 bg-warning";
+    } else if (starValue > displayRating) {
+      starClass = "d-mask d-mask-star-2 bg-base-300";
+    }
+    return (
+      <input
+        type="radio"
+        name={`rating-static-${groupId}`}
+        class={starClass}
+        disabled
+        checked={Math.round(displayRating) === starValue}
+      />
+    );
+  })}
+  {count !== undefined && <span class="ml-2 text-sm text-base-content/70">({count})</span>}
+</div>
