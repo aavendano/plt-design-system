@@ -1,13 +1,30 @@
 {% comment %}
   ReviewRating liquid renderer.
-  Expects: rating, max_rating, count
+  Expects: rating, max_rating, count, locale
 {% endcomment %}
 
 {% assign max_r = max_rating | default: 5 %}
 {% assign disp_rating = rating | at_least: 0 | at_most: max_r %}
-{% assign disp_rating_rounded = disp_rating | round %}
+{% assign loc = locale | default: 'en-US' %}
 
-<div class="d-rating d-rating-sm" aria-label="Rating: {{ disp_rating }} out of {{ max_r }}">
+{% if loc == 'fr-CA' %}
+  {% capture aria_label_rating %}Note: {{ disp_rating }} sur {{ max_r }}{% endcapture %}
+  {% assign aria_label_no_reviews = "Aucun avis" %}
+{% elsif loc == 'es-US' %}
+  {% capture aria_label_rating %}Calificación: {{ disp_rating }} de {{ max_r }}{% endcapture %}
+  {% assign aria_label_no_reviews = "Sin reseñas" %}
+{% else %}
+  {% capture aria_label_rating %}Rating: {{ disp_rating }} out of {{ max_r }}{% endcapture %}
+  {% assign aria_label_no_reviews = "No reviews" %}
+{% endif %}
+
+{% if count == 0 %}
+  {% assign aria_label = aria_label_no_reviews %}
+{% else %}
+  {% assign aria_label = aria_label_rating %}
+{% endif %}
+
+<div class="d-rating d-rating-sm" role="img" aria-label="{{ aria_label | escape }}">
   {% for i in (1..max_r) %}
     {% assign diff = i | minus: disp_rating %}
     {% if diff > 0 and diff < 1 %}
@@ -18,13 +35,7 @@
       {% assign star_class = "d-mask d-mask-star-2 bg-warning" %}
     {% endif %}
 
-    <input
-      type="radio"
-      name="rating-static-{{ 'now' | date: '%N' }}"
-      class="{{ star_class }}"
-      disabled
-      {% if disp_rating_rounded == i %}checked{% endif %}
-    />
+    <span class="{{ star_class }}" aria-hidden="true"></span>
   {% endfor %}
   {% if count != blank %}<span class="ml-2 text-sm text-base-content/70">({{ count | escape }})</span>{% endif %}
 </div>
