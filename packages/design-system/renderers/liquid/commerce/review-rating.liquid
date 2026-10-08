@@ -1,0 +1,30 @@
+{% comment %}
+  ReviewRating liquid renderer.
+  Expects: rating, max_rating, count
+{% endcomment %}
+
+{% assign max_r = max_rating | default: 5 %}
+{% assign disp_rating = rating | at_least: 0 | at_most: max_r %}
+{% assign disp_rating_rounded = disp_rating | round %}
+
+<div class="d-rating d-rating-sm" aria-label="Rating: {{ disp_rating }} out of {{ max_r }}">
+  {% for i in (1..max_r) %}
+    {% assign diff = i | minus: disp_rating %}
+    {% if diff > 0 and diff < 1 %}
+      {% assign star_class = "d-mask d-mask-star-2 d-mask-half-1 bg-warning" %}
+    {% elsif i > disp_rating %}
+      {% assign star_class = "d-mask d-mask-star-2 bg-base-300" %}
+    {% else %}
+      {% assign star_class = "d-mask d-mask-star-2 bg-warning" %}
+    {% endif %}
+
+    <input
+      type="radio"
+      name="rating-static-{{ 'now' | date: '%N' }}"
+      class="{{ star_class }}"
+      disabled
+      {% if disp_rating_rounded == i %}checked{% endif %}
+    />
+  {% endfor %}
+  {% if count != blank %}<span class="ml-2 text-sm text-base-content/70">({{ count | escape }})</span>{% endif %}
+</div>

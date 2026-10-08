@@ -1,0 +1,17 @@
+{% comment %} PLT ProductQuickView renderer. {% endcomment %}
+<plt-quick-view>
+  <button type="button" class="d-btn d-btn-outline theme-bordered theme-elevated" data-quick-view-open>
+    {{ trigger_label | default: "Quick View" | escape }}
+  </button>
+  <dialog class="d-modal">
+    <div class="d-modal-box w-11/12 max-w-5xl bg-base-100 theme-bordered theme-elevated">
+      <form method="dialog">
+        <button class="d-btn d-btn-sm d-btn-circle d-btn-ghost absolute right-2 top-2" aria-label="Close" data-quick-view-close>✕</button>
+      </form>
+      {% include 'product-detail' %}
+    </div>
+    <form method="dialog" class="d-modal-backdrop">
+      <button data-quick-view-close>close</button>
+    </form>
+  </dialog>
+</plt-quick-view>
