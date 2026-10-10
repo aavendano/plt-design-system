@@ -1,0 +1,40 @@
+---
+import {
+  SHOPIFY_CDN_SIZES,
+  SHOPIFY_CDN_WIDTHS,
+  shopifyCdnSrcSet,
+  shopifyCdnUrl,
+  type ShopifyCdnLayout,
+} from "../../../src/shopify/cdn-image.ts";
+
+interface Props {
+  src: string;
+  alt: string;
+  layout?: ShopifyCdnLayout;
+  loading?: "lazy" | "eager";
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  layout = "card",
+  loading = "lazy",
+  class: className,
+} = Astro.props;
+
+const widths = SHOPIFY_CDN_WIDTHS[layout];
+const srcset = shopifyCdnSrcSet(src, widths);
+const fallbackSrc = shopifyCdnUrl(src, { width: widths[widths.length - 1] ?? 800 });
+const sizes = SHOPIFY_CDN_SIZES[layout];
+---
+
+<img
+  src={fallbackSrc}
+  srcset={srcset || undefined}
+  sizes={srcset ? sizes : undefined}
+  alt={alt}
+  loading={loading}
+  class={className}
+  decoding="async"
+/>

@@ -1,4 +1,6 @@
 ---
+import ResponsiveShopifyImage from "../ui/ResponsiveShopifyImage.astro";
+
 interface ProductImage {
   url: string;
   alt?: string;
@@ -35,14 +37,19 @@ const primary = images[0];
     <slot name="gallery">
       {primary && (
         <div class="plt-product-detail__gallery-main">
-          <img src={primary.url} alt={primary.alt || title} />
+          <ResponsiveShopifyImage
+            src={primary.url}
+            alt={primary.alt || title}
+            layout="gallery"
+            loading="eager"
+          />
         </div>
       )}
       {images.length > 1 && (
         <div class="plt-product-detail__thumbs">
           {images.map((image) => (
             <button type="button" class="plt-product-detail__thumb" aria-label={image.alt || title}>
-              <img src={image.url} alt="" loading="lazy" />
+              <ResponsiveShopifyImage src={image.url} alt="" layout="card" loading="lazy" />
             </button>
           ))}
         </div>

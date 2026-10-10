@@ -1,4 +1,6 @@
 ---
+import ResponsiveShopifyImage from "../ui/ResponsiveShopifyImage.astro";
+
 interface Props {
   title: string;
   url: string;
@@ -12,7 +14,7 @@ const { title, url, imageUrl, imageAlt = title, description } = Astro.props;
 <a href={url} class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-collection-card">
   {imageUrl && (
     <figure class="plt-media-card__media plt-collection-card__media">
-      <img src={imageUrl} alt={imageAlt} loading="lazy" />
+      <ResponsiveShopifyImage src={imageUrl} alt={imageAlt} layout="collection" loading="lazy" />
     </figure>
   )}
   <div class="d-card-body plt-media-card__body">
