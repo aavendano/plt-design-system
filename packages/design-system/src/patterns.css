@@ -942,7 +942,7 @@ plt-quick-view dialog::backdrop {
   margin: 0;
 }
 .plt-docs-toc__tree details {
-  border-left: 1px solid color-mix(in srgb, var(--plt-border-color) 65%, transparent);
+  border-left: var(--plt-border-width) solid var(--plt-border-color);
 }
 .plt-docs-toc__summary {
   display: flex;
@@ -984,7 +984,7 @@ plt-quick-view dialog::backdrop {
   list-style: none;
   padding: 0;
   margin: 0 0 0.25rem 1rem;
-  border-left: 1px solid color-mix(in srgb, var(--plt-border-color) 45%, transparent);
+  border-left: var(--plt-border-width) solid var(--plt-border-color);
 }
 .plt-docs-toc__children a {
   display: block;
@@ -994,7 +994,7 @@ plt-quick-view dialog::backdrop {
 .plt-docs-toc__section {
   margin-top: var(--plt-docs-outline-section-gap);
   padding-top: 1.25rem;
-  border-top: 1px solid var(--plt-border-color);
+  border-top: var(--plt-border-width) solid var(--plt-border-color);
 }
 .plt-docs-toc__section--solo {
   margin-top: 0;
@@ -1022,8 +1022,10 @@ plt-quick-view dialog::backdrop {
 }
 .plt-docs-nav-tree__menu a {
   border-radius: var(--plt-radius-field);
+  border: var(--plt-border-width) solid transparent;
   text-decoration: none;
   color: color-mix(in oklab, var(--plt-color-base-content) 70%, transparent);
+  box-shadow: none;
 }
 .plt-docs-nav-tree__menu a:hover {
   color: var(--plt-color-base-content);
@@ -1033,12 +1035,15 @@ plt-quick-view dialog::backdrop {
   background: var(--plt-color-secondary);
   color: var(--plt-color-secondary-content);
   font-weight: 600;
+  border-radius: var(--plt-radius-field);
+  border-color: var(--plt-border-color);
+  box-shadow: var(--plt-shadow-offset) var(--plt-shadow-offset) 0 0 var(--plt-shadow-color);
 }
 .plt-docs-nav-tree__child {
   margin-top: 0.75rem;
   margin-left: 0.5rem;
   padding-left: 0.5rem;
-  border-left: 1px solid color-mix(in srgb, var(--plt-border-color) 65%, transparent);
+  border-left: var(--plt-border-width) solid var(--plt-border-color);
 }
 .plt-docs-nav-tree__child .plt-docs-nav-tree__label {
   margin-bottom: 0.375rem;
