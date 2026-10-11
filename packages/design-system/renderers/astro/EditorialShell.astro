@@ -1,0 +1,12 @@
+---
+import EditorialShell from "./layout/EditorialShell.astro";
+
+const hasAside = Astro.slots.has("aside");
+const hasRail = Astro.slots.has("rail");
+---
+<EditorialShell {...Astro.props} showAside={hasAside} showRail={hasRail}>
+  {hasAside && <slot name="aside" slot="aside" />}
+  <slot name="main" slot="main" />
+  {hasRail && <slot name="rail" slot="rail" />}
+  <slot />
+</EditorialShell>

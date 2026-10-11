@@ -25,6 +25,9 @@ Supported baseline: daisyUI `>=5.7.8 <6` with Tailwind CSS `>=4 <5`.
 | Footer | `d-footer` + `d-menu` |
 | Cart drawer | `d-drawer` + `d-drawer-toggle` + `d-drawer-side` |
 | Join groups (qty, pagination) | `d-join` |
+| Docs nav tree | `d-menu` inside `plt-docs-nav-tree` |
+| Docs page outline | `plt-docs-toc` with native `details` / chevron (`plt-docs-toc__*`); no daisyUI TOC part |
+| Editorial docs shell | `plt-editorial-shell` grid + sticky columns; app owns document header/footer |
 
 Current daisyUI 5 form controls are bordered by default. Removed modifiers such as `d-input-bordered`, `d-select-bordered`, `d-textarea-bordered`, and the old `d-card-bordered` spelling must not be used.
 

@@ -109,6 +109,9 @@ const required = {
   "renderers/liquid/empty-state.liquid": ["d-alert", "d-btn", "plt-empty-state"],
   "renderers/astro/commerce/Price.astro": ["plt-price", "plt-product-card__price"],
   "renderers/astro/commerce/Stock.astro": ["plt-stock", "data-stock-state"],
+  "renderers/astro/editorial/PageOutline.astro": ["plt-docs-toc"],
+  "renderers/astro/editorial/NavTree.astro": ["d-menu", "plt-docs-nav-tree"],
+  "renderers/astro/layout/EditorialShell.astro": ["plt-editorial-shell"],
   "demo/index.html": [
     "d-btn",
     "d-card",

@@ -15,6 +15,13 @@ The renderer layer maps normalized component contracts to platform syntax while 
 - SplitCta
 - Breadcrumbs
 
+### Docs / editorial shell (Astro-only)
+- PageOutline — in-page heading outline (`plt-docs-toc*`); optional slot for secondary nav
+- NavTree — grouped doc navigation (`d-menu` + `plt-docs-nav-tree`)
+- EditorialShell — content-region grid with sticky aside/rail (`plt-editorial-shell`)
+
+These three have Astro renderers only until a Liquid consumer exists. Do not add Liquid stubs for parity alone. The consuming docs app owns manifests, sync, Content Layer, and presenters; the design system owns chrome markup, tokens, and CSS.
+
 ### Shell
 - Navbar
 - Footer
@@ -33,7 +40,7 @@ The renderer layer maps normalized component contracts to platform syntax while 
 - Pagination
 - EmptyState
 
-Each component has a Liquid renderer under `renderers/liquid/` and an Astro renderer under `renderers/astro/`.
+Most storefront components have a Liquid renderer under `renderers/liquid/` and an Astro renderer under `renderers/astro/`. Docs/editorial shell units (`PageOutline`, `NavTree`, `EditorialShell`) are Astro-only until a Liquid consumer exists.
 
 Units the website still needs, and units that must stay in the application, are listed in the repository doc `docs/storefront-component-inventory.md`. Do not add a renderer until that inventory marks the unit as missing.
 
@@ -66,6 +73,9 @@ Liquid and Astro may differ syntactically, but equivalent renderers must emit th
 - OptionPicker / QuantitySelector / Pagination: `d-btn`, `d-join`, `d-input` as applicable
 - FilterBar / SortSelect / SearchField: `d-select` / `d-input` / `d-btn`
 - EmptyState: `d-alert`, `d-btn`
+- PageOutline: `plt-docs-toc` (details/chevron are `plt-docs-toc*` extensions; no daisyUI TOC part)
+- NavTree: `d-menu`, `plt-docs-nav-tree`
+- EditorialShell: `plt-editorial-shell` (layout composition; no daisyUI page-shell part)
 
 PLT `theme-*` classes apply brand treatment. `plt-*` classes may extend composition where daisyUI has no corresponding component part, but may not replace a daisyUI component class.
 

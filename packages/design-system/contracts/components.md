@@ -238,6 +238,40 @@ Required: `state` — `available` | `unavailable` | `low` | `unknown`; `label` �
 
 The renderer does not interpret inventory quantities or Shopify `quantityAvailable`; it only reflects the normalized `state` and `label`.
 
+## PageOutline
+
+Required: `items` — array of `{ depth, slug, text }` (heading outline). Depths `2` and `3` are rendered; other depths are ignored.
+
+Optional: `label` (defaults to `"On this page"`).
+
+A default slot may inject secondary navigation (for example a `NavTree`) below the outline. When both outline roots and the slot are present, the renderer separates them with a border using `--plt-border-color` and gap `--plt-docs-outline-section-gap`.
+
+IntersectionObserver / scroll-spy, filesystem, and product-label i18n stay outside the contract.
+
+Astro-only until a Liquid consumer exists.
+
+## NavTree
+
+Required: `groups` — array of `{ label, items: [{ title, href, current? }], children? }` where `children` repeats the same group shape one level deep.
+
+Optional: `currentPath` — when set, the renderer marks an item current by comparing normalized paths if `current` is not already provided on the item.
+
+Tree construction, content manifests, and sync stay outside the contract.
+
+Astro-only until a Liquid consumer exists.
+
+## EditorialShell
+
+No required data props. Named slots: `aside`, `main`, `rail` (optional).
+
+- Without `rail`: two columns when `aside` is present (aside + main from the large breakpoint).
+- With `rail`: two columns from the medium breakpoint (main + rail); three columns from the large breakpoint when `aside` is also present.
+- Sticky side columns use `--plt-docs-sticky-top`.
+
+Document chrome (html/head/header/footer), source sync, and section tabs stay in the application.
+
+Astro-only until a Liquid consumer exists.
+
 ## Pending storefront units
 
 Contracts above are the implemented set. Units the website still needs (`MegaMenu`, `Faq`, and the rest) are listed in the repository doc `docs/storefront-component-inventory.md`. Do not add a contract here until that unit is requested.

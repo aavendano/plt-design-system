@@ -7,6 +7,8 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `plt` | `themes/plt.css` | The original PlayLoveToys look: bold borders, hard shadows, display type in capitals. Same output as `src/index.css`. |
 | `neutral` | `themes/neutral.css` | Stock daisyUI `light` values: thin borders, soft shadows, system fonts, no capitals. |
 | `nocturne` | `themes/nocturne.css` | Dark, compact, one accent (`#9184d9`), 8px radii, Inter at medium weight, outlined primary buttons. From the Nocturne kit. |
+| `docs` | `themes/docs.css` | Dense dark documentation UI: canvas `#0A0A0F`, violet accent `#8B7CF6`, Inter + JetBrains Mono, hairline borders, no shadows, filled primary buttons. Reading hierarchy (secondary body, primary headings). Visual docs chrome (`PageOutline`, `NavTree`, `EditorialShell` + `plt-docs-*` patterns) lives in the package; the app orchestrates data. |
+| `docs-light` | `themes/docs-light.css` | Light counterpart to `docs`: canvas `#FAFAFB`, white surfaces, elevated `#F4F4F6`, border `#E4E4E9`, text primary `#0A0A0F` / secondary `#52525B`, deepened violet `#6D5BE0` for AA link contrast, soft elevation `0 1px 2px rgba(10,10,15,0.06)`. Same type and component signatures as `docs`. |
 | `capricho` | `themes/capricho.css` | Quiet editorial luxury (Lunar Caprice): cream ground, charcoal ink, matte gold, marble-dark hero, Bodoni Moda display with Jost, square corners, hairline borders, soft shadows. |
 | `broadsheet` | `themes/broadsheet.css` | Printed-newspaper register: cool newsprint ground, near-black ink, Source Serif 4 throughout, cyan accent and magenta second ink, no dark bands or section dividers, small radii, soft ink shadows. |
 | `konstrukt` | `themes/konstrukt.css` | Bauhaus/Swiss on paper: riso red, blue and ochre, flat blocks, 2px charcoal borders, no shadows, square corners, uppercase Source Serif 4 headlines with Jost and IBM Plex Mono. |
@@ -25,7 +27,15 @@ Import exactly one theme after Tailwind; each declares its own daisyUI plugin co
 @import "@playlovetoys/design-system/themes/neutral";
 ```
 
-An application can pick the theme at build time (for example from a `THEME` environment variable resolved in its bundler config). Fonts are not bundled: a theme names the family (`--plt-font-*`) and the application loads the files.
+For the documentation look (dark or light — import exactly one):
+
+```css
+@import "tailwindcss";
+@import "@playlovetoys/design-system/themes/docs";
+/* or: @import "@playlovetoys/design-system/themes/docs-light"; */
+```
+
+An application can pick the theme at build time (for example from a `THEME` environment variable resolved in its bundler config). Fonts are not bundled: a theme names the family (`--plt-font-*`) and the application loads the files. For `docs` / `docs-light`, load Inter and JetBrains Mono (or accept the system/ui-monospace fallbacks). Docs chrome markup and sticky/outline CSS live in the package (`EditorialShell`, `PageOutline`, `NavTree`, `plt-docs-*` / `plt-editorial-shell` in `src/patterns.css`, tokens `--plt-docs-sticky-top` and `--plt-docs-outline-section-gap`). The app owns document shell (header/footer), manifests, sync, and presenters. Style app-only chrome with `--plt-*` / `--plt-docs-*` tokens (including `--plt-docs-accent-subtle` for tinted badges and active nav).
 
 ## Tokens a theme sets
 

@@ -1,0 +1,63 @@
+{
+  "started_at": "2026-10-10T19:38:12-0400",
+  "finished_at": "2026-10-10T19:38:12-0400",
+  "outcome": "no_change",
+  "options": {
+    "rung": "3",
+    "tau_ren": 0.95,
+    "max_diff_tokens": 8000,
+    "tau_nb": 0.5,
+    "tau_grow": 0.33,
+    "k_hop": 1,
+    "use_ownership_closure": true,
+    "tau_full": 0.5,
+    "tau_tree": 0.3,
+    "use_routing_agent": true,
+    "use_growth_recluster": true,
+    "use_up": true,
+    "agent_may_patch_leaf": true,
+    "agent_patches_related": true,
+    "use_stale_scan": true,
+    "extra": {}
+  },
+  "revision": {
+    "old_commit": null,
+    "new_commit": "1b36e341bf7d787a575fa57970c6a60a07e6f18f",
+    "repo_path": "/home/alejandro/Documents/Proyectos/CSS-Style/plt-design-system"
+  },
+  "diff": {
+    "counts": {
+      "added": 0,
+      "deleted": 0,
+      "interface": 0,
+      "body": 0,
+      "edge": 0,
+      "renamed": 0
+    },
+    "added": [],
+    "deleted": [],
+    "interface": [],
+    "body": [],
+    "edge": [],
+    "renamed": {}
+  },
+  "repair": {},
+  "reclustered": [],
+  "reports": {},
+  "ownership": [],
+  "active": [],
+  "write_sets": {},
+  "fallback": {},
+  "verdicts": [],
+  "pages_written": [],
+  "pages_removed": [],
+  "write_set_violations": [],
+  "stale_scan": {},
+  "calls": [],
+  "detector_notes": [
+    "whole-repository mode: one virtual leaf (overview)",
+    "reference index rebuilt from pages (none saved by previous build)"
+  ],
+  "errors": [],
+  "wall_seconds": 0.01
+}

@@ -1,0 +1,42 @@
+---
+interface Props {
+  /** Optional id for the main landmark (defaults to "main"). */
+  mainId?: string;
+  /** Override aside presence when forwarding through a wrapper. */
+  showAside?: boolean;
+  /** Override rail presence when forwarding through a wrapper. */
+  showRail?: boolean;
+}
+
+const { mainId = "main", showAside, showRail } = Astro.props;
+const hasAside = showAside ?? Astro.slots.has("aside");
+const hasRail = showRail ?? Astro.slots.has("rail");
+---
+
+<div
+  class:list={[
+    "plt-editorial-shell",
+    "astro-page-shell",
+    hasAside && "plt-editorial-shell--with-aside",
+    hasRail && "plt-editorial-shell--with-rail",
+  ]}
+>
+  {
+    hasAside && (
+      <aside class="plt-editorial-shell__aside">
+        <slot name="aside" />
+      </aside>
+    )
+  }
+  <main id={mainId} class="plt-editorial-shell__main">
+    <slot name="main" />
+    <slot />
+  </main>
+  {
+    hasRail && (
+      <aside class="plt-editorial-shell__rail">
+        <slot name="rail" />
+      </aside>
+    )
+  }
+</div>
