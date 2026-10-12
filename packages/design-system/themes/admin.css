@@ -1,0 +1,105 @@
+/* Theme: Admin. A quiet, utility-first surface matching django-admin-react:
+ * white and gray panels, blue actions, red destructive states, thin borders,
+ * moderate corners and soft elevation. */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #ffffff;
+  --plt-color-base-200: #f9fafb;
+  --plt-color-base-300: #e5e7eb;
+  --plt-color-base-content: #111827;
+  --plt-color-primary: #2563eb;
+  --plt-color-primary-content: #ffffff;
+  --plt-color-secondary: #4b5563;
+  --plt-color-secondary-content: #ffffff;
+  --plt-color-accent: #1d4ed8;
+  --plt-color-accent-content: #ffffff;
+  --plt-color-neutral: #111827;
+  --plt-color-neutral-content: #ffffff;
+  --plt-color-info: #3b82f6;
+  --plt-color-info-content: #ffffff;
+  --plt-color-success: #16a34a;
+  --plt-color-success-content: #ffffff;
+  --plt-color-warning: #d97706;
+  --plt-color-warning-content: #ffffff;
+  --plt-color-error: #dc2626;
+  --plt-color-error-content: #ffffff;
+
+  --plt-border-color: #e5e7eb;
+  --plt-border-strong: #d1d5db;
+  --plt-shadow-color: rgba(17, 24, 39, 0.1);
+
+  --plt-radius-selector: 0.375rem;
+  --plt-radius-field: 0.375rem;
+  --plt-radius-box: 0.5rem;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 1px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-font-display: ui-sans-serif, system-ui, sans-serif;
+  --plt-font-body: ui-sans-serif, system-ui, sans-serif;
+  --plt-font-accent: ui-sans-serif, system-ui, sans-serif;
+  --plt-heading-weight: 600;
+  --plt-heading-tracking: normal;
+  --plt-heading-transform: none;
+  --plt-label-weight: 600;
+  --plt-label-tracking: normal;
+  --plt-label-transform: none;
+  --plt-price-tracking: normal;
+
+  --plt-elevation: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --plt-elevation-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  line-height: 1.2;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+.theme-elevated {
+  box-shadow: var(--plt-elevation);
+  transition: box-shadow 150ms ease;
+}
+
+.theme-elevated:hover,
+.theme-elevated:active {
+  transform: none;
+  box-shadow: var(--plt-elevation-hover);
+}
+
+.theme-sidebar-shadow {
+  box-shadow: 2px 0 0 -1px rgba(0, 0, 0, 0.06);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-primary) 20%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--plt-color-primary);
+  outline-offset: 2px;
+}
