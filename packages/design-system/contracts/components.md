@@ -111,7 +111,7 @@ Required: `site_name`, `links` — array of `{ label, url, current? }`.
 
 Optional: `logo_url`, `logo_alt`, `home_url`.
 
-Interactive slots (search, cart, mobile toggle) stay outside the contract; platforms inject them via named slots / render blocks.
+Interactive slots (search, cart) stay outside the contract; platforms inject them via named slots (`actions`, `mobile-actions`). The mobile menu toggle is bundled and functional out of the box: the component root is wrapped in a `<plt-navbar>` custom element backed by `src/navigation/navbar-toggle.js`, which drives the existing `data-plt-navbar-toggle` / `aria-expanded` / `aria-controls` / `data-open` attributes (click to open/close, Escape to close and return focus, click-outside to close). No platform JS required.
 
 ## MegaMenu
 
@@ -256,17 +256,24 @@ Required: `groups` — array of `{ label, items: [{ title, href, current? }], ch
 
 Optional: `currentPath` — when set, the renderer marks an item current by comparing normalized paths if `current` is not already provided on the item.
 
+The current item gets the `.plt-text-highlight` primitive (background +
+color only, from `--plt-color-highlight`/`--plt-color-highlight-content`)
+instead of a filled/shadowed pill — a "you are here" marker distinct from
+`.theme-elevated` action buttons. Other app-level current-page pills (e.g.
+plt-docs' domain rail) should reuse the same class for consistency.
+
 Tree construction, content manifests, and sync stay outside the contract.
 
 Astro-only until a Liquid consumer exists.
 
 ## EditorialShell
 
-No required data props. Named slots: `aside`, `main`, `rail` (optional).
+No required data props. Named slots: `aside`, `main`, `rail` (optional). Optional props `asideId`, `asideToggleLabel`, `asideCloseLabel` customize the mobile drawer trigger (English defaults).
 
 - Without `rail`: two columns when `aside` is present (aside + main from the large breakpoint).
 - With `rail`: two columns from the medium breakpoint (main + rail); three columns from the large breakpoint when `aside` is also present.
 - Sticky side columns use `--plt-docs-sticky-top`.
+- When `aside` is present, it renders inside a daisyUI drawer (`d-drawer lg:d-drawer-open`, same CSS-only mechanism as `CartDrawer`): below the large breakpoint it's a full-screen overlay opened by a focusable `<label>` trigger and closed via the overlay or a close button; from the large breakpoint it becomes the existing permanently visible sticky column. No JavaScript required.
 
 Document chrome (html/head/header/footer), source sync, and section tabs stay in the application.
 

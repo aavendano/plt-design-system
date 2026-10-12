@@ -40,7 +40,11 @@ function isActive(href: string, itemCurrent?: boolean): boolean {
               const active = isActive(item.href, item.current);
               return (
                 <li>
-                  <a href={item.href} aria-current={active ? "page" : undefined}>
+                  <a
+                    href={item.href}
+                    class:list={[active && "plt-text-highlight"]}
+                    aria-current={active ? "page" : undefined}
+                  >
                     {item.title}
                   </a>
                 </li>
@@ -56,7 +60,11 @@ function isActive(href: string, itemCurrent?: boolean): boolean {
                 const active = isActive(item.href, item.current);
                 return (
                   <li>
-                    <a href={item.href} aria-current={active ? "page" : undefined}>
+                    <a
+                      href={item.href}
+                      class:list={[active && "plt-text-highlight"]}
+                      aria-current={active ? "page" : undefined}
+                    >
                       {item.title}
                     </a>
                   </li>

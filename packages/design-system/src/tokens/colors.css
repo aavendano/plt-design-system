@@ -22,4 +22,11 @@
 
   --plt-border-color: var(--plt-color-base-content);
   --plt-shadow-color: var(--plt-color-base-content);
+
+  /* Text-highlight marker (::selection-style: background + color only, no
+     border/shadow) for "you are here" indicators — see .plt-text-highlight
+     in primitives.css. Derived from secondary so it tracks whatever each
+     theme sets there without needing a per-theme override. */
+  --plt-color-highlight: color-mix(in oklab, var(--plt-color-secondary) 35%, transparent);
+  --plt-color-highlight-content: var(--plt-color-base-content);
 }
