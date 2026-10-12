@@ -1,0 +1,79 @@
+---
+export interface NavTreeItem {
+  title: string;
+  href: string;
+  current?: boolean;
+}
+
+export interface NavTreeGroup {
+  label: string;
+  items: NavTreeItem[];
+  children?: NavTreeGroup[];
+}
+
+interface Props {
+  groups: NavTreeGroup[];
+  currentPath?: string;
+}
+
+const { groups, currentPath } = Astro.props;
+
+function normalizePath(path: string): string {
+  return path.replace(/\/+$/, "") || "/";
+}
+
+function isActive(href: string, itemCurrent?: boolean): boolean {
+  if (typeof itemCurrent === "boolean") return itemCurrent;
+  if (!currentPath) return false;
+  return normalizePath(currentPath) === normalizePath(href);
+}
+---
+
+<nav class="plt-docs-nav-tree" aria-label="Documentation">
+  {
+    groups.map((group) => (
+      <div class="plt-docs-nav-tree__group">
+        <p class="plt-docs-nav-tree__label">{group.label}</p>
+        {group.items.length > 0 && (
+          <ul class="d-menu d-menu-sm plt-docs-nav-tree__menu">
+            {group.items.map((item) => {
+              const active = isActive(item.href, item.current);
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={[active && "plt-text-highlight"]}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {group.children?.map((child) => (
+          <div class="plt-docs-nav-tree__child">
+            <p class="plt-docs-nav-tree__label">{child.label}</p>
+            <ul class="d-menu d-menu-sm plt-docs-nav-tree__menu">
+              {child.items.map((item) => {
+                const active = isActive(item.href, item.current);
+                return (
+                  <li>
+                    <a
+                      href={item.href}
+                      class:list={[active && "plt-text-highlight"]}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</nav>

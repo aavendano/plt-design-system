@@ -50,11 +50,9 @@
   "devDependencies": {
     "@tailwindcss/cli": ">=4 <5",
     "daisyui": ">=5.7.8 <6",
+    "jsdom": "^29.1.1",
     "stylelint": "^17.16.0",
     "tailwindcss": ">=4 <5",
     "vitest": "^3.2.4"
-  },
-  "dependencies": {
-    "jsdom": "^29.1.1"
   }
 }

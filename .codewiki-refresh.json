@@ -1,0 +1,22 @@
+{
+  "lang": "es",
+  "focus": "packages/design-system",
+  "jobs": [
+    {
+      "type": "architecture",
+      "out": "packages/design-system/docs/developer/architecture"
+    },
+    {
+      "type": "user-guide",
+      "out": "packages/design-system/docs/guides"
+    },
+    {
+      "type": "developer",
+      "out": "packages/design-system/docs/developer"
+    },
+    {
+      "type": "api",
+      "out": "packages/design-system/docs/developer/api"
+    }
+  ]
+}

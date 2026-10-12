@@ -1,0 +1,18 @@
+---
+import EditorialShell from "./layout/EditorialShell.astro";
+
+// Respect an explicit showAside/showRail override from the caller (e.g. a
+// platform layout that conditionally wraps its slotted content in a runtime
+// check); Astro.slots.has() only reflects whether a slot="..." marker is
+// present in the template, not whether that slot's content is actually
+// non-empty at runtime, so it can't be trusted to override an explicit prop.
+const { showAside, showRail, ...restProps } = Astro.props;
+const hasAside = showAside ?? Astro.slots.has("aside");
+const hasRail = showRail ?? Astro.slots.has("rail");
+---
+<EditorialShell {...restProps} showAside={hasAside} showRail={hasRail}>
+  {hasAside && <slot name="aside" slot="aside" />}
+  <slot name="main" slot="main" />
+  {hasRail && <slot name="rail" slot="rail" />}
+  <slot />
+</EditorialShell>

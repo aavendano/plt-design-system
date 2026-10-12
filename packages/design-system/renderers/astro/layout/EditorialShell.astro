@@ -1,0 +1,95 @@
+---
+interface Props {
+  /** Optional id for the main landmark (defaults to "main"). */
+  mainId?: string;
+  /** Override aside presence when forwarding through a wrapper. */
+  showAside?: boolean;
+  /** Override rail presence when forwarding through a wrapper. */
+  showRail?: boolean;
+  /** Base id for the aside's drawer checkbox (defaults to "plt-editorial-aside"). */
+  asideId?: string;
+  /** Accessible label for the button that opens the aside drawer on small screens. */
+  asideToggleLabel?: string;
+  /** Accessible label for the button/overlay that closes the aside drawer. */
+  asideCloseLabel?: string;
+}
+
+const {
+  mainId = "main",
+  showAside,
+  showRail,
+  asideId = "plt-editorial-aside",
+  asideToggleLabel = "Open navigation",
+  asideCloseLabel = "Close navigation",
+} = Astro.props;
+const hasAside = showAside ?? Astro.slots.has("aside");
+const hasRail = showRail ?? Astro.slots.has("rail");
+const toggleId = `${asideId}-toggle`;
+---
+
+<div
+  class:list={[
+    "plt-editorial-shell",
+    "astro-page-shell",
+    hasAside && "plt-editorial-shell--with-aside",
+    hasRail && "plt-editorial-shell--with-rail",
+    hasAside && "d-drawer lg:d-drawer-open",
+  ]}
+>
+  {
+    hasAside && (
+      <input
+        id={toggleId}
+        type="checkbox"
+        class="d-drawer-toggle plt-editorial-shell__aside-toggle"
+      />
+    )
+  }
+
+  <div class="plt-editorial-shell__content d-drawer-content">
+    {
+      hasAside && (
+        <label
+          for={toggleId}
+          class="d-btn d-btn-outline plt-editorial-shell__aside-trigger"
+          aria-label={asideToggleLabel}
+        >
+          <span aria-hidden="true">☰</span> {asideToggleLabel}
+        </label>
+      )
+    }
+    <main id={mainId} class="plt-editorial-shell__main">
+      <slot name="main" />
+      <slot />
+    </main>
+    {
+      hasRail && (
+        <aside class="plt-editorial-shell__rail">
+          <slot name="rail" />
+        </aside>
+      )
+    }
+  </div>
+
+  {
+    hasAside && (
+      <div class="d-drawer-side">
+        <label
+          for={toggleId}
+          class="d-drawer-overlay"
+          aria-label={asideCloseLabel}
+        />
+        <aside class="plt-editorial-shell__aside" aria-label="Documentation navigation">
+          <label
+            for={toggleId}
+            class="d-btn d-btn-ghost d-btn-sm d-btn-square plt-editorial-shell__aside-close"
+            aria-label={asideCloseLabel}
+          >
+            <span aria-hidden="true">×</span>
+          </label>
+          <slot name="aside" />
+        </aside>
+      </div>
+    )
+  }
+</div>

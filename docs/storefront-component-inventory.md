@@ -65,6 +65,16 @@ These 23 contracts already have Astro and Liquid renderers. The storefront gap i
 | `EditorialCard` | Article or story summary. |
 | `SplitCta` | Copy plus media callout. Not used by the storefront yet. |
 
+### Docs / editorial shell (Astro-only)
+
+Consumed by `plt-docs`. No Liquid renderers until a Liquid consumer exists.
+
+| Component | Role |
+| --- | --- |
+| `PageOutline` | In-page heading outline (`h2`/`h3`). Optional slot for secondary nav (e.g. `NavTree`). |
+| `NavTree` | Grouped documentation navigation tree. |
+| `EditorialShell` | Content-region grid (aside / main / rail) with sticky columns. App keeps document header, footer, SourceRepos, and sync. |
+
 ### Commerce
 
 | Component | Role |
@@ -143,7 +153,10 @@ Page compositions and domain behavior. Build these from the units above; do not 
 - Infinite scroll, money math, cart state, predictive fetch, mega-menu data loading
 - JSON-LD and meta tags
 
+## Keep in plt-docs
 
-crea el prompt para que el agent claude haga lo siguiente:
-1.- revise que todos los componentes cumplan con el estandard de diseno 
-2.- Cree los componentes que faltan
+Application orchestration for the documentation portal. Use `PageOutline`, `NavTree`, and `EditorialShell` for chrome; do not reimplement their markup.
+
+- Source manifests, sync, Content Layer, presenters
+- `SourceRepos`, `DocNav` / `DocSectionNav`, document header/footer
+- Prose / Mermaid app styles, IntersectionObserver scroll-spy (if added later)

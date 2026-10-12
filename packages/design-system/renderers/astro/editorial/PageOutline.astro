@@ -1,0 +1,72 @@
+---
+export interface PageOutlineItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  items: PageOutlineItem[];
+  label?: string;
+}
+
+const { items, label = "On this page" } = Astro.props;
+const toc = items.filter((item) => item.depth === 2 || item.depth === 3);
+const hasSectionNav = Astro.slots.has("default");
+const roots: Array<PageOutlineItem & { children: PageOutlineItem[] }> = [];
+
+for (const item of toc) {
+  if (item.depth === 2) {
+    roots.push({ ...item, children: [] });
+  } else {
+    roots.at(-1)?.children.push(item);
+  }
+}
+---
+
+{
+  (roots.length > 0 || hasSectionNav) && (
+    <nav aria-label="Page outline and sections" class="plt-docs-toc">
+      {roots.length > 0 && (
+        <>
+          <p class="plt-docs-toc__label">{label}</p>
+          <ul class="plt-docs-toc__tree">
+            {roots.map((root, index) => (
+              <li>
+                <details open={index === 0}>
+                  <summary class="plt-docs-toc__summary">
+                    <a href={`#${root.slug}`}>{root.text}</a>
+                    {root.children.length > 0 && (
+                      <span class="plt-docs-toc__chevron" aria-hidden="true">›</span>
+                    )}
+                  </summary>
+                  {root.children.length > 0 && (
+                    <ul class="plt-docs-toc__children">
+                      {root.children.map((child) => (
+                        <li>
+                          <a href={`#${child.slug}`}>{child.text}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </details>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {
+        hasSectionNav && (
+          <div
+            class:list={[
+              "plt-docs-toc__section",
+              roots.length === 0 && "plt-docs-toc__section--solo",
+            ]}
+          >
+            <slot />
+          </div>
+        )
+      }
+    </nav>
+  )
+}

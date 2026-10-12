@@ -1,0 +1,337 @@
+/* Theme: Docs Light. Light counterpart to `docs`: cool grey-blue canvas,
+ * white surfaces that lift off the ground, one deepened violet accent for AA
+ * contrast on light backgrounds, Inter + JetBrains Mono. Same reading
+ * hierarchy and component signatures as `docs`; elevation uses a hairline
+ * plus a soft flat shadow (surfaces are lighter than the canvas).
+ *
+ * Status colours are for callout boxes only. Fonts are named here and loaded
+ * by the consuming app. Visual docs chrome lives in package patterns/renderers;
+ * the app orchestrates data, header/footer, and sync. Pair with `themes/docs`
+ * when switching at build time — do not import both.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  color-scheme: light;
+
+  --plt-color-base-100: #fafafb;
+  --plt-color-base-200: #ffffff;
+  --plt-color-base-300: #f4f4f6;
+  --plt-color-base-content: #0a0a0f;
+  --plt-color-primary: #6d5be0;
+  --plt-color-primary-content: #fafafb;
+  --plt-color-secondary: #6d5be0;
+  --plt-color-secondary-content: #fafafb;
+  --plt-color-accent: #6d5be0;
+  --plt-color-accent-content: #fafafb;
+  --plt-color-neutral: #f4f4f6;
+  --plt-color-neutral-content: #0a0a0f;
+  --plt-color-info: #2563eb;
+  --plt-color-info-content: #fafafb;
+  --plt-color-success: #16a34a;
+  --plt-color-success-content: #fafafb;
+  --plt-color-warning: #d97706;
+  --plt-color-warning-content: #0a0a0f;
+  --plt-color-error: #dc2626;
+  --plt-color-error-content: #fafafb;
+
+  /* Docs palette extras — same roles as `docs`, light values. */
+  --plt-docs-text-secondary: #52525b;
+  --plt-docs-text-muted: #71717a;
+  --plt-docs-accent-bright: #8b7cf6;
+  --plt-docs-accent-subtle: rgba(109, 91, 224, 0.1);
+  --plt-docs-code-bg: #f4f4f6;
+  --plt-docs-code-fg: #5b4bc4;
+  --plt-docs-code-block: #f4f4f6;
+  --plt-docs-border: #e4e4e9;
+
+  --plt-border-color: var(--plt-docs-border);
+  --plt-shadow-color: transparent;
+
+  --plt-radius-selector: 0.5rem;
+  --plt-radius-field: 0.5rem;
+  --plt-radius-box: 0.625rem;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 1px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-page-width: 87.5rem;
+  --plt-page-margin: 1.25rem;
+  --plt-section-gap-min: 2.5rem;
+
+  --plt-font-display: "Inter", system-ui, sans-serif;
+  --plt-font-body: "Inter", system-ui, sans-serif;
+  --plt-font-accent: "Inter", system-ui, sans-serif;
+  --plt-font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --plt-heading-weight: 800;
+  --plt-heading-tracking: -0.02em;
+  --plt-heading-transform: none;
+  --plt-label-weight: 700;
+  --plt-label-tracking: 0.06em;
+  --plt-label-transform: uppercase;
+  --plt-price-tracking: normal;
+
+  /* Soft lift: surface sits above the cooler canvas. */
+  --plt-docs-elevation: 0 1px 2px rgba(10, 10, 15, 0.06);
+}
+
+/* Product cards: the media edge uses the border color, not the primary. */
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+/* Surfaces: hairline + soft flat shadow; no lift transform. */
+.theme-elevated,
+.theme-elevated:hover,
+.theme-elevated:active {
+  box-shadow: var(--plt-docs-elevation);
+  border: 1px solid var(--plt-border-color);
+  transform: none;
+}
+
+.theme-sidebar-shadow {
+  box-shadow: none;
+}
+
+/* Reading hierarchy: body secondary, headings primary. */
+body {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--plt-docs-text-secondary);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--plt-color-base-content);
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: var(--plt-heading-tracking);
+  text-transform: var(--plt-heading-transform);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--plt-border-color);
+}
+
+h3 {
+  font-size: 1.1875rem;
+  font-weight: 600;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+ul {
+  padding-left: 1.375rem;
+  line-height: 1.8;
+  color: var(--plt-docs-text-secondary);
+}
+
+li::marker {
+  color: var(--plt-color-primary);
+}
+
+a {
+  color: var(--plt-color-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(109, 91, 224, 0.4);
+}
+
+a:hover {
+  color: var(--plt-docs-accent-bright);
+  text-decoration-color: currentColor;
+}
+
+code,
+kbd,
+samp,
+.plt-mono {
+  font-family: var(--plt-font-mono);
+}
+
+:not(pre) > code,
+kbd {
+  background: var(--plt-docs-code-bg);
+  color: var(--plt-docs-code-fg);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+/* Code blocks: elevated panel without a copy-header (app owns that markup). */
+pre {
+  background: var(--plt-docs-code-block);
+  border: 1px solid var(--plt-border-color);
+  border-radius: 0.625rem;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  font-family: var(--plt-font-mono);
+  font-size: 0.84375rem;
+  line-height: 1.7;
+  color: var(--plt-color-base-content);
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-color-primary) 22%, transparent);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(109, 91, 224, 0.15);
+  border-color: var(--plt-color-primary);
+}
+
+:disabled {
+  opacity: 0.45;
+}
+
+/* Buttons: filled violet primary; outline secondary; no hard shadows. */
+.d-btn {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  box-shadow: none;
+  border-radius: 0.5rem;
+}
+
+.d-btn-primary,
+.d-btn-secondary,
+.d-btn-accent {
+  background: var(--plt-color-primary);
+  border-color: var(--plt-color-primary);
+  color: var(--plt-color-primary-content);
+}
+
+.d-btn-primary:hover,
+.d-btn-secondary:hover,
+.d-btn-accent:hover {
+  background: var(--plt-docs-accent-bright);
+  border-color: var(--plt-docs-accent-bright);
+  color: var(--plt-color-primary-content);
+}
+
+.d-btn-outline {
+  background: transparent;
+  border: 1px solid var(--plt-border-color);
+  color: var(--plt-color-base-content);
+}
+
+.d-btn-outline:hover {
+  border-color: var(--plt-color-primary);
+  background: var(--plt-docs-accent-subtle);
+}
+
+.d-btn-ghost {
+  color: var(--plt-docs-text-secondary);
+}
+
+.d-btn-ghost:hover {
+  background: rgba(10, 10, 15, 0.04);
+  color: var(--plt-color-base-content);
+}
+
+/* Pill: announcement-bar style chip (single-use opt-in class). */
+.plt-docs-pill {
+  border: 1px solid var(--plt-border-color);
+  border-radius: 100px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--plt-color-primary);
+  background: transparent;
+  text-decoration: none;
+}
+
+.plt-docs-pill:hover {
+  background: var(--plt-docs-accent-subtle);
+  color: var(--plt-color-primary);
+}
+
+/* Callouts: left accent bar + tinted fill from status roles. */
+.d-alert {
+  border-radius: 0.625rem;
+  border: none;
+  border-left: 3px solid var(--plt-color-info);
+  background: color-mix(in srgb, var(--plt-color-info) 8%, transparent);
+  color: var(--plt-docs-text-secondary);
+  padding: 0.875rem 1rem;
+  box-shadow: none;
+}
+
+.d-alert-info {
+  border-left-color: var(--plt-color-info);
+  background: color-mix(in srgb, var(--plt-color-info) 8%, transparent);
+}
+
+.d-alert-success {
+  border-left-color: var(--plt-color-success);
+  background: color-mix(in srgb, var(--plt-color-success) 8%, transparent);
+}
+
+.d-alert-warning {
+  border-left-color: var(--plt-color-warning);
+  background: color-mix(in srgb, var(--plt-color-warning) 8%, transparent);
+}
+
+.d-alert-error {
+  border-left-color: var(--plt-color-error);
+  background: color-mix(in srgb, var(--plt-color-error) 8%, transparent);
+}
+
+/* Tables: elevated header on canvas, secondary cells, subtle row hover. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 1.25rem 0;
+}
+
+th {
+  background: var(--plt-color-base-300);
+  color: var(--plt-color-base-content);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--plt-border-color);
+}
+
+td {
+  padding: 0.625rem 0.875rem;
+  color: var(--plt-docs-text-secondary);
+  border-bottom: 1px solid var(--plt-border-color);
+}
+
+tr:hover td {
+  background: rgba(10, 10, 15, 0.02);
+}

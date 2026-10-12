@@ -1,0 +1,21 @@
+{
+    "generation_info": {
+        "timestamp": "2026-10-10T23:49:18.210984+00:00",
+        "main_model": "claude-sonnet-4-5",
+        "generator_version": "2.0.0",
+        "repo_path": "/home/alejandro/Documents/Proyectos/CSS-Style/plt-design-system",
+        "commit_id": "1b36e341bf7d787a575fa57970c6a60a07e6f18f",
+        "language": "Spanish",
+        "layout": "hierarchical"
+    },
+    "statistics": {
+        "total_components": 70,
+        "leaf_nodes": 49,
+        "max_depth": 2
+    },
+    "files_generated": [
+        "overview.md",
+        "module_tree.json",
+        "first_module_tree.json"
+    ]
+}

@@ -62,6 +62,21 @@
   box-shadow: var(--plt-shadow-hover-offset) 0 0 0 var(--plt-shadow-color);
 }
 
+/* Marker-style highlight for "you are here" indicators (active nav items,
+ * current-domain pills). Modeled on the CSS highlight pseudo-elements
+ * (::selection, ::target-text), which are limited to color + background —
+ * no border, no box-shadow — so a current-location marker reads as an
+ * annotation over the text rather than a clickable action like
+ * .theme-elevated buttons do. */
+.plt-text-highlight {
+  background: var(--plt-color-highlight);
+  color: var(--plt-color-highlight-content);
+  border-color: transparent;
+  box-shadow: none;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 /* Badges grow with their text. daisyUI fixes the height, so a label that wraps
  * (long copy, uppercase, wide tracking) would spill out of its chip. */
 .d-badge {
