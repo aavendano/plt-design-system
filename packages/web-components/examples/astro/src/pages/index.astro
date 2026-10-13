@@ -1,0 +1,71 @@
+---
+/**
+ * Astro page (consumer). Data comes from the Storefront API in production;
+ * here a fixture of the same shape. The page normalizes it and renders the
+ * shared adapter; price and cart state stay in the page.
+ */
+import VariantPicker from "@playlovetoys/web-components/adapters/astro/VariantPicker.astro";
+import { fromStorefrontProduct } from "@playlovetoys/web-components/variant-picker/storefront";
+import { storefrontProduct } from "../../../../tests/fixtures/product.mjs";
+
+const product = storefrontProduct();
+const picker = fromStorefrontProduct(product);
+const selected = product.selectedOrFirstAvailableVariant;
+const prices = Object.fromEntries(
+  product.variants.nodes.map((variant) => [variant.id, `$${variant.price.amount}`]),
+);
+---
+
+<!doctype html>
+<html lang="en" data-theme="brand">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{product.title} — Astro · plt-variant-picker</title>
+    <link rel="stylesheet" href="/astro/demo.css" />
+  </head>
+  <body class="bg-base-100 text-base-content">
+    <main class="demo-shell" data-frontend="astro">
+      <header>
+        <p class="d-badge d-badge-secondary theme-label-bold">Astro</p>
+        <h1 class="theme-headline-lg">{product.title}</h1>
+        <p class="plt-product-detail__price" data-price>{prices[selected.id]}</p>
+      </header>
+      <form method="post" action="/api/cart" class="grid gap-6">
+        <input type="hidden" name="register" value="add" />
+        <VariantPicker
+          {...picker}
+          name="merchandiseId"
+          labels={{ soldOut: "Sold out", unavailable: "Unavailable" }}
+          fallbackLabel="Variant"
+        />
+        <button
+          type="submit"
+          class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold"
+          data-add-to-cart
+          disabled={!selected.availableForSale}
+        >
+          {selected.availableForSale ? "Add to cart" : "Sold out"}
+        </button>
+      </form>
+      <output class="demo-log" data-log></output>
+      <script is:inline type="application/json" data-variant-prices set:html={JSON.stringify(prices)} />
+    </main>
+    <script>
+      // Page-owned behaviour: price, button and URL follow the picker's event.
+      const prices = JSON.parse(document.querySelector("[data-variant-prices]")!.textContent!);
+      const button = document.querySelector<HTMLButtonElement>("[data-add-to-cart]")!;
+      const log = document.querySelector("[data-log]")!;
+      document.addEventListener("plt:variant-change", (event) => {
+        const { variantId, available, selectedOptions } = event.detail;
+        document.querySelector("[data-price]")!.textContent = variantId ? prices[variantId] : "—";
+        button.disabled = !available;
+        button.textContent = available ? "Add to cart" : variantId ? "Sold out" : "Unavailable";
+        const url = new URL(location.href);
+        for (const { name, value } of selectedOptions) url.searchParams.set(name, value);
+        history.replaceState(null, "", url);
+        log.textContent = `plt:variant-change ${JSON.stringify({ variantId, available, selectedOptions })}`;
+      });
+    </script>
+  </body>
+</html>

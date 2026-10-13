@@ -1,0 +1,11 @@
+/* Demo stylesheet: Tailwind 4 + daisyUI 5 + PLT design system, as a consumer compiles it. */
+@import "tailwindcss";
+@source "../liquid/theme";
+@source "../astro/src";
+@source "../react";
+@source "../../adapters";
+@source "../../dist";
+@import "@playlovetoys/design-system";
+
+.demo-shell { max-width: 40rem; margin-inline: auto; padding: 2rem 1rem; display: grid; gap: 1.5rem; }
+.demo-log { font-family: var(--plt-font-mono, monospace); font-size: 0.8rem; white-space: pre-wrap; min-height: 3rem; }

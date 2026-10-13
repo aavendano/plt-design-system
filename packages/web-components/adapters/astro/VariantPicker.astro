@@ -1,0 +1,70 @@
+---
+/**
+ * Astro adapter for <plt-variant-picker> (@playlovetoys/web-components).
+ *
+ * Renders the element with its initial state as JSON attributes plus a
+ * no-JavaScript <select> fallback. The client script only registers the
+ * element; nothing touches the DOM while Astro renders on the server.
+ * Normalize Storefront API data with `fromStorefrontProduct` before use.
+ */
+import type {
+  PltProductOption,
+  PltVariant,
+  PltVariantPickerLabels,
+} from "@playlovetoys/web-components/variant-picker";
+
+interface Props {
+  options: PltProductOption[];
+  variants: PltVariant[];
+  selectedVariantId?: string | null;
+  /** Form field name of the variant id (default `id`). */
+  name?: string;
+  labels?: PltVariantPickerLabels;
+  /** Label of the no-JavaScript select. */
+  fallbackLabel?: string;
+  id?: string;
+  class?: string;
+}
+
+const {
+  options,
+  variants,
+  selectedVariantId = null,
+  name = "id",
+  labels = {},
+  fallbackLabel = options.map((option) => option.name).join(" / "),
+  id,
+  class: className,
+} = Astro.props;
+
+const fallbackId = `${id ?? "plt-variant-picker"}-fallback`;
+---
+
+<plt-variant-picker
+  id={id}
+  class={className}
+  name={name}
+  selected-variant-id={selectedVariantId ?? undefined}
+  options={JSON.stringify(options)}
+  variants={JSON.stringify(variants)}
+  labels={JSON.stringify(labels)}
+>
+  <div class="plt-variant-picker__fallback" data-plt-fallback>
+    <label class="theme-label-bold" for={fallbackId}>{fallbackLabel}</label>
+    <select class="d-select" id={fallbackId} name={name}>
+      {variants.map((variant) => (
+        <option
+          value={variant.id}
+          selected={variant.id === selectedVariantId}
+          disabled={!variant.available}
+        >
+          {variant.title ?? variant.options.join(" / ")}
+        </option>
+      ))}
+    </select>
+  </div>
+</plt-variant-picker>
+
+<script>
+  import "@playlovetoys/web-components/variant-picker/define";
+</script>
