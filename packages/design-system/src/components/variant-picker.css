@@ -31,9 +31,9 @@ plt-variant-picker:defined > [data-plt-fallback] { display: none; }
 .plt-variant-picker__value[data-status="sold-out"] .plt-variant-picker__label {
   text-decoration: line-through;
 }
+/* Shape, not opacity: dimmed text would fail WCAG 1.4.3 contrast. */
 .plt-variant-picker__value[data-status="unavailable"] {
   border-style: dashed;
-  opacity: 0.6;
 }
 .plt-variant-picker__swatch {
   display: inline-block;

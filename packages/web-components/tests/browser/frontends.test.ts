@@ -177,15 +177,24 @@ describe.each(frontends)("$name frontend", ({ name, field, ids }) => {
     await close();
   });
 
-  it("has no axe-core accessibility violations", async () => {
+  it("has no axe-core accessibility violations in any value state", async () => {
     const { page, close } = await open(name);
     await page.addScriptTag({ content: axeSource });
-    const results = await page.evaluate(() =>
-      (window as unknown as { axe: { run: (context: string) => Promise<{ violations: { id: string; nodes: unknown[] }[] }> } }).axe.run(
-        "plt-variant-picker",
-      ),
-    );
-    expect(results.violations.map((violation) => violation.id)).toEqual([]);
+    const audit = async () => {
+      // daisyUI buttons transition colours; audit the settled state.
+      await page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+      return page.evaluate(() =>
+        (window as unknown as { axe: { run: (context: string) => Promise<{ violations: { id: string; nodes: unknown[] }[] }> } }).axe.run(
+          "plt-variant-picker",
+        ),
+      );
+    };
+    // Initial state: available, sold-out and selected values.
+    expect((await audit()).violations.map((violation) => violation.id)).toEqual([]);
+    // Green: unavailable values appear.
+    await value(page, "Color", "Green").click();
+    expect(await value(page, "Size", "L").getAttribute("data-status")).toBe("unavailable");
+    expect((await audit()).violations.map((violation) => violation.id)).toEqual([]);
     await close();
   });
 
