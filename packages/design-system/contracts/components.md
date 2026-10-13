@@ -54,7 +54,7 @@ Required: same as `ProductDetail`.
 
 Optional: `trigger_label` (defaults to "Quick View").
 
-Presents a modal wrapping a `ProductDetail` renderer. Focus management and escape behavior are handled natively by HTML `<dialog>` and `<plt-quick-view>`.
+Presents a modal wrapping a `ProductDetail` renderer. Focus management and escape behavior are handled natively by HTML `<dialog>` and `<plt-quick-view>` (`@playlovetoys/web-components`, Lit): `[data-quick-view-open]` opens it with `showModal()`, `[data-quick-view-close]` and backdrop clicks close it, page scroll is locked while any modal is open and focus returns to the trigger. Emits `plt:quick-view-open` / `plt:quick-view-close`; `open` property.
 
 ## Reviews
 
@@ -107,11 +107,11 @@ Route construction stays outside the contract.
 
 ## Navbar
 
-Required: `site_name`, `links` — array of `{ label, url, current? }`.
+Required: `site_name`, `links` — array of `{ label, url, current?, columns? }`. A link with `columns` (MegaMenu contract) opens a mega menu panel.
 
 Optional: `logo_url`, `logo_alt`, `home_url`.
 
-Interactive slots (search, cart) stay outside the contract; platforms inject them via named slots (`actions`, `mobile-actions`). The mobile menu toggle is bundled and functional out of the box: the component root is wrapped in a `<plt-navbar>` custom element backed by `src/navigation/navbar-toggle.js`, which drives the existing `data-plt-navbar-toggle` / `aria-expanded` / `aria-controls` / `data-open` attributes (click to open/close, Escape to close and return focus, click-outside to close). No platform JS required.
+Interactive slots (search, cart) stay outside the contract; platforms inject them via named slots (`actions`, `mobile-actions`). Behaviour is bundled: the component root is wrapped in `<plt-navbar>` (`@playlovetoys/web-components`, Lit), which drives `data-plt-navbar-toggle` / `aria-expanded` / `aria-controls` / `data-open` for the mobile menu (click to open/close, Escape closes and returns focus, click-outside closes) and the mega menu (below). No platform JS required. Emits `plt:navbar-toggle` (`{ open }`) and `plt:megamenu-toggle` (`{ id, open }`).
 
 ## MegaMenu
 
@@ -119,7 +119,7 @@ Panel shown under a `Navbar` link whose menu item has grandchildren. Text column
 
 Required: `id`, `label`, `columns` — array of `{ title, url, children }` where `children` is an array of `{ label, url, current? }`.
 
-The panel is a child of the navbar item (`.plt-megamenu`, `data-open="true|false"`). Opening on hover or focus, closing on Escape, and `aria-expanded` / `aria-controls` stay in the platform; the contract only fixes the anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`.
+The panel lives inside the sticky `.plt-navbar` (`.plt-megamenu`, `data-open="true|false"`); anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`. Its trigger is the top-level link with `aria-haspopup="true"`, `aria-expanded` and `aria-controls` (or `[data-plt-megamenu-trigger]`). `<plt-navbar>` owns the behaviour: open on hover or focus, ArrowDown into the panel, close after leaving trigger and panel (150 ms), on focus leaving or on following a link, Escape closes and returns focus; one panel open at a time. The Navbar renderers emit the anatomy from `links[].columns`.
 
 ## Footer
 
@@ -137,6 +137,8 @@ Optional: `subtotal`, `checkout_url`, `cart_url`, `checkout_label`, `view_cart_l
 
 Line items and quantity/remove controls are injected via a slot / render block. Cart state stays outside the contract.
 
+Interactive version: `<plt-cart-drawer>` — a modal `<dialog>` side sheet (focus contained, Escape closes, focus and page scroll restored). Data: `lines` (CartLine data below), `subtotal`, `checkout-url`, `cart-url`, `labels`, `busy`; methods `show()` / `hide()` / `toggle()`; events `plt:cart-drawer-open` / `plt:cart-drawer-close`. Line events bubble through it. The consumer owns every cart mutation and formats every price.
+
 ## CartLine
 
 Required: `title`, `price`.
@@ -144,6 +146,8 @@ Required: `title`, `price`.
 Optional: `url`, `image_url`, `image_alt`, `variant_label`, `quantity` (display string or number).
 
 Quantity/remove controls are injected via a slot / render block.
+
+Interactive version: `<plt-cart-line>` with `line` = `{ id, title, url?, imageUrl?, imageAlt?, variantTitle?, quantity, price, compareAtPrice?, maxQuantity? }` (prices are display strings). Renders a `<plt-quantity-selector>` and a remove button; emits `plt:cart-line-change` (`{ lineId, quantity, previousQuantity }`) and `plt:cart-line-remove` (`{ lineId }`); `busy` disables its controls.
 
 ## ProductGrid
 
@@ -165,6 +169,8 @@ Required: `title`, `price`.
 Optional: `vendor`, `compare_at_price`, `badge`, `description`, `images` — array of `{ url, alt? }`.
 
 Gallery override, option pickers and add-to-cart actions are injected via slots / render blocks.
+
+The gallery is wrapped in `<plt-product-gallery>` (`@playlovetoys/web-components`, Lit): `.plt-product-detail__thumb` buttons swap `.plt-product-detail__gallery-main img` (including `srcset`/`sizes`) and carry `aria-current`; arrow keys, Home and End move between thumbnails; `selectedIndex` / `select(index)` let the page show a variant's image; emits `plt:gallery-change` (`{ index, src }`).
 
 Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
 
@@ -196,7 +202,7 @@ Prices, inventory quantities, cart mutations, routing and persistence stay outsi
 
 Optional: `value` (default `1`), `min`, `max`, `input_name`, `decrease_label`, `increase_label`.
 
-Click handlers stay outside the contract.
+Interactive version: `<plt-quantity-selector>` (`value`, `min`, `max`, `step`, `name`, `disabled`, `labels`). Clamps typed values, keeps bound buttons focusable (`aria-disabled`), submits under `name`, emits `plt:quantity-change` (`{ value, previousValue }`).
 
 ## CartSummary
 
@@ -216,11 +222,15 @@ Optional: `action`, `method`, `submit_label`.
 
 Facet data resolution stays outside the contract.
 
+Interactive version: `<plt-filter-bar>` (`filters`, `action`, `method`, `manual`, `labels`) adds active-filter chips and "clear all". Each change emits a cancelable `plt:filter-change` (`{ values, changed, query }`); if not cancelled the form submits (GET, empty filters omitted). Client-routed frontends cancel it and navigate. `manual` shows an Apply button instead.
+
 ## SortSelect
 
 Required: `options` — array of `{ label, value, selected? }`.
 
 Optional: `name`, `label`, `action`, `method`.
+
+Interactive version: `<plt-sort-select>`; a change emits a cancelable `plt:sort-change` (`{ name, value }`) and submits unless cancelled.
 
 ## SearchField
 
@@ -231,6 +241,8 @@ Optional: `action`, `method`, `input_name`, `placeholder`, `value`, `submit_labe
 Required: `pages` — array of `{ label, url?, current?, disabled? }`.
 
 Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`.
+
+Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves.
 
 ## EmptyState
 

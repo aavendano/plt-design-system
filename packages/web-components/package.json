@@ -6,7 +6,10 @@
   "type": "module",
   "sideEffects": [
     "./dist/*/define.js",
-    "./dist/*.bundle.js"
+    "./dist/all.js",
+    "./dist/*.bundle.js",
+    "./src/*/define.ts",
+    "./src/all.ts"
   ],
   "files": [
     "dist",
@@ -37,7 +40,56 @@
       "default": "./dist/react/variant-picker.js"
     },
     "./adapters/astro/*": "./adapters/astro/*",
-    "./adapters/liquid/*": "./adapters/liquid/*"
+    "./adapters/liquid/*": "./adapters/liquid/*",
+    "./quantity-selector": {
+      "types": "./dist/quantity-selector/index.d.ts",
+      "default": "./dist/quantity-selector/index.js"
+    },
+    "./quantity-selector/define": {
+      "types": "./dist/quantity-selector/define.d.ts",
+      "default": "./dist/quantity-selector/define.js"
+    },
+    "./cart": {
+      "types": "./dist/cart/index.d.ts",
+      "default": "./dist/cart/index.js"
+    },
+    "./cart/define": {
+      "types": "./dist/cart/define.d.ts",
+      "default": "./dist/cart/define.js"
+    },
+    "./collection": {
+      "types": "./dist/collection/index.d.ts",
+      "default": "./dist/collection/index.js"
+    },
+    "./collection/define": {
+      "types": "./dist/collection/define.d.ts",
+      "default": "./dist/collection/define.js"
+    },
+    "./product": {
+      "types": "./dist/product/index.d.ts",
+      "default": "./dist/product/index.js"
+    },
+    "./product/define": {
+      "types": "./dist/product/define.d.ts",
+      "default": "./dist/product/define.js"
+    },
+    "./navigation": {
+      "types": "./dist/navigation/index.d.ts",
+      "default": "./dist/navigation/index.js"
+    },
+    "./navigation/define": {
+      "types": "./dist/navigation/define.d.ts",
+      "default": "./dist/navigation/define.js"
+    },
+    "./all": {
+      "types": "./dist/all.d.ts",
+      "default": "./dist/all.js"
+    },
+    "./bundle": "./dist/plt-web-components.bundle.js",
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    }
   },
   "scripts": {
     "build": "node scripts/build.mjs",

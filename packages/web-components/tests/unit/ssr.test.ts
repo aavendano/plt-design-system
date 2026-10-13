@@ -45,7 +45,7 @@ describe("server rendering", () => {
     });
 
     expect(html).toContain('<plt-variant-picker\n  name="id"\n  selected-variant-id="40001"');
-    expect(html).toContain('<script type="module" src="assets/plt-variant-picker.bundle.js"></script>');
+    expect(html).toContain('<script type="module" src="./assets/plt-web-components.bundle.js"></script>');
     expect(html).not.toContain("<script>x</script>");
 
     const attribute = (name: string) => {

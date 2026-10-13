@@ -1,4 +1,10 @@
-{% comment %} PLT Navbar renderer. Interactive slots provided by the platform. {% endcomment %}
+{% comment %}
+  PLT Navbar renderer. Interactive slots provided by the platform.
+  Behaviour (mobile toggle, mega menu) comes from <plt-navbar> in
+  @playlovetoys/web-components; load plt-web-components.bundle.js once per page.
+  A link with `columns` (MegaMenu contract) opens a mega menu panel.
+{% endcomment %}
+<plt-navbar>
 <header class="d-navbar plt-navbar" data-plt-navbar>
   <div class="plt-navbar__inner">
     <div class="d-navbar-start gap-2">
@@ -29,10 +35,35 @@
               class="theme-label-bold"
               href="{{ link.url | escape }}"
               {% if link.current %}aria-current="page"{% endif %}
+              {% if link.columns.size > 0 %}aria-haspopup="true" aria-expanded="false" aria-controls="plt-megamenu-{{ forloop.index0 }}"{% endif %}
             >{{ link.label | escape }}</a>
           </li>
         {% endfor %}
       </ul>
+      {% for link in links %}
+        {% if link.columns.size > 0 %}
+          <div class="plt-megamenu" id="plt-megamenu-{{ forloop.index0 }}" data-open="false" role="region" aria-label="{{ link.label | escape }}">
+            <div class="plt-megamenu__inner">
+              {% for column in link.columns %}
+                <div class="plt-megamenu__column">
+                  {% if column.url != blank %}
+                    <a class="plt-megamenu__title theme-label-bold" href="{{ column.url | escape }}">{{ column.title | escape }}</a>
+                  {% else %}
+                    <span class="plt-megamenu__title theme-label-bold">{{ column.title | escape }}</span>
+                  {% endif %}
+                  {% if column.children.size > 0 %}
+                    <ul class="plt-megamenu__list">
+                      {% for child in column.children %}
+                        <li><a class="plt-megamenu__link" href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.label | escape }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
 
     <div class="d-navbar-end plt-navbar__actions">
@@ -49,6 +80,22 @@
             href="{{ link.url | escape }}"
             {% if link.current %}aria-current="page"{% endif %}
           >{{ link.label | escape }}</a>
+          {% if link.columns.size > 0 %}
+            <ul>
+              {% for column in link.columns %}
+                <li>
+                  {% if column.url != blank %}<a href="{{ column.url | escape }}">{{ column.title | escape }}</a>{% else %}<span class="theme-label-bold">{{ column.title | escape }}</span>{% endif %}
+                  {% if column.children.size > 0 %}
+                    <ul>
+                      {% for child in column.children %}
+                        <li><a href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.label | escape }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>
@@ -57,3 +104,4 @@
     </div>
   </div>
 </header>
+</plt-navbar>

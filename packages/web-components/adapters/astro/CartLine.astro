@@ -1,0 +1,19 @@
+---
+/** Astro adapter for <plt-cart-line> (CartLine contract; prices pre-formatted). */
+import type { PltCartLabels, PltCartLineData } from "../../dist/cart/index.js";
+
+interface Props {
+  line: PltCartLineData;
+  labels?: PltCartLabels;
+  busy?: boolean;
+  class?: string;
+}
+
+const { line, labels = {}, busy = false, class: className } = Astro.props;
+---
+
+<plt-cart-line class={className} line={JSON.stringify(line)} labels={JSON.stringify(labels)} busy={busy || undefined}></plt-cart-line>
+
+<script>
+  import "../../dist/cart/define.js";
+</script>

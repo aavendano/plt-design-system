@@ -11,7 +11,7 @@ import type {
   PltProductOption,
   PltVariant,
   PltVariantPickerLabels,
-} from "@playlovetoys/web-components/variant-picker";
+} from "../../dist/variant-picker/index.js";
 
 interface Props {
   options: PltProductOption[];
@@ -66,5 +66,7 @@ const fallbackId = `${id ?? "plt-variant-picker"}-fallback`;
 </plt-variant-picker>
 
 <script>
-  import "@playlovetoys/web-components/variant-picker/define";
+  // Relative, so the adapter resolves however the package is installed
+  // (workspace, npm git dependency of the whole repo, pnpm `path:`).
+  import "../../dist/variant-picker/define.js";
 </script>

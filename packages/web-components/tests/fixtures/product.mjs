@@ -43,7 +43,7 @@ export function liquidProduct() {
   }));
   return {
     id: 7001,
-    title: "Play Tee <Limited> \"Edition\"",
+    title: "Play Tee",
     handle: "play-tee",
     options: ["Color", "Size"],
     options_with_values: [

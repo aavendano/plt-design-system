@@ -1,0 +1,83 @@
+/*
+ * Rules the PLT Web Components (@playlovetoys/web-components) add on top of
+ * the existing anatomy in patterns.css. Imported by base.css; importable on
+ * its own as `@playlovetoys/design-system/web-components`. --plt-* tokens
+ * fall back to daisyUI 5 theme variables.
+ */
+
+/* Server-rendered no-JS fallbacks disappear once their element is defined. */
+:is(plt-quantity-selector, plt-cart-line, plt-filter-bar, plt-sort-select, plt-pagination):defined > [data-plt-fallback] {
+  display: none;
+}
+plt-quantity-selector { display: inline-block; }
+plt-cart-line,
+plt-filter-bar,
+plt-sort-select,
+plt-pagination { display: block; }
+
+/* Quantity: a bound reached keeps the button focusable but inert. */
+.plt-quantity-selector .d-btn[aria-disabled="true"] { cursor: not-allowed; }
+
+/* Cart line: struck-through compare-at price and the busy state. */
+.plt-cart-line__compare {
+  margin-inline-end: 0.35em;
+  color: color-mix(in oklab, var(--plt-color-base-content, var(--color-base-content)) 55%, transparent);
+  font-weight: 400;
+}
+.plt-cart-line[aria-busy="true"] { opacity: 0.7; }
+
+/* Cart drawer: a modal <dialog> shaped as a side sheet. */
+plt-cart-drawer { display: contents; }
+.plt-cart-drawer__dialog {
+  inset-block: 0;
+  inset-inline: auto 0;
+  width: min(24rem, 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-inline-start: var(--plt-section-border-width, var(--border)) solid var(--plt-border-color, var(--color-base-content));
+  background: var(--plt-color-base-100, var(--color-base-100));
+  color: var(--plt-color-base-content, var(--color-base-content));
+}
+.plt-cart-drawer__dialog::backdrop {
+  background: color-mix(in oklab, var(--plt-color-neutral, var(--color-neutral)) 45%, transparent);
+}
+.plt-cart-drawer__dialog .plt-cart-lines > li:last-child .plt-cart-line { border-bottom: 0; }
+
+/* Filter bar: applied filters as removable chips. */
+.plt-filter-bar__active {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block-end: 1rem;
+}
+.plt-filter-bar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+/* Gallery: the selected thumbnail and keyboard focus are visible. */
+.plt-product-detail__thumb[aria-current="true"] {
+  outline: 2px solid var(--plt-color-primary, var(--color-primary));
+  outline-offset: 2px;
+}
+.plt-product-detail__thumb:focus-visible {
+  outline: 2px solid var(--plt-color-accent, var(--color-accent));
+  outline-offset: 2px;
+}
+
+/* Navbar: an open mega menu trigger reads as current. */
+.plt-navbar__links a[aria-expanded="true"] { color: var(--plt-color-primary, var(--color-primary)); }
+
+/* Cart line meta (variant): .theme-meta's 60% mix is below WCAG AA on light
+   themes, so the component's own meta text stays at full contrast. */
+.plt-cart-line .plt-cart-line__meta { color: var(--plt-color-base-content, var(--color-base-content)); }

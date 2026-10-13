@@ -18,7 +18,7 @@ Zensical is used here as the documentation and authoring layer. The storefront t
 | `@playlovetoys/design-system` | DaisyUI-first visual tokens, primitives, patterns and renderers. |
 | `@playlovetoys/editorial` | Framework-neutral page, block and hydration contracts. |
 | `@playlovetoys/astro` | Astro rendering adapter for editorial blocks. |
-| `@playlovetoys/web-components` | Lit Web Components shared by Liquid, Astro and React (pilot: `<plt-variant-picker>`). |
+| `@playlovetoys/web-components` | Lit Web Components shared by Liquid, Astro and React: product, cart, collection and navigation. |
 
 ## Local commands
 

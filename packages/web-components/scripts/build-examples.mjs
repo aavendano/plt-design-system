@@ -9,11 +9,12 @@
  */
 import { build } from "esbuild";
 import { execFileSync } from "node:child_process";
-import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { shopifyLiquid } from "../tests/fixtures/liquid.mjs";
 import { liquidProduct } from "../tests/fixtures/product.mjs";
+import * as demo from "../tests/fixtures/demo.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const bin = (name) => join(root, "../../node_modules/.bin", name);
@@ -30,17 +31,42 @@ execFileSync(bin("tailwindcss"), ["-i", join(examples, "shared/demo.css"), "-o",
   stdio: "pipe",
 });
 
-// Liquid: theme layout + section, snippet resolved from the shared adapter.
+// Liquid: theme layout + sections; snippets from the shared adapters and the
+// design-system Liquid renderers (navbar).
 {
   const dir = join(out, "liquid");
   await mkdir(join(dir, "assets"), { recursive: true });
-  const engine = shopifyLiquid([join(examples, "liquid/theme"), join(root, "adapters/liquid")]);
-  const context = { product: liquidProduct(), request: { locale: { iso_code: "en" } } };
+  const engine = shopifyLiquid([
+    join(examples, "liquid/theme"),
+    join(root, "adapters/liquid"),
+    join(root, "../design-system/renderers/liquid"),
+  ]);
+  const product = liquidProduct();
+  const data = demo.demoData({
+    variants: product.variants.map((variant) => ({ id: String(variant.id), title: variant.title, available: variant.available, cents: variant.price })),
+    initialVariantId: String(product.selected_or_first_available_variant.id),
+    collectionMode: "navigate",
+  });
+  const context = {
+    product,
+    images: demo.images,
+    nav_links: demo.navLinks,
+    filters: demo.liquidFilters,
+    sort_options: demo.liquidSortOptions,
+    paginate: demo.liquidPaginate,
+    cards: demo.cards,
+    cart: { ...demo.liquidCart, item_count: 1 },
+    routes: { cart_url: "/cart" },
+    request: { locale: { iso_code: "en" } },
+    demo_data_json: JSON.stringify(data),
+  };
   const section = await engine.renderFile("sections/main-product", context);
   const page = await engine.renderFile("layout/theme", { ...context, content_for_layout: section });
   await writeFile(join(dir, "index.html"), page);
-  await copyFile(join(root, "dist/plt-variant-picker.bundle.js"), join(dir, "assets/plt-variant-picker.bundle.js"));
+  await copyFile(join(root, "dist/plt-web-components.bundle.js"), join(dir, "assets/plt-web-components.bundle.js"));
+  await copyFile(join(examples, "shared/store.js"), join(dir, "assets/store.js"));
   await copyFile(css, join(dir, "assets/demo.css"));
+  await cp(join(examples, "shared/images"), join(dir, "images"), { recursive: true });
 }
 
 // Astro: a real `astro build` of a page that uses the Astro adapter.
@@ -51,6 +77,7 @@ execFileSync(bin("tailwindcss"), ["-i", join(examples, "shared/demo.css"), "-o",
     env: { ...process.env, ASTRO_TELEMETRY_DISABLED: "1" },
   });
   await copyFile(css, join(out, "astro/demo.css"));
+  await cp(join(examples, "shared/images"), join(out, "astro/images"), { recursive: true });
 }
 
 // React: server render to HTML, then hydrate on the client.
@@ -85,6 +112,7 @@ execFileSync(bin("tailwindcss"), ["-i", join(examples, "shared/demo.css"), "-o",
   await writeFile(join(dir, "index.html"), render());
   await rm(serverFile);
   await copyFile(css, join(dir, "demo.css"));
+  await cp(join(examples, "shared/images"), join(dir, "images"), { recursive: true });
 }
 
 const sizes = await Promise.all(

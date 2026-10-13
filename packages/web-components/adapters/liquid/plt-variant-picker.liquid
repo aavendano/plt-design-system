@@ -5,7 +5,7 @@
   no-JavaScript <select> fallback. Selection logic lives in the component;
   cart, price and URL handling stay in the theme (listen to plt:variant-change).
 
-  Copy dist/plt-variant-picker.bundle.js to the theme's assets/ folder.
+  Copy dist/plt-web-components.bundle.js to the theme's assets/ folder.
 
   @param {product} product - Shopify product
   @param {variant} [selected_variant] - Defaults to product.selected_or_first_available_variant
@@ -13,7 +13,7 @@
   @param {string} [sold_out_label] - Localized "Sold out"
   @param {string} [unavailable_label] - Localized "Unavailable"
   @param {string} [fallback_label] - Label of the no-JS select (default: product.options joined)
-  @param {string} [script_url] - Bundle URL (default: 'plt-variant-picker.bundle.js' | asset_url); pass 'none' to skip the tag
+  @param {string} [script_url] - Bundle URL (default: 'plt-web-components.bundle.js' | asset_url); pass 'none' to skip the tag
 {% enddoc %}
 
 {%- liquid
@@ -25,7 +25,7 @@
   endif
   assign bundle_url = script_url
   if bundle_url == blank
-    assign bundle_url = 'plt-variant-picker.bundle.js' | asset_url
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
   endif
 -%}
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import '../gallery.js';
+import '../../src/product/define';
 
 describe('ProductGallery custom element', () => {
   beforeEach(() => {

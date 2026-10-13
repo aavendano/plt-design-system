@@ -3,10 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ product.title | escape }} — Liquid · plt-variant-picker</title>
+    <title>{{ product.title | escape }} — Liquid · PLT Web Components</title>
     <link rel="stylesheet" href="{{ 'demo.css' | asset_url }}">
   </head>
   <body class="bg-base-100 text-base-content">
+    {%- capture cart_action -%}
+      <button type="button" class="d-btn d-btn-ghost theme-label-bold" data-cart-open>Cart ({{ cart.item_count }})</button>
+    {%- endcapture -%}
+    {% render 'navbar', site_name: 'PlayLoveToys', links: nav_links, actions: cart_action, mobile_actions: '' %}
     {{ content_for_layout }}
+    {% render 'plt-cart-drawer', cart: cart, routes: routes, script_url: 'none' %}
+    <script type="application/json" id="demo-data">{{ demo_data_json }}</script>
+    {% render 'plt-web-components' %}
+    <script type="module">
+      import { mountStore } from "{{ 'store.js' | asset_url }}";
+      // Elements are defined by the bundle above (module scripts run in order).
+      mountStore();
+    </script>
   </body>
 </html>

@@ -1,45 +1,60 @@
 {%- comment -%}
-  Theme section (consumer). The picker comes from the shared Liquid adapter;
-  price display, add-to-cart state and URL updates are theme business logic.
+  Theme sections (consumer). Components come from the shared Liquid
+  adapters and design-system renderers; prices, cart and navigation are theme
+  code (assets/store.js). Collection controls use their default behaviour:
+  real GET navigation.
 {%- endcomment -%}
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 <main class="demo-shell" data-frontend="liquid">
-  <header>
-    <p class="d-badge d-badge-secondary theme-label-bold">Shopify Liquid</p>
-    <h1 class="theme-headline-lg">{{ product.title | escape }}</h1>
-    <p class="plt-product-detail__price" data-price>{{ current_variant.price | money }}</p>
-  </header>
+  <section class="plt-product-detail" id="pdp" data-pdp>
+    <plt-product-gallery class="plt-product-detail__gallery">
+      <div class="plt-product-detail__gallery-main"><img src="{{ images[0].src }}" alt="{{ images[0].alt | escape }}" width="400" height="400"></div>
+      <div class="plt-product-detail__thumbs">
+        {%- for image in images -%}
+          <button type="button" class="plt-product-detail__thumb" aria-label="{{ image.alt | escape }}"{% if forloop.first %} aria-current="true"{% endif %}><img src="{{ image.src }}" alt="" width="80" height="80"></button>
+        {%- endfor -%}
+      </div>
+    </plt-product-gallery>
+    <form class="plt-product-detail__buybox" method="post" action="/cart/add">
+      <p class="d-badge d-badge-secondary theme-label-bold">Shopify Liquid</p>
+      <h1 class="theme-headline-lg">{{ product.title | escape }}</h1>
+      <p class="plt-product-detail__price" data-price>{{ current_variant.price | money }}</p>
+      {% render 'plt-variant-picker', product: product, selected_variant: current_variant, script_url: 'none' %}
+      <div class="plt-product-detail__actions">
+        {% render 'plt-quantity-selector', value: 1, max: 10, script_url: 'none' %}
+        <button type="submit" class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" data-add-to-cart>Add to cart</button>
+      </div>
+    </form>
+  </section>
 
-  <form method="post" action="/cart/add" class="grid gap-6" data-product-form>
-    {% render 'plt-variant-picker',
-      product: product,
-      selected_variant: current_variant,
-      sold_out_label: 'Sold out',
-      unavailable_label: 'Unavailable'
-    %}
-    <button type="submit" class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" data-add-to-cart{% unless current_variant.available %} disabled{% endunless %}>
-      {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
-    </button>
-  </form>
+  <section class="plt-collection" id="collection" data-collection>
+    <h2 class="theme-headline-sm">Collection</h2>
+    <div class="plt-collection-controls">
+      {% render 'plt-filter-bar', filters: filters, action: '', script_url: 'none' %}
+      {% render 'plt-sort-select', options: sort_options, current: 'manual', script_url: 'none' %}
+    </div>
+    <ul class="demo-grid">
+      {%- for card in cards -%}
+        <li>
+          <article class="d-card bg-base-100 theme-bordered">
+            <div class="d-card-body">
+              <h3 class="d-card-title theme-headline-sm">{{ card.title | escape }}</h3>
+              <plt-quick-view>
+                <button type="button" class="d-btn d-btn-outline theme-bordered theme-label-bold" data-quick-view-open>Quick view</button>
+                <dialog class="d-modal" aria-labelledby="qv-{{ forloop.index }}">
+                  <div class="d-modal-box theme-bordered">
+                    <h3 class="theme-headline-sm" id="qv-{{ forloop.index }}">{{ card.title | escape }}</h3>
+                    <p>{{ card.body | escape }}</p>
+                    <form method="dialog"><button class="d-btn d-btn-sm d-btn-outline theme-bordered" data-quick-view-close>Close</button></form>
+                  </div>
+                </dialog>
+              </plt-quick-view>
+            </div>
+          </article>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {% render 'plt-pagination', paginate: paginate, script_url: 'none' %}
+  </section>
   <output class="demo-log" data-log></output>
-
-  <script type="application/json" data-variant-prices>
-    { {%- for variant in product.variants -%}"{{ variant.id }}": {{ variant.price | money | json }}{% unless forloop.last %},{% endunless %}{%- endfor -%} }
-  </script>
-  <script type="module">
-    // Theme-owned behaviour: price, button and URL follow the picker's event.
-    const prices = JSON.parse(document.querySelector("[data-variant-prices]").textContent);
-    const button = document.querySelector("[data-add-to-cart]");
-    const log = document.querySelector("[data-log]");
-    document.addEventListener("plt:variant-change", (event) => {
-      const { variantId, available, selectedOptions } = event.detail;
-      document.querySelector("[data-price]").textContent = prices[variantId] ?? "—";
-      button.disabled = !available;
-      button.textContent = available ? "Add to cart" : variantId ? "Sold out" : "Unavailable";
-      const url = new URL(location.href);
-      if (variantId) url.searchParams.set("variant", variantId); else url.searchParams.delete("variant");
-      history.replaceState(null, "", url);
-      log.textContent = `plt:variant-change ${JSON.stringify({ variantId, available, selectedOptions })}`;
-    });
-  </script>
 </main>

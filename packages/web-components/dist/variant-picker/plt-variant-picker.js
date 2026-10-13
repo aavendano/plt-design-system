@@ -14,24 +14,12 @@ import {
 import {
   VARIANT_CHANGE_EVENT
 } from "./types.js";
+import { emit, jsonConverter as sharedJsonConverter, retireFallback } from "../shared/element.js";
+const jsonConverter = (fallback) => sharedJsonConverter("plt-variant-picker", fallback);
 const DEFAULT_LABELS = {
   soldOut: "Sold out",
   unavailable: "Unavailable"
 };
-const jsonConverter = (fallback) => ({
-  fromAttribute(value) {
-    if (value === null || value === "") return fallback();
-    try {
-      return JSON.parse(value);
-    } catch {
-      console.warn("<plt-variant-picker>: ignoring malformed JSON attribute");
-      return fallback();
-    }
-  },
-  toAttribute(value) {
-    return JSON.stringify(value);
-  }
-});
 let instanceCount = 0;
 class PltVariantPicker extends LitElement {
   constructor() {
@@ -84,14 +72,7 @@ class PltVariantPicker extends LitElement {
   }
   /** Hides and disables the no-JS fallback so it neither shows nor submits. */
   _retireFallback() {
-    for (const fallback of this.querySelectorAll(":scope > [data-plt-fallback]")) {
-      fallback.hidden = true;
-      for (const control of fallback.querySelectorAll(
-        "input, select, textarea, button"
-      )) {
-        control.disabled = true;
-      }
-    }
+    retireFallback(this);
   }
   _select(optionIndex, value) {
     if (this.disabled) return;
@@ -106,13 +87,7 @@ class PltVariantPicker extends LitElement {
       selectedOptions: this.selectedOptions,
       previousVariantId
     };
-    this.dispatchEvent(
-      new CustomEvent(VARIANT_CHANGE_EVENT, {
-        detail,
-        bubbles: true,
-        composed: true
-      })
-    );
+    emit(this, VARIANT_CHANGE_EVENT, detail);
   }
   _labels() {
     return { ...DEFAULT_LABELS, ...this.labels ?? {} };

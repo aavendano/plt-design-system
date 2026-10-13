@@ -1,27 +1,17 @@
 /**
- * Minimal React adapter for `<plt-variant-picker>` (React 18 and 19).
- *
- * It does not re-implement the picker: it renders the custom element, passes
- * array/object data as DOM properties, forwards `plt:variant-change` to a
- * callback and registers the element lazily on the client, so server rendering
- * never touches `customElements`.
+ * React adapter for `<plt-variant-picker>` (React 18 and 19), built on the
+ * generic `createComponent` bridge. It does not re-implement the picker.
  */
-import {
-  createElement,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  type ReactNode,
-} from "react";
+import { createElement as h, type ReactNode } from "react";
+import { createComponent, type BaseProps } from "./create.js";
 import type {
   PltProductOption,
   PltVariant,
   PltVariantChangeDetail,
   PltVariantPickerLabels,
 } from "../variant-picker/types.js";
-import { VARIANT_CHANGE_EVENT } from "../variant-picker/types.js";
 
-export interface PltVariantPickerProps {
+export interface PltVariantPickerProps extends BaseProps {
   options: PltProductOption[];
   variants: PltVariant[];
   selectedVariantId?: string | null;
@@ -31,103 +21,32 @@ export interface PltVariantPickerProps {
   disabled?: boolean;
   /** Label of the no-JavaScript `<select>` fallback. */
   fallbackLabel?: string;
-  className?: string;
   onVariantChange?: (detail: PltVariantChangeDetail, event: CustomEvent<PltVariantChangeDetail>) => void;
   /** Replaces the default no-JavaScript fallback. Mark it `data-plt-fallback`. */
   children?: ReactNode;
 }
 
-type PickerElement = HTMLElement & {
-  options: PltProductOption[];
-  variants: PltVariant[];
-  labels: PltVariantPickerLabels;
-  selectedVariantId: string | null;
-  disabled: boolean;
-};
-
-const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
-
-let registration: Promise<unknown> | null = null;
-function ensureDefined() {
-  registration ??= import("../variant-picker/define.js");
-  return registration;
-}
-
-export function PltVariantPicker({
-  options,
-  variants,
-  selectedVariantId = null,
-  name = "id",
-  labels,
-  disabled = false,
-  fallbackLabel = "Variant",
-  className,
-  onVariantChange,
-  children,
-}: PltVariantPickerProps) {
-  const ref = useRef<PickerElement | null>(null);
-  const callback = useRef(onVariantChange);
-  callback.current = onVariantChange;
-
-  // Complex data travels as properties, never as stringified attributes.
-  useIsomorphicLayoutEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-    element.options = options;
-    element.variants = variants;
-    element.labels = labels ?? {};
-  }, [options, variants, labels]);
-
-  useIsomorphicLayoutEffect(() => {
-    if (!ref.current) return;
-    ref.current.selectedVariantId = selectedVariantId;
-    ref.current.disabled = disabled;
-  }, [selectedVariantId, disabled]);
-
-  useEffect(() => {
-    void ensureDefined();
-    const element = ref.current;
-    if (!element) return;
-    const listener = (event: Event) => {
-      const custom = event as CustomEvent<PltVariantChangeDetail>;
-      callback.current?.(custom.detail, custom);
-    };
-    element.addEventListener(VARIANT_CHANGE_EVENT, listener);
-    return () => element.removeEventListener(VARIANT_CHANGE_EVENT, listener);
-  }, []);
-
-  const fallback =
-    children ??
-    createElement(
+export const PltVariantPicker = createComponent<PltVariantPickerProps>({
+  tag: "plt-variant-picker",
+  load: () => import("../variant-picker/define.js"),
+  properties: ["options", "variants", "labels", "selectedVariantId", "disabled", "name"],
+  attributes: { name: "name", selectedVariantId: "selected-variant-id", disabled: "disabled" },
+  events: { onVariantChange: "plt:variant-change" },
+  fallback: ({ variants, selectedVariantId, name = "id", disabled, fallbackLabel = "Variant" }) =>
+    h(
       "div",
       { className: "plt-variant-picker__fallback", "data-plt-fallback": "" },
-      createElement("label", { className: "theme-label-bold" },
+      h(
+        "label",
+        { className: "theme-label-bold" },
         fallbackLabel,
-        createElement(
+        h(
           "select",
           { className: "d-select", name, defaultValue: selectedVariantId ?? undefined, disabled },
           variants.map((variant) =>
-            createElement(
-              "option",
-              { key: variant.id, value: variant.id, disabled: !variant.available },
-              variant.title ?? variant.options.join(" / "),
-            ),
+            h("option", { key: variant.id, value: variant.id, disabled: !variant.available }, variant.title ?? variant.options.join(" / ")),
           ),
         ),
       ),
-    );
-
-  return createElement(
-    "plt-variant-picker",
-    {
-      ref,
-      name,
-      // Attributes so the server-rendered HTML carries the initial state.
-      "selected-variant-id": selectedVariantId ?? undefined,
-      disabled: disabled || undefined,
-      className,
-      suppressHydrationWarning: true,
-    },
-    fallback,
-  );
-}
+    ),
+});
