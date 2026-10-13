@@ -178,6 +178,20 @@ Required: `name`, `options` — array of `{ label, value, selected?, disabled? }
 
 Variant resolution and form wiring stay outside the contract.
 
+## VariantPicker (pilot, Web Component)
+
+Interactive counterpart of OptionPicker, shipped as `<plt-variant-picker>` from `@playlovetoys/web-components` (Lit). One implementation for Liquid, Astro and React; the platform adapters only normalize data.
+
+Required: `options` — array of `{ name, values: (string | { value, label?, swatch?: { color?, image? } })[] }`; `variants` — array of `{ id, options: string[], available, title? }` with `options` positional and aligned with `options`.
+
+Optional: `selectedVariantId`, `name` (hidden variant-id field, default `id`), `labels` (`{ soldOut?, unavailable? }`), `disabled`.
+
+Emits `plt:variant-change` (`{ variantId, variant, available, selectedOptions, previousVariantId }`, bubbling and composed) when the shopper changes the selection.
+
+Style hooks: composes `.plt-option-picker` with `d-btn` (`d-btn-primary` selected, `d-btn-outline` otherwise); `.plt-variant-picker__value[data-status="available|sold-out|unavailable"]`; children marked `data-plt-fallback` are the no-JavaScript fallback.
+
+Prices, inventory quantities, cart mutations, routing and persistence stay outside the contract. See `packages/web-components/README.md`.
+
 ## QuantitySelector
 
 Optional: `value` (default `1`), `min`, `max`, `input_name`, `decrease_label`, `increase_label`.

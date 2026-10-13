@@ -18,6 +18,7 @@ Zensical is used here as the documentation and authoring layer. The storefront t
 | `@playlovetoys/design-system` | DaisyUI-first visual tokens, primitives, patterns and renderers. |
 | `@playlovetoys/editorial` | Framework-neutral page, block and hydration contracts. |
 | `@playlovetoys/astro` | Astro rendering adapter for editorial blocks. |
+| `@playlovetoys/web-components` | Lit Web Components shared by Liquid, Astro and React (pilot: `<plt-variant-picker>`). |
 
 ## Local commands
 
@@ -38,5 +39,6 @@ Browse the interactive component catalog at [/catalog/](/catalog/) after buildin
 - [Hydration islands](hydration-islands.md)
 - [Component foundation](component-foundation.md)
 - [Storefront component inventory](storefront-component-inventory.md)
+- [Lit adoption pilot](architecture/lit-adoption.md)
 - [Store template contract](store-template-contract.md)
 - [Homepage example](examples/home-page.md)

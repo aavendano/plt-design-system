@@ -4,3 +4,5 @@ docs/stylesheets/plt-preview.css
 site/
 .cursor/debug*
 packages/design-system/demo/dist-*.css
+packages/web-components/examples/.out/
+packages/web-components/examples/astro/.astro/

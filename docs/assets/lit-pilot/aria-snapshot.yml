@@ -1,0 +1,17 @@
+- 'group "Color: Red"':
+  - text: "Color: Red"
+  - radio "Red" [checked]
+  - text: Red
+  - radio "Blue"
+  - text: Blue
+  - radio "Green"
+  - text: Green
+- 'group "Size: S"':
+  - text: "Size: S"
+  - radio "S" [checked]
+  - text: S
+  - radio "M, Sold out"
+  - text: M
+  - radio "L"
+  - text: L
+- status: Red / S

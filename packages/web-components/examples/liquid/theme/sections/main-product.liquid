@@ -1,0 +1,45 @@
+{%- comment -%}
+  Theme section (consumer). The picker comes from the shared Liquid adapter;
+  price display, add-to-cart state and URL updates are theme business logic.
+{%- endcomment -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<main class="demo-shell" data-frontend="liquid">
+  <header>
+    <p class="d-badge d-badge-secondary theme-label-bold">Shopify Liquid</p>
+    <h1 class="theme-headline-lg">{{ product.title | escape }}</h1>
+    <p class="plt-product-detail__price" data-price>{{ current_variant.price | money }}</p>
+  </header>
+
+  <form method="post" action="/cart/add" class="grid gap-6" data-product-form>
+    {% render 'plt-variant-picker',
+      product: product,
+      selected_variant: current_variant,
+      sold_out_label: 'Sold out',
+      unavailable_label: 'Unavailable'
+    %}
+    <button type="submit" class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" data-add-to-cart{% unless current_variant.available %} disabled{% endunless %}>
+      {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
+    </button>
+  </form>
+  <output class="demo-log" data-log></output>
+
+  <script type="application/json" data-variant-prices>
+    { {%- for variant in product.variants -%}"{{ variant.id }}": {{ variant.price | money | json }}{% unless forloop.last %},{% endunless %}{%- endfor -%} }
+  </script>
+  <script type="module">
+    // Theme-owned behaviour: price, button and URL follow the picker's event.
+    const prices = JSON.parse(document.querySelector("[data-variant-prices]").textContent);
+    const button = document.querySelector("[data-add-to-cart]");
+    const log = document.querySelector("[data-log]");
+    document.addEventListener("plt:variant-change", (event) => {
+      const { variantId, available, selectedOptions } = event.detail;
+      document.querySelector("[data-price]").textContent = prices[variantId] ?? "—";
+      button.disabled = !available;
+      button.textContent = available ? "Add to cart" : variantId ? "Sold out" : "Unavailable";
+      const url = new URL(location.href);
+      if (variantId) url.searchParams.set("variant", variantId); else url.searchParams.delete("variant");
+      history.replaceState(null, "", url);
+      log.textContent = `plt:variant-change ${JSON.stringify({ variantId, available, selectedOptions })}`;
+    });
+  </script>
+</main>
