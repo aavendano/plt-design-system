@@ -12,7 +12,7 @@
     "test": "vitest run",
     "check": "npm run check:conformance && npm run check:renderers && npm run check:contracts && npm run test && npm run check:css && npm run check:themes && npm run build:demo && npm run build:themes",
     "build:themes": "node scripts/build-themes.mjs",
-    "check:css": "stylelint \"src/patterns.css\" \"src/primitives.css\" \"src/typography.css\" \"src/base.css\" \"src/utilities.css\" \"src/geometry.css\"",
+    "check:css": "stylelint \"src/patterns.css\" \"src/primitives.css\" \"src/typography.css\" \"src/base.css\" \"src/utilities.css\" \"src/geometry.css\" \"src/components/*.css\"",
     "check:themes": "node scripts/check-theme-rules.mjs"
   },
   "files": [
@@ -34,6 +34,7 @@
     "./utilities": "./src/utilities.css",
     "./primitives": "./src/primitives.css",
     "./patterns": "./src/patterns.css",
+    "./variant-picker": "./src/components/variant-picker.css",
     "./daisyui": "./src/daisyui-theme.css",
     "./shopify": "./adapters/shopify.css",
     "./astro": "./adapters/astro.css",

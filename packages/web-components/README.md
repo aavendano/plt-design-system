@@ -71,8 +71,10 @@ interface PltVariantChangeDetail {
 ### Styling
 
 Uses `d-btn`, `d-btn-primary`, `d-btn-outline`, `d-select`, `theme-*` and
-`.plt-option-picker*`, plus the `.plt-variant-picker*` pattern rules in
-`@playlovetoys/design-system/src/patterns.css`. Tailwind consumers should add
+`.plt-option-picker*`, plus the `.plt-variant-picker*` rules in
+`@playlovetoys/design-system/variant-picker`
+(`packages/design-system/src/components/variant-picker.css`, included by the
+full design-system stylesheet). Tailwind consumers should add
 `@source` for this package's `dist/` (and the adapter they use) so the classes
 are generated.
 
@@ -92,6 +94,37 @@ are generated.
 `dist/` is committed (and verified by `npm run check:dist`) because consumers
 install the design system as a git dependency and Shopify themes copy the
 bundle into `assets/`.
+
+## Installing in a frontend
+
+With npm, the design system is a git dependency of the whole repository
+(npm cannot install a sub-directory), so paths include `packages/…`:
+
+```jsonc
+// package.json
+"@playlovetoys/platform": "github:aavendano/plt-design-system#<commit>",
+"lit": "^3.3.1"
+```
+
+```js
+import VariantPicker from "@playlovetoys/platform/packages/web-components/adapters/astro/VariantPicker.astro";
+import { fromStorefrontProduct } from "@playlovetoys/platform/packages/web-components/dist/variant-picker/storefront.js";
+```
+
+`lit` must be a dependency of the frontend: git dependencies do not install
+the workspace's own dependencies. Frontends that do not import the whole
+design-system stylesheet add the picker styles on their own (they fall back
+to daisyUI 5 theme variables when `--plt-*` tokens are absent) and register
+the classes with Tailwind:
+
+```css
+@import "@playlovetoys/platform/packages/design-system/src/components/variant-picker.css";
+@source "../../node_modules/@playlovetoys/platform/packages/web-components/dist";
+@source "../../node_modules/@playlovetoys/platform/packages/web-components/adapters/astro";
+```
+
+With pnpm, `github:aavendano/plt-design-system#<commit>&path:/packages/web-components`
+installs the package under its own name and the `exports` below apply.
 
 ## Platform adapters
 

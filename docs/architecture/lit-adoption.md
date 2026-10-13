@@ -230,9 +230,10 @@ código imperativo y su runtime se paga una vez por página.
 
 ## Riesgos y limitaciones
 
-1. **Regla Alpine-only en `plt-astro-storefront`.** Usar el componente en la PDP
-   real requiere una decisión explícita que la modifique; este piloto no toca el
-   storefront. La demo Astro vive en este repositorio.
+1. **Regla Alpine-only en `plt-astro-storefront` — resuelta.** Decisión del
+   13-10-2026: Lit está permitido en el frontend Astro y Alpine puede
+   sustituirse donde haga falta para dar paso a Web Components. La PDP del
+   storefront adopta `<plt-variant-picker>` en un PR propio.
 2. **Validación fuera de producción.** Las demos reproducen cada plataforma pero
    no sustituyen a un tema Shopify real, Oxygen ni el storefront desplegado.
    liquidjs no es Shopify Liquid: `asset_url` e `image_url` están simulados y
@@ -247,10 +248,15 @@ código imperativo y su runtime se paga una vez por página.
 6. **Duplicación de Lit** si un consumidor mezcla el bundle autocontenido con el
    build ESM; el registro idempotente evita el error, no el peso.
 
-## Próximos pasos (requieren aprobación)
+## Próximos pasos
 
-1. Decidir sobre la regla Alpine-only y, si se acepta, PR en
-   `plt-astro-frontend` sustituyendo `VariantForm.astro` por el adaptador.
+1. ~~Decidir sobre la regla Alpine-only~~ (aceptado: Lit permitido en Astro).
+   PR en `plt-astro-storefront` (futuro `plt-astro-frontend`) sustituyendo el
+   selector de `VariantForm.astro` por el adaptador. Para consumirlo vía
+   dependencia git de npm, el adaptador Astro usa imports relativos y los
+   estilos del picker se publican aparte
+   (`@playlovetoys/design-system/variant-picker`, con *fallback* a variables
+   de daisyUI cuando faltan los tokens `--plt-*`).
 2. PR en `plt-frontend-liquid` sustituyendo el selector Alpine por el snippet,
    manteniendo `variant:changed` como puente durante la transición.
 3. PR en `tina-hydrogen-frontstore` (rama desde `ai-dev`) usando
