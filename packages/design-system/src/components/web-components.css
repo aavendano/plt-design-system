@@ -77,7 +77,3 @@ plt-cart-drawer { display: contents; }
 
 /* Navbar: an open mega menu trigger reads as current. */
 .plt-navbar__links a[aria-expanded="true"] { color: var(--plt-color-primary, var(--color-primary)); }
-
-/* Cart line meta (variant): .theme-meta's 60% mix is below WCAG AA on light
-   themes, so the component's own meta text stays at full contrast. */
-.plt-cart-line .plt-cart-line__meta { color: var(--plt-color-base-content, var(--color-base-content)); }

@@ -61,5 +61,5 @@
 .theme-meta {
   font-family: var(--plt-font-body);
   font-size: 0.875rem;
-  color: color-mix(in oklab, var(--plt-color-base-content) 60%, transparent);
+  color: var(--plt-color-meta);
 }

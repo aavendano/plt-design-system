@@ -53,6 +53,9 @@
 
   --plt-border-color: #e4e4e9;
   --plt-shadow-color: transparent;
+  /* The grey-green base content is already soft (6.6:1 on white), so meta
+     text fades less than the default to stay at 4.5:1. */
+  --plt-color-meta: color-mix(in oklab, var(--plt-color-base-content) 85%, transparent);
 
   --plt-radius-selector: 0.375rem;
   --plt-radius-field: 0.25rem;
