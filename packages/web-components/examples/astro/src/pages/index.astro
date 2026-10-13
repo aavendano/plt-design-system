@@ -1,19 +1,36 @@
 ---
 /**
  * Astro page (consumer). Data comes from the Storefront API in production;
- * here a fixture of the same shape. The page normalizes it and renders the
- * shared adapter; price and cart state stay in the page.
+ * here fixtures of the same shapes. The page renders the shared adapters and
+ * design-system renderers; prices, cart and routing stay in the page
+ * (collection controls are client-routed here).
  */
+import Navbar from "../../../../../design-system/renderers/astro/navigation/Navbar.astro";
 import VariantPicker from "@playlovetoys/web-components/adapters/astro/VariantPicker.astro";
+import QuantitySelector from "@playlovetoys/web-components/adapters/astro/QuantitySelector.astro";
+import FilterBar from "@playlovetoys/web-components/adapters/astro/FilterBar.astro";
+import SortSelect from "@playlovetoys/web-components/adapters/astro/SortSelect.astro";
+import Pagination from "@playlovetoys/web-components/adapters/astro/Pagination.astro";
+import CartDrawer from "@playlovetoys/web-components/adapters/astro/CartDrawer.astro";
+import WebComponents from "@playlovetoys/web-components/adapters/astro/WebComponents.astro";
 import { fromStorefrontProduct } from "@playlovetoys/web-components/variant-picker/storefront";
 import { storefrontProduct } from "../../../../tests/fixtures/product.mjs";
+import * as demo from "../../../../tests/fixtures/demo.mjs";
 
 const product = storefrontProduct();
 const picker = fromStorefrontProduct(product);
 const selected = product.selectedOrFirstAvailableVariant;
-const prices = Object.fromEntries(
-  product.variants.nodes.map((variant) => [variant.id, `$${variant.price.amount}`]),
-);
+const data = demo.demoData({
+  variants: product.variants.nodes.map((variant) => ({
+    id: variant.id,
+    title: variant.title,
+    available: variant.availableForSale,
+    cents: Math.round(Number(variant.price.amount) * 100),
+  })),
+  initialVariantId: selected.id,
+  collectionMode: "client",
+});
+const cartCount = demo.cartLines.reduce((sum, line) => sum + line.quantity, 0);
 ---
 
 <!doctype html>
@@ -21,51 +38,73 @@ const prices = Object.fromEntries(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{product.title} — Astro · plt-variant-picker</title>
+    <title>{product.title} — Astro · PLT Web Components</title>
     <link rel="stylesheet" href="/astro/demo.css" />
   </head>
   <body class="bg-base-100 text-base-content">
+    <Navbar siteName="PlayLoveToys" links={demo.navLinks}>
+      <button slot="actions" type="button" class="d-btn d-btn-ghost theme-label-bold" data-cart-open>Cart ({cartCount})</button>
+    </Navbar>
     <main class="demo-shell" data-frontend="astro">
-      <header>
-        <p class="d-badge d-badge-secondary theme-label-bold">Astro</p>
-        <h1 class="theme-headline-lg">{product.title}</h1>
-        <p class="plt-product-detail__price" data-price>{prices[selected.id]}</p>
-      </header>
-      <form method="post" action="/api/cart" class="grid gap-6">
-        <input type="hidden" name="register" value="add" />
-        <VariantPicker
-          {...picker}
-          name="merchandiseId"
-          labels={{ soldOut: "Sold out", unavailable: "Unavailable" }}
-          fallbackLabel="Variant"
-        />
-        <button
-          type="submit"
-          class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold"
-          data-add-to-cart
-          disabled={!selected.availableForSale}
-        >
-          {selected.availableForSale ? "Add to cart" : "Sold out"}
-        </button>
-      </form>
+      <section class="plt-product-detail" id="pdp" data-pdp>
+        <plt-product-gallery class="plt-product-detail__gallery">
+          <div class="plt-product-detail__gallery-main"><img src={demo.images[0].src} alt={demo.images[0].alt} width="400" height="400" /></div>
+          <div class="plt-product-detail__thumbs">
+            {demo.images.map((image, index) => (
+              <button type="button" class="plt-product-detail__thumb" aria-label={image.alt} aria-current={index === 0 ? "true" : undefined}><img src={image.src} alt="" width="80" height="80" /></button>
+            ))}
+          </div>
+        </plt-product-gallery>
+        <form class="plt-product-detail__buybox" method="post" action="/api/cart">
+          <p class="d-badge d-badge-secondary theme-label-bold">Astro</p>
+          <h1 class="theme-headline-lg">{product.title}</h1>
+          <p class="plt-product-detail__price" data-price>{demo.money(data.variants[selected.id].cents)}</p>
+          <VariantPicker {...picker} name="merchandiseId" labels={{ soldOut: "Sold out", unavailable: "Unavailable" }} fallbackLabel="Variant" />
+          <div class="plt-product-detail__actions">
+            <QuantitySelector value={1} max={10} />
+            <button type="submit" class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" data-add-to-cart>Add to cart</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="plt-collection" id="collection" data-collection>
+        <h2 class="theme-headline-sm">Collection</h2>
+        <div class="plt-collection-controls">
+          <FilterBar filters={demo.filters} />
+          <SortSelect options={demo.sortOptions} name="sort_by" />
+        </div>
+        <ul class="demo-grid">
+          {demo.cards.map((card, index) => (
+            <li>
+              <article class="d-card bg-base-100 theme-bordered">
+                <div class="d-card-body">
+                  <h3 class="d-card-title theme-headline-sm">{card.title}</h3>
+                  <plt-quick-view>
+                    <button type="button" class="d-btn d-btn-outline theme-bordered theme-label-bold" data-quick-view-open>Quick view</button>
+                    <dialog class="d-modal" aria-labelledby={`qv-${index + 1}`}>
+                      <div class="d-modal-box theme-bordered">
+                        <h3 class="theme-headline-sm" id={`qv-${index + 1}`}>{card.title}</h3>
+                        <p>{card.body}</p>
+                        <form method="dialog"><button class="d-btn d-btn-sm d-btn-outline theme-bordered" data-quick-view-close>Close</button></form>
+                      </div>
+                    </dialog>
+                  </plt-quick-view>
+                </div>
+              </article>
+            </li>
+          ))}
+        </ul>
+        <Pagination pages={demo.pages} nextUrl={demo.nextUrl} />
+      </section>
       <output class="demo-log" data-log></output>
-      <script is:inline type="application/json" data-variant-prices set:html={JSON.stringify(prices)} />
     </main>
+    <CartDrawer lines={demo.cartLines} subtotal={demo.money(1900)} checkoutUrl="/checkout" cartUrl="/cart" />
+    <script is:inline type="application/json" id="demo-data" set:html={JSON.stringify(data)} />
+    <WebComponents />
     <script>
-      // Page-owned behaviour: price, button and URL follow the picker's event.
-      const prices = JSON.parse(document.querySelector("[data-variant-prices]")!.textContent!);
-      const button = document.querySelector<HTMLButtonElement>("[data-add-to-cart]")!;
-      const log = document.querySelector("[data-log]")!;
-      document.addEventListener("plt:variant-change", (event) => {
-        const { variantId, available, selectedOptions } = event.detail;
-        document.querySelector("[data-price]")!.textContent = variantId ? prices[variantId] : "—";
-        button.disabled = !available;
-        button.textContent = available ? "Add to cart" : variantId ? "Sold out" : "Unavailable";
-        const url = new URL(location.href);
-        for (const { name, value } of selectedOptions) url.searchParams.set(name, value);
-        history.replaceState(null, "", url);
-        log.textContent = `plt:variant-change ${JSON.stringify({ variantId, available, selectedOptions })}`;
-      });
+      import "@playlovetoys/web-components/all";
+      import { mountStore } from "../../../shared/store.js";
+      mountStore();
     </script>
   </body>
 </html>

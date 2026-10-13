@@ -1,0 +1,34 @@
+---
+/**
+ * Astro adapter for <plt-cart-drawer>. The page owns the cart: it listens to
+ * plt:cart-line-change / plt:cart-line-remove, mutates the Shopify cart, then
+ * sets `lines` / `subtotal` on the element; `element.show()` opens it.
+ */
+import type { PltCartLabels, PltCartLineData } from "../../dist/cart/index.js";
+
+interface Props {
+  lines: PltCartLineData[];
+  subtotal?: string;
+  checkoutUrl?: string;
+  cartUrl?: string;
+  labels?: PltCartLabels;
+  id?: string;
+  class?: string;
+}
+
+const { lines, subtotal = "", checkoutUrl = "", cartUrl = "", labels = {}, id = "plt-cart-drawer", class: className } = Astro.props;
+---
+
+<plt-cart-drawer
+  id={id}
+  class={className}
+  lines={JSON.stringify(lines)}
+  subtotal={subtotal}
+  checkout-url={checkoutUrl}
+  cart-url={cartUrl}
+  labels={JSON.stringify(labels)}
+></plt-cart-drawer>
+
+<script>
+  import "../../dist/cart/define.js";
+</script>

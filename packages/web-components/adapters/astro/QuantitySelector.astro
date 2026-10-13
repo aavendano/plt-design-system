@@ -1,0 +1,45 @@
+---
+/** Astro adapter for <plt-quantity-selector>; the fallback is a plain number input. */
+import type { PltQuantitySelectorLabels } from "../../dist/quantity-selector/index.js";
+
+interface Props {
+  value?: number;
+  min?: number;
+  max?: number | null;
+  step?: number;
+  name?: string;
+  disabled?: boolean;
+  labels?: PltQuantitySelectorLabels;
+  id?: string;
+  class?: string;
+}
+
+const { value = 1, min = 1, max = null, step = 1, name = "quantity", disabled = false, labels = {}, id, class: className } = Astro.props;
+---
+
+<plt-quantity-selector
+  id={id}
+  class={className}
+  value={value}
+  min={min}
+  max={max ?? undefined}
+  step={step}
+  name={name}
+  disabled={disabled || undefined}
+  labels={JSON.stringify(labels)}
+>
+  <input
+    data-plt-fallback
+    class="d-input"
+    type="number"
+    name={name || undefined}
+    value={value}
+    min={min}
+    max={max ?? undefined}
+    aria-label={labels.quantity ?? "Quantity"}
+  />
+</plt-quantity-selector>
+
+<script>
+  import "../../dist/quantity-selector/define.js";
+</script>

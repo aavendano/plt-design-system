@@ -21,16 +21,10 @@ const root = fileURLToPath(new URL("..", import.meta.url));
 const check = process.argv.includes("--check");
 const outdir = check ? await mkdtemp(join(tmpdir(), "plt-wc-")) : join(root, "dist");
 
-const modules = [
-  "src/variant-picker/index.ts",
-  "src/variant-picker/define.ts",
-  "src/variant-picker/plt-variant-picker.ts",
-  "src/variant-picker/resolve.ts",
-  "src/variant-picker/storefront.ts",
-  "src/variant-picker/types.ts",
-  "src/react/index.ts",
-  "src/react/variant-picker.ts",
-];
+const modules = (await readdir(join(root, "src"), { withFileTypes: true, recursive: true }))
+  .filter((entry) => entry.isFile() && entry.name.endsWith(".ts") && !entry.name.endsWith(".d.ts"))
+  .map((entry) => relative(root, join(entry.parentPath, entry.name)))
+  .sort();
 
 await rm(outdir, { recursive: true, force: true });
 
@@ -47,7 +41,12 @@ await build({
 
 await build({
   absWorkingDir: root,
-  entryPoints: { "plt-variant-picker.bundle": "src/variant-picker/define.ts" },
+  entryPoints: {
+    // Every component, Lit included once: what a Shopify theme loads.
+    "plt-web-components.bundle": "src/all.ts",
+    // The pilot's single-component bundle, kept for existing theme installs.
+    "plt-variant-picker.bundle": "src/variant-picker/define.ts",
+  },
   outdir,
   format: "esm",
   target: "es2021",

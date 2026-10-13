@@ -30,7 +30,10 @@ const {
 const primary = images[0];
 ---
 
-<script src="../../../src/commerce/gallery.js"></script>
+<script>
+  // Behaviour lives in @playlovetoys/web-components (Lit).
+  import "../../../../web-components/dist/product/define.js";
+</script>
 
 <section class="plt-product-detail">
   <plt-product-gallery class="plt-product-detail__gallery">

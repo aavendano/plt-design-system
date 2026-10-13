@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import '../quick-view.js';
+import '../../src/product/define';
 
 describe('ProductQuickView custom element', () => {
   beforeEach(() => {

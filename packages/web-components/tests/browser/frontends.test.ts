@@ -89,8 +89,8 @@ const hiddenField = (page: Page, field: string) =>
 describe.each(frontends)("$name frontend", ({ name, field, ids }) => {
   it("upgrades the server-rendered markup", async () => {
     const { page, errors, close } = await open(name);
-    expect(await page.locator("[data-plt-fallback]").isHidden()).toBe(true);
-    expect(await page.locator("[data-plt-fallback] select").isDisabled()).toBe(true);
+    expect(await page.locator("plt-variant-picker > [data-plt-fallback]").isHidden()).toBe(true);
+    expect(await page.locator("plt-variant-picker > [data-plt-fallback] select").isDisabled()).toBe(true);
     expect(await page.locator("plt-variant-picker fieldset").count()).toBe(2);
     expect(await value(page, "Color", "Red").locator("input").isChecked()).toBe(true);
     expect(await hiddenField(page, field)).toBe(ids(40001));
@@ -136,7 +136,11 @@ describe.each(frontends)("$name frontend", ({ name, field, ids }) => {
 
   it("is operable with the keyboard alone", async () => {
     const { page, close } = await open(name);
-    await page.locator("body").click({ position: { x: 1, y: 1 } });
+    // Start right before the picker (the page has a navbar above it).
+    await page.locator("[data-price]").evaluate((element: HTMLElement) => {
+      element.tabIndex = -1;
+      element.focus();
+    });
     await page.keyboard.press("Tab");
     const focused = () =>
       page.evaluate(() => {
@@ -182,7 +186,7 @@ describe.each(frontends)("$name frontend", ({ name, field, ids }) => {
     await page.addScriptTag({ content: axeSource });
     const audit = async () => {
       // daisyUI buttons transition colours; audit the settled state.
-      await page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+      await page.evaluate(() => Promise.allSettled(document.getAnimations().map((animation) => animation.finished)));
       return page.evaluate(() =>
         (window as unknown as { axe: { run: (context: string) => Promise<{ violations: { id: string; nodes: unknown[] }[] }> } }).axe.run(
           "plt-variant-picker",

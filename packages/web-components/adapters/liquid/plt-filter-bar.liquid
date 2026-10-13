@@ -1,0 +1,53 @@
+{% doc %}
+  Liquid adapter for <plt-filter-bar>: maps Shopify storefront filters
+  (`collection.filters` / `search.filters`, list type) to the FilterBar
+  contract. One value per filter (the contract is a select); price-range
+  filters are skipped. Without JavaScript the fallback form submits normally.
+
+  @param {filter[]} filters - collection.filters
+  @param {string} [action] - Form action (default: current page)
+  @param {string} [all_label] - Label of the "any" option (default: All)
+  @param {string} [apply_label]
+  @param {string} [script_url] - Bundle URL; 'none' skips the tag
+{% enddoc %}
+{%- liquid
+  assign any_label = all_label | default: 'All'
+  assign apply_text = apply_label | default: 'Apply'
+  assign bundle_url = script_url | default: ''
+  if bundle_url == blank
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
+  endif
+-%}
+{%- capture filters_json -%}
+  [
+  {%- assign first = true -%}
+  {%- for filter in filters -%}
+    {%- if filter.type == 'list' -%}
+      {%- assign active_value = '' -%}
+      {%- for value in filter.values -%}{%- if value.active and active_value == '' -%}{%- assign active_value = value.value -%}{%- endif -%}{%- endfor -%}
+      {%- unless first -%},{%- endunless -%}{%- assign first = false -%}
+      {"id":{{ filter.param_name | json }},"label":{{ filter.label | json }},"options":[{"label":{{ any_label | json }},"value":"","selected":{% if active_value == '' %}true{% else %}false{% endif %}}
+      {%- for value in filter.values -%},{"label":{{ value.label | json }},"value":{{ value.value | json }},"selected":{% if value.value == active_value %}true{% else %}false{% endif %}}{%- endfor -%}
+      ]}
+    {%- endif -%}
+  {%- endfor -%}
+  ]
+{%- endcapture -%}
+<plt-filter-bar filters="{{ filters_json | strip | escape }}" action="{{ action | escape }}" labels="{{ apply_text | json | prepend: '{"apply":' | append: '}' | escape }}">
+  <form data-plt-fallback class="plt-filter-bar" action="{{ action | escape }}" method="get">
+    {%- for filter in filters -%}
+      {%- if filter.type == 'list' -%}
+        <label class="plt-filter-bar__field theme-label-bold">{{ filter.label | escape }}
+          <select class="d-select" name="{{ filter.param_name | escape }}">
+            <option value="">{{ any_label | escape }}</option>
+            {%- for value in filter.values -%}
+              <option value="{{ value.value | escape }}"{% if value.active %} selected{% endif %}>{{ value.label | escape }}</option>
+            {%- endfor -%}
+          </select>
+        </label>
+      {%- endif -%}
+    {%- endfor -%}
+    <button type="submit" class="d-btn d-btn-primary theme-label-bold">{{ apply_text | escape }}</button>
+  </form>
+</plt-filter-bar>
+{%- if bundle_url != 'none' -%}<script type="module" src="{{ bundle_url | escape }}"></script>{%- endif -%}

@@ -35,6 +35,7 @@
     "./primitives": "./src/primitives.css",
     "./patterns": "./src/patterns.css",
     "./variant-picker": "./src/components/variant-picker.css",
+    "./web-components": "./src/components/web-components.css",
     "./daisyui": "./src/daisyui-theme.css",
     "./shopify": "./adapters/shopify.css",
     "./astro": "./adapters/astro.css",

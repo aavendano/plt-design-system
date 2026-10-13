@@ -1,3 +1,4 @@
+import { defineOnce } from "../shared/element.js";
 import { PltVariantPicker } from "./plt-variant-picker.js";
 
 export const PLT_VARIANT_PICKER_TAG = "plt-variant-picker";
@@ -10,11 +11,7 @@ export const PLT_VARIANT_PICKER_TAG = "plt-variant-picker";
 export function definePltVariantPicker(
   registry: CustomElementRegistry | undefined = globalThis.customElements,
 ): boolean {
-  if (!registry) return false;
-  if (!registry.get(PLT_VARIANT_PICKER_TAG)) {
-    registry.define(PLT_VARIANT_PICKER_TAG, PltVariantPicker);
-  }
-  return true;
+  return defineOnce(PLT_VARIANT_PICKER_TAG, PltVariantPicker, registry);
 }
 
 definePltVariantPicker();

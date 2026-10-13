@@ -9,8 +9,45 @@ consumers never install or download Lit. Styles still come from the design
 system: components render into light DOM with the existing `d-` daisyUI classes,
 `theme-*` treatments and `--plt-*` tokens.
 
-Status: **pilot** (`<plt-variant-picker>` only). See
-[`docs/architecture/lit-adoption.md`](../../docs/architecture/lit-adoption.md).
+See [`docs/architecture/lit-adoption.md`](../../docs/architecture/lit-adoption.md)
+for the decisions, costs and validation.
+
+## Components
+
+Every element renders into light DOM, registers idempotently (`define`
+modules; no-op on the server), takes complex data as properties or JSON
+attributes, and reports through bubbling, composed `plt:*` `CustomEvent`s.
+None fetches data, formats money, mutates the cart or routes: the frontend does.
+
+| Group | Element | Data in | Events out |
+| --- | --- | --- | --- |
+| Product | `<plt-variant-picker>` | `options`, `variants`, `selected-variant-id`, `name`, `labels` | `plt:variant-change` |
+| Product | `<plt-quantity-selector>` | `value`, `min`, `max`, `step`, `name`, `labels` | `plt:quantity-change` |
+| Product | `<plt-product-gallery>` | ProductDetail gallery markup; `selected-index`, `select(i)` | `plt:gallery-change` |
+| Product | `<plt-quick-view>` | ProductQuickView markup (`<dialog>`); `open`, `show()`, `close()` | `plt:quick-view-open`, `plt:quick-view-close` |
+| Cart | `<plt-cart-line>` | `line` (`{ id, title, quantity, price, … }`), `busy` | `plt:cart-line-change`, `plt:cart-line-remove` |
+| Cart | `<plt-cart-drawer>` | `lines`, `subtotal`, `checkout-url`, `cart-url`, `busy`; `show()` | `plt:cart-drawer-open`, `plt:cart-drawer-close` (+ line events) |
+| Collection | `<plt-filter-bar>` | `filters`, `action`, `manual`, `labels` | `plt:filter-change` (cancelable) |
+| Collection | `<plt-sort-select>` | `options`, `name`, `label` | `plt:sort-change` (cancelable) |
+| Collection | `<plt-pagination>` | `pages`, `previous-url`, `next-url` | `plt:page-change` (cancelable) |
+| Navigation | `<plt-navbar>` | Navbar + MegaMenu markup | `plt:navbar-toggle`, `plt:megamenu-toggle` |
+
+Two kinds of element:
+
+- **Rendering** elements (picker, quantity, cart, collection) render their
+  own anatomy from data. Children marked `data-plt-fallback` are the
+  server-rendered no-JS version; they are hidden and disabled on upgrade.
+- **Enhancing** elements (gallery, quick view, navbar) add behaviour to
+  markup the design-system renderers already emit; they render nothing.
+  Their contracts are unchanged from the former vanilla custom elements.
+
+Collection events are cancelable: by default the control submits its GET form
+or follows its link (works in any frontend, including Liquid); client-routed
+frontends call `event.preventDefault()` and navigate themselves.
+
+Contracts: `packages/design-system/contracts/components.md` (VariantPicker,
+QuantitySelector, CartDrawer, CartLine, FilterBar, SortSelect, Pagination,
+ProductDetail, ProductQuickView, Navbar, MegaMenu).
 
 ## `<plt-variant-picker>`
 
@@ -73,23 +110,34 @@ interface PltVariantChangeDetail {
 Uses `d-btn`, `d-btn-primary`, `d-btn-outline`, `d-select`, `theme-*` and
 `.plt-option-picker*`, plus the `.plt-variant-picker*` rules in
 `@playlovetoys/design-system/variant-picker`
-(`packages/design-system/src/components/variant-picker.css`, included by the
-full design-system stylesheet). Tailwind consumers should add
-`@source` for this package's `dist/` (and the adapter they use) so the classes
-are generated.
+(`packages/design-system/src/components/variant-picker.css`). The other
+components use the existing anatomy in `patterns.css` plus
+`@playlovetoys/design-system/web-components`
+(`src/components/web-components.css`: drawer sheet, filter chips, focus states).
+Both files are included by the full design-system stylesheet and fall back to
+daisyUI 5 variables when `--plt-*` tokens are absent. Tailwind consumers
+should add `@source` for this package's `dist/` (and the adapters they use)
+so the classes are generated.
 
 ## Entry points
 
 | Import | Contents |
 | --- | --- |
-| `@playlovetoys/web-components/variant-picker` | Class, types and resolver. Does not register the tag. |
-| `@playlovetoys/web-components/variant-picker/define` | Registers `<plt-variant-picker>` once (no-op on the server or when already defined). |
-| `@playlovetoys/web-components/variant-picker/resolve` | Pure resolution functions (no DOM, no Lit). |
-| `@playlovetoys/web-components/variant-picker/storefront` | `fromStorefrontProduct()` — Storefront API product → picker data. Plain mapping, no client. |
-| `@playlovetoys/web-components/variant-picker/bundle` | `dist/plt-variant-picker.bundle.js`: self-contained (Lit included) for Shopify themes. |
-| `@playlovetoys/web-components/react/variant-picker` | `<PltVariantPicker>` React 18/19 adapter. |
-| `@playlovetoys/web-components/adapters/liquid/plt-variant-picker.liquid` | Liquid snippet. |
-| `@playlovetoys/web-components/adapters/astro/VariantPicker.astro` | Astro component. |
+| `@playlovetoys/web-components/<group>` | Classes, types and helpers. Does not register tags. Groups: `variant-picker`, `quantity-selector`, `cart`, `collection`, `product`, `navigation`. |
+| `@playlovetoys/web-components/<group>/define` | Registers the group's tags once (no-op on the server or when already defined). |
+| `@playlovetoys/web-components/all` | Registers every component. |
+| `@playlovetoys/web-components/bundle` | `dist/plt-web-components.bundle.js`: all components, Lit included once, for Shopify themes. |
+| `@playlovetoys/web-components/variant-picker/bundle` | `dist/plt-variant-picker.bundle.js`: the pilot's single-component bundle. |
+| `@playlovetoys/web-components/variant-picker/resolve` | Pure variant resolution (no DOM, no Lit). |
+| `@playlovetoys/web-components/variant-picker/storefront` | `fromStorefrontProduct()` — Storefront API product → picker data. |
+| `@playlovetoys/web-components/react` | React 18/19 adapters for every element, built on `createComponent()`. |
+| `@playlovetoys/web-components/adapters/liquid/*` | Snippets: `plt-variant-picker`, `plt-quantity-selector`, `plt-cart-drawer`, `plt-filter-bar`, `plt-sort-select`, `plt-pagination`, `plt-web-components` (loads the bundle). |
+| `@playlovetoys/web-components/adapters/astro/*` | `VariantPicker`, `QuantitySelector`, `CartLine`, `CartDrawer`, `FilterBar`, `SortSelect`, `Pagination`, `WebComponents` (registers all). |
+
+The design-system renderers ProductDetail, ProductQuickView and Navbar (Astro
+and Liquid) already wrap their markup in the enhancing elements; Liquid pages
+add `{% render 'plt-web-components' %}` once, Astro pages get the script from
+the renderer.
 
 `dist/` is committed (and verified by `npm run check:dist`) because consumers
 install the design system as a git dependency and Shopify themes copy the
@@ -130,9 +178,11 @@ installs the package under its own name and the `exports` below apply.
 
 ### Shopify Liquid
 
-Copy `dist/plt-variant-picker.bundle.js` to the theme's `assets/` and
-`adapters/liquid/plt-variant-picker.liquid` to `snippets/`, then inside the
-product form:
+Copy `dist/plt-web-components.bundle.js` to the theme's `assets/` and the
+snippets in `adapters/liquid/` to `snippets/`. Each data snippet loads the
+bundle (module scripts with one URL run once); pages that only use the
+enhancing renderers (Navbar, ProductDetail, ProductQuickView) render
+`{% render 'plt-web-components' %}` once. Inside the product form:
 
 ```liquid
 {%- assign sold_out_label = 'products.product.sold_out' | t -%}
@@ -145,7 +195,11 @@ product form:
 ```
 
 The theme keeps price, button state and URL updates by listening to
-`plt:variant-change`. No React, Astro or Alpine is required.
+`plt:variant-change`. No React, Astro or Alpine is required. The other
+snippets map Shopify objects directly: `plt-cart-drawer` (`cart`; prices
+formatted with `money` in Liquid), `plt-filter-bar` (`collection.filters`,
+list filters), `plt-sort-select` (`collection.sort_options`),
+`plt-pagination` (`paginate`), `plt-quantity-selector`.
 
 ### Astro
 
@@ -166,7 +220,7 @@ client `<script>` only registers the element.
 ### Hydrogen React
 
 ```tsx
-import { PltVariantPicker } from "@playlovetoys/web-components/react/variant-picker";
+import { PltVariantPicker } from "@playlovetoys/web-components/react";
 import { fromStorefrontProduct } from "@playlovetoys/web-components/variant-picker/storefront";
 
 const picker = useMemo(() => fromStorefrontProduct(product), [product]);
@@ -179,11 +233,26 @@ const picker = useMemo(() => fromStorefrontProduct(product), [product]);
 />;
 ```
 
-The adapter passes arrays as DOM properties, forwards the DOM event and imports
-the element definition lazily in an effect, so server rendering never touches
-`customElements` and hydration sees the same markup the server produced.
-Memoize `options`/`variants`/`labels` to avoid resetting properties on every
-render.
+Every adapter comes from one generic bridge, `createComponent({ tag, load,
+properties, attributes, events, fallback })`: arrays and objects travel as DOM
+properties, simple values are mirrored as attributes for the server HTML, DOM
+events map to callbacks (`onVariantChange`, `onLineChange`, `onFilterChange`,
+…; the callback gets `(detail, event)`), and the element definition is
+imported lazily in an effect, so server rendering never touches
+`customElements` and hydration sees the server's markup. Memoize array and
+object props to avoid resetting properties on every render. Cancel collection
+events to route with `navigate()`:
+
+```tsx
+<PltFilterBar filters={filters} onFilterChange={(detail, event) => {
+  event.preventDefault();
+  navigate(`?${detail.query}`, { replace: true });
+}} />
+<PltCartDrawer open={open} lines={lines} subtotal={subtotal} busy={pending}
+  onLineChange={({ lineId, quantity }) => cart.updateLines([{ id: lineId, quantity }])}
+  onLineRemove={({ lineId }) => cart.removeLines([lineId])}
+  onClose={() => setOpen(false)} />
+```
 
 ## Development
 
@@ -194,9 +263,11 @@ npm run test:browser -w @playlovetoys/web-components # Liquid, Astro, React demo
 npm run size -w @playlovetoys/web-components         # bundle sizes
 ```
 
-`test:browser` builds `examples/.out/{liquid,astro,react}` (Liquid rendered with
-liquidjs, a real `astro build`, React SSR + hydration) and drives them with
-Playwright: pointer and keyboard selection, events, sold-out/unavailable states,
-property updates, axe-core, no-JS fallback, pixel parity across the three
-frontends. Screenshots land in `examples/.out/screenshots/`. It needs Chromium
+`test:browser` builds three storefront demos in `examples/.out/{liquid,astro,react}`
+(Liquid rendered with liquidjs, a real `astro build`, React SSR + hydration),
+each with navbar + mega menu, product page (gallery, variant picker, quantity),
+collection controls, quick views and the cart drawer, and drives them with
+Playwright: pointer and keyboard use, events, cart mutations, client routing
+vs. default navigation, axe-core, no-JS fallbacks, and pixel / ARIA parity
+across the three frontends. Screenshots land in `examples/.out/screenshots/`. It needs Chromium
 (`npx playwright install chromium`).

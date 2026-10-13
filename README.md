@@ -7,7 +7,7 @@ Monorepo for the reusable visual, editorial and Astro integration layers used by
 - `@playlovetoys/design-system` — the daisyUI 5 + Tailwind CSS 4 component layer, including tokens, primitives, patterns and cross-platform visual renderers.
 - `@playlovetoys/editorial` — framework-neutral editorial contracts and schemas.
 - `@playlovetoys/astro` — Astro block rendering and integration built on the other two packages.
-- `@playlovetoys/web-components` — framework-neutral Web Components (Lit) shared by the Liquid, Astro and Hydrogen React frontends. Pilot: `<plt-variant-picker>`. Separate package so CSS-only consumers never load Lit.
+- `@playlovetoys/web-components` — framework-neutral Web Components (Lit) shared by the Liquid, Astro and Hydrogen React frontends. Ten elements: product (variant picker, quantity, gallery, quick view), cart (line, drawer), collection (filters, sort, pagination) and navigation (navbar + mega menu). Separate package so CSS-only consumers never load Lit.
 
 Dependency direction:
 

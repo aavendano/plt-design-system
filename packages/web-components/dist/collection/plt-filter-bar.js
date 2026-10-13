@@ -1,0 +1,144 @@
+import { LitElement, html, nothing } from "lit";
+import { live } from "lit/directives/live.js";
+import { byId, emit, jsonConverter, nextId, retireFallback } from "../shared/element.js";
+import { activeFilters, nonEmptyValues, selectedValues, toQuery } from "./params.js";
+import {
+  FILTER_CHANGE_EVENT
+} from "./types.js";
+const DEFAULT_LABELS = {
+  apply: "Apply",
+  active: "Active filters",
+  clear: "Clear all",
+  remove: "Remove filter"
+};
+class PltFilterBar extends LitElement {
+  constructor() {
+    super();
+    this._idPrefix = nextId("plt-filter");
+    this._submitting = false;
+    this.filters = [];
+    this.action = "";
+    this.method = "get";
+    this.manual = false;
+    this.labels = {};
+    this._values = {};
+  }
+  createRenderRoot() {
+    return this;
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    retireFallback(this);
+  }
+  /** Current non-empty values by filter id. */
+  get values() {
+    return nonEmptyValues(this._values);
+  }
+  willUpdate(changed) {
+    if (changed.has("filters")) this._values = selectedValues(this.filters ?? []);
+  }
+  updated() {
+    retireFallback(this);
+  }
+  get form() {
+    return this.querySelector(":scope > form.plt-filter-bar:not([data-plt-fallback])");
+  }
+  _set(id, value) {
+    this._values = { ...this._values, [id]: value };
+    this._commit(id);
+  }
+  _clear() {
+    this._values = Object.fromEntries(Object.keys(this._values).map((id) => [id, ""]));
+    this._commit(null);
+  }
+  /** Emits the change; submits the form unless cancelled or in manual mode. */
+  _commit(changed) {
+    const proceed = this._emit(changed);
+    if (proceed && !this.manual) {
+      this._submitting = true;
+      try {
+        this.form?.requestSubmit();
+      } finally {
+        this._submitting = false;
+      }
+    }
+  }
+  _emit(changed) {
+    return emit(
+      this,
+      FILTER_CHANGE_EVENT,
+      { values: this.values, changed, query: toQuery(this._values) },
+      true
+    );
+  }
+  _onSubmit(event) {
+    if (this._submitting) return;
+    if (!this._emit(null)) event.preventDefault();
+  }
+  _onFormData(event) {
+    for (const filter of this.filters ?? []) {
+      if (!this._values[filter.id]) event.formData.delete(filter.id);
+    }
+  }
+  async _removeChip(id) {
+    this._set(id, "");
+    await this.updateComplete;
+    byId(this, `${this._idPrefix}-${id}`)?.focus();
+  }
+  render() {
+    const labels = { ...DEFAULT_LABELS, ...this.labels ?? {} };
+    const filters = this.filters ?? [];
+    const active = activeFilters(filters, this._values);
+    return html`<form
+        class="plt-filter-bar"
+        action=${this.action}
+        method=${this.method || "get"}
+        @submit=${(event) => this._onSubmit(event)}
+        @formdata=${(event) => this._onFormData(event)}
+      >
+        ${filters.map(
+      (filter) => html`<div class="plt-filter-bar__field">
+            <label class="theme-label-bold" for=${`${this._idPrefix}-${filter.id}`}>${filter.label}</label>
+            <select
+              class="d-select"
+              id=${`${this._idPrefix}-${filter.id}`}
+              name=${filter.id}
+              .value=${live(this._values[filter.id] ?? "")}
+              @change=${(event) => this._set(filter.id, event.target.value)}
+            >
+              ${filter.options.map(
+        (option) => html`<option value=${option.value} ?selected=${option.value === (this._values[filter.id] ?? "")}>${option.label}</option>`
+      )}
+            </select>
+          </div>`
+    )}
+        ${this.manual ? html`<button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">${labels.apply}</button>` : nothing}
+      </form>
+      ${active.length ? html`<div class="plt-filter-bar__active" role="group" aria-label=${labels.active}>
+            <ul class="plt-filter-bar__chips">
+              ${active.map(
+      (item) => html`<li>
+                  <button
+                    type="button"
+                    class="d-btn d-btn-sm d-btn-outline theme-bordered theme-label-bold"
+                    aria-label=${`${labels.remove}: ${item.label} ${item.valueLabel}`}
+                    @click=${() => this._removeChip(item.id)}
+                  >${item.label}: ${item.valueLabel} <span aria-hidden="true">×</span></button>
+                </li>`
+    )}
+            </ul>
+            <button type="button" class="d-btn d-btn-sm d-btn-ghost theme-label-bold" @click=${() => this._clear()}>${labels.clear}</button>
+          </div>` : nothing}`;
+  }
+}
+PltFilterBar.properties = {
+  filters: { type: Array, converter: jsonConverter("plt-filter-bar", () => []) },
+  action: { type: String },
+  method: { type: String },
+  manual: { type: Boolean, reflect: true },
+  labels: { type: Object, converter: jsonConverter("plt-filter-bar", () => ({})) },
+  _values: { state: true }
+};
+export {
+  PltFilterBar
+};

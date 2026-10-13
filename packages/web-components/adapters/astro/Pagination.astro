@@ -1,0 +1,36 @@
+---
+/** Astro adapter for <plt-pagination>; the fallback is the same list of links. */
+import type { PltPage, PltPaginationLabels } from "../../dist/collection/index.js";
+
+interface Props {
+  pages: PltPage[];
+  previousUrl?: string;
+  nextUrl?: string;
+  labels?: PltPaginationLabels;
+  id?: string;
+  class?: string;
+}
+
+const { pages, previousUrl, nextUrl, labels = {}, id, class: className } = Astro.props;
+---
+
+<plt-pagination
+  id={id}
+  class={className}
+  pages={JSON.stringify(pages)}
+  previous-url={previousUrl}
+  next-url={nextUrl}
+  labels={JSON.stringify(labels)}
+>
+  <nav data-plt-fallback aria-label={labels.nav ?? "Pagination"}>
+    {previousUrl && <a href={previousUrl}>{labels.previous ?? "Previous"}</a>}
+    {pages.map((page) =>
+      page.url && !page.current ? <a href={page.url}>{page.label}</a> : <span aria-current={page.current ? "page" : undefined}>{page.label}</span>,
+    )}
+    {nextUrl && <a href={nextUrl}>{labels.next ?? "Next"}</a>}
+  </nav>
+</plt-pagination>
+
+<script>
+  import "../../dist/collection/define.js";
+</script>
