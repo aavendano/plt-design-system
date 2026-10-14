@@ -10,7 +10,7 @@ import type { PltQuantityChangeDetail, PltQuantitySelectorLabels } from "../quan
 import type { PltCartLabels, PltCartLineChangeDetail, PltCartLineData, PltCartLineRemoveDetail } from "../cart/types.js";
 import type { PltChoice, PltFilter, PltFilterBarLabels, PltFilterChangeDetail, PltPreserved, PltPage, PltPageChangeDetail, PltPaginationLabels, PltSortChangeDetail } from "../collection/types.js";
 import type { PltGalleryChangeDetail } from "../product/plt-product-gallery.js";
-import type { PltMegaMenuToggleDetail, PltNavbarToggleDetail } from "../navigation/plt-navbar.js";
+import type { PltMegaMenuToggleDetail, PltNavbarOverflowDetail, PltNavbarToggleDetail } from "../navigation/plt-navbar.js";
 type Handler<D> = (detail: D, event: CustomEvent<D>) => void;
 export interface PltQuantitySelectorProps extends BaseProps {
     value?: number;
@@ -106,7 +106,10 @@ export interface PltNavbarProps extends BaseProps {
     hoverDelay?: number;
     /** Keep `--plt-navbar-height` equal to the navbar's height: `""` on the element, `"root"` on `<html>`. */
     publishHeight?: string;
+    /** Items that always stay visible when `[data-plt-navbar-overflow]` collapses the rest into "More" (default 1). */
+    overflowMin?: number;
     onToggle?: Handler<PltNavbarToggleDetail>;
+    onOverflow?: Handler<PltNavbarOverflowDetail>;
     onMegaMenuToggle?: Handler<PltMegaMenuToggleDetail>;
 }
 export declare const PltNavbar: import("react").ForwardRefExoticComponent<PltNavbarProps & import("react").RefAttributes<HTMLElement>>;

@@ -121,6 +121,15 @@ Opt-in capabilities of `<plt-navbar>`, switched on by an attribute or by the mar
 | `[data-plt-megamenu]` | panel | Marks a mega menu panel like `.plt-megamenu` does, for markup that keeps its own classes. The panel toggles `data-open="true|false"`; showing and hiding it is the frontend's CSS. |
 | `publish-height` or `publish-height="root"` | `<plt-navbar>` | Keeps `--plt-navbar-height` equal to the element's height (a `ResizeObserver`), on the element, or on `<html>` with `root`. The element must be a block box: give the wrapper `display: block`. Removed when the element disconnects. |
 | `[data-plt-navbar-deferred]` | `img` | An image that carries `data-deferred-src`, `data-deferred-srcset` and `data-deferred-sizes` (any subset) gets them applied as `src`, `srcset` and `sizes` on idle (at most 2 s after connect), or at the first hover on a trigger, focus on one, panel open or mobile menu open, whichever comes first. `navbar.activateDeferred()` does it on demand. |
+| `[data-plt-navbar-overflow]` | the element that bounds the links (usually the `ul`) | Collapses the links that do not fit into a "More" item. Measured on connect, when the element resizes and when web fonts load; `navbar.reflow()` re-measures on demand. The element's width must not depend on its links. Links are hidden **from the end**, so the ones that stay are the first ones, in order. Needs the hooks below; without a `[data-plt-navbar-more]` item it does nothing. |
+| `[data-plt-navbar-item="id"]` | each link's `li` | A link that may be moved into More. Gets `hidden` when it does not fit. The id ties it to its More entry. |
+| `[data-plt-navbar-more]` | the More `li` (last in the bar, start with `hidden`) | Holds the toggle and the list. Shown only while some link is hidden. |
+| `[data-plt-navbar-more-toggle]` | `button` in More | Opens and closes the list (`aria-expanded`, `aria-controls` to the list). ArrowDown/ArrowUp open it onto the first/last entry. |
+| `[data-plt-navbar-more-list]` | `ul` in More (start with `hidden`) | The open list. The design system hangs it below the button, so it never covers it. |
+| `[data-plt-navbar-more-for="id"]` | `li` in the list (start with `hidden`) | One entry per link, **plain links included**; only the entries of hidden links are shown. An entry that carries `aria-haspopup`/`aria-controls` opens the same mega menu panel as the link in the bar. |
+| `overflow-min="1"` | `<plt-navbar>` | Links that always stay in the bar, however narrow it gets. Default `1`. |
+
+Keyboard in More: Enter/Space on the button toggles; ArrowDown/ArrowUp/Home/End move between entries; ArrowRight enters an entry's panel; Escape closes the panel first, then the list, and returns focus to the button; a click outside, focus leaving, or following a link closes it. Event `plt:navbar-overflow` (`detail.hidden`: ids of the hidden links, in order) fires when that set changes, including to `[]`.
 
 ## MegaMenu
 

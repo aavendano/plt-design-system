@@ -172,6 +172,26 @@ plt-filter-bar[orientation="vertical"] .plt-filter-bar__active { order: -1; padd
 /* Navbar: an open mega menu trigger reads as current. */
 .plt-navbar__links a[aria-expanded="true"] { color: var(--plt-color-primary, var(--color-primary)); }
 
+/* Navbar overflow ("More"): hooks hidden by the element must stay hidden whatever utility class the item carries. */
+[data-plt-navbar-item][hidden],
+[data-plt-navbar-more][hidden],
+[data-plt-navbar-more-for][hidden],
+[data-plt-navbar-more-list][hidden] { display: none; }
+[data-plt-navbar-more] { position: relative; }
+/* The open list hangs below its button instead of covering it, and grows towards the bar so it stays inside it. */
+[data-plt-navbar-more-list] {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-end: 0;
+  z-index: 50;
+  min-inline-size: 12rem;
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+  background: var(--plt-color-base-200, var(--color-base-200));
+  border: var(--plt-section-border-width, var(--plt-border-width, var(--border))) solid var(--plt-border-color, var(--color-base-content));
+}
+
 /* Pagination: the current page is a disabled button, which daisyUI greys out; keep it visibly selected. */
 .plt-pagination .d-btn.d-btn-primary:disabled {
   background-color: var(--plt-color-primary, var(--color-primary));

@@ -26,7 +26,7 @@ import type {
 } from "../collection/types.js";
 import { preservedEntries } from "../collection/params.js";
 import type { PltGalleryChangeDetail } from "../product/plt-product-gallery.js";
-import type { PltMegaMenuToggleDetail, PltNavbarToggleDetail } from "../navigation/plt-navbar.js";
+import type { PltMegaMenuToggleDetail, PltNavbarOverflowDetail, PltNavbarToggleDetail } from "../navigation/plt-navbar.js";
 
 type Handler<D> = (detail: D, event: CustomEvent<D>) => void;
 
@@ -316,14 +316,21 @@ export interface PltNavbarProps extends BaseProps {
   hoverDelay?: number;
   /** Keep `--plt-navbar-height` equal to the navbar's height: `""` on the element, `"root"` on `<html>`. */
   publishHeight?: string;
+  /** Items that always stay visible when `[data-plt-navbar-overflow]` collapses the rest into "More" (default 1). */
+  overflowMin?: number;
   onToggle?: Handler<PltNavbarToggleDetail>;
+  onOverflow?: Handler<PltNavbarOverflowDetail>;
   onMegaMenuToggle?: Handler<PltMegaMenuToggleDetail>;
 }
 
 export const PltNavbar = createComponent<PltNavbarProps>({
   tag: "plt-navbar",
   load: () => import("../navigation/define.js"),
-  properties: ["hoverDelay", "publishHeight"],
-  attributes: { hoverDelay: "hover-delay", publishHeight: "publish-height" },
-  events: { onToggle: "plt:navbar-toggle", onMegaMenuToggle: "plt:megamenu-toggle" },
+  properties: ["hoverDelay", "publishHeight", "overflowMin"],
+  attributes: { hoverDelay: "hover-delay", publishHeight: "publish-height", overflowMin: "overflow-min" },
+  events: {
+    onToggle: "plt:navbar-toggle",
+    onMegaMenuToggle: "plt:megamenu-toggle",
+    onOverflow: "plt:navbar-overflow",
+  },
 });
