@@ -1,11 +1,13 @@
 import { LitElement, type PropertyValues } from "lit";
-import { type PltChoice } from "./types.js";
+import { type PltChoice, type PltPreserved } from "./types.js";
 /**
  * `<plt-sort-select>` — SortSelect anatomy inside a GET form.
  *
  * A change emits a cancelable `plt:sort-change`; if nobody cancels it the form
  * submits (normal navigation with `?{name}={value}`). Client-routed frontends
  * cancel it and navigate themselves. `manual` adds a submit button instead.
+ * `preserve` carries query parameters that another control owns (the active
+ * filters, say) as hidden inputs, so a native submit keeps them.
  *
  * @fires plt:sort-change - cancelable; `{ name, value }`
  */
@@ -38,6 +40,13 @@ export declare class PltSortSelect extends LitElement {
             type: StringConstructor;
             attribute: string;
         };
+        preserve: {
+            type: ObjectConstructor;
+            converter: {
+                fromAttribute(value: string | null): any;
+                toAttribute(value: unknown): string;
+            };
+        };
         _value: {
             state: boolean;
         };
@@ -49,6 +58,7 @@ export declare class PltSortSelect extends LitElement {
     method: string;
     manual: boolean;
     applyLabel: string;
+    preserve: PltPreserved;
     private _value;
     private readonly _id;
     constructor();

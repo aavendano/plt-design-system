@@ -216,13 +216,15 @@ Style hooks only. `plt-collection-filters` wraps a `d-collapse` panel (`plt-coll
 
 ## FilterBar
 
-Required: `filters` — array of `{ id, label, options: [{ label, value, selected? }] }`.
+Required: `filters` — array of `{ id, label, options: [{ label, value, selected?, count? }], multiple? }`.
 
 Optional: `action`, `method`, `submit_label`.
 
+A filter with `multiple: true` is a checkbox group (options with value `""` are ignored; `count` is shown next to the label) and sends every checked value under the same `id`. Without it the filter is a select.
+
 Facet data resolution stays outside the contract.
 
-Interactive version: `<plt-filter-bar>` (`filters`, `action`, `method`, `manual`, `labels`) adds active-filter chips and "clear all". Each change emits a cancelable `plt:filter-change` (`{ values, changed, query }`); if not cancelled the form submits (GET, empty filters omitted). Client-routed frontends cancel it and navigate. `manual` shows an Apply button instead.
+Interactive version: `<plt-filter-bar>` (`filters`, `action`, `method`, `manual`, `orientation`, `labels`, `preserve`) adds active-filter chips (one per value) and "clear all". Each change emits a cancelable `plt:filter-change` (`{ values, changed, query }`; `values` holds a string per select filter and an array per `multiple` filter, and `query` repeats the name for arrays); if not cancelled the form submits (GET, empty filters omitted). Client-routed frontends cancel it and navigate. `manual` shows an Apply button instead. `orientation="vertical"` stacks the controls for a sidebar. `preserve` is `{ name: string | string[] }` of query parameters another control owns (the sort order, say); they are carried as hidden inputs so a native submit keeps them.
 
 ## SortSelect
 
@@ -230,7 +232,7 @@ Required: `options` — array of `{ label, value, selected? }`.
 
 Optional: `name`, `label`, `action`, `method`.
 
-Interactive version: `<plt-sort-select>`; a change emits a cancelable `plt:sort-change` (`{ name, value }`) and submits unless cancelled.
+Interactive version: `<plt-sort-select>`; a change emits a cancelable `plt:sort-change` (`{ name, value }`) and submits unless cancelled. `preserve` (see FilterBar) keeps the active filters through a native submit.
 
 ## SearchField
 

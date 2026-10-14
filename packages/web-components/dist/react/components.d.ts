@@ -8,7 +8,7 @@ import { type ReactNode } from "react";
 import { type BaseProps } from "./create.js";
 import type { PltQuantityChangeDetail, PltQuantitySelectorLabels } from "../quantity-selector/types.js";
 import type { PltCartLabels, PltCartLineChangeDetail, PltCartLineData, PltCartLineRemoveDetail } from "../cart/types.js";
-import type { PltChoice, PltFilter, PltFilterBarLabels, PltFilterChangeDetail, PltPage, PltPageChangeDetail, PltPaginationLabels, PltSortChangeDetail } from "../collection/types.js";
+import type { PltChoice, PltFilter, PltFilterBarLabels, PltFilterChangeDetail, PltPreserved, PltPage, PltPageChangeDetail, PltPaginationLabels, PltSortChangeDetail } from "../collection/types.js";
 import type { PltGalleryChangeDetail } from "../product/plt-product-gallery.js";
 import type { PltMegaMenuToggleDetail, PltNavbarToggleDetail } from "../navigation/plt-navbar.js";
 type Handler<D> = (detail: D, event: CustomEvent<D>) => void;
@@ -65,7 +65,10 @@ export interface PltFilterBarProps extends BaseProps {
     action?: string;
     method?: string;
     manual?: boolean;
+    orientation?: "horizontal" | "vertical";
     labels?: PltFilterBarLabels;
+    /** Query parameters another control owns; kept by a native submit. */
+    preserve?: PltPreserved;
     /** Cancel the event (`event.preventDefault()`) to navigate client-side. */
     onFilterChange?: Handler<PltFilterChangeDetail>;
 }
@@ -78,6 +81,8 @@ export interface PltSortSelectProps extends BaseProps {
     method?: string;
     manual?: boolean;
     applyLabel?: string;
+    /** Query parameters another control owns; kept by a native submit. */
+    preserve?: PltPreserved;
     /** Cancel the event (`event.preventDefault()`) to navigate client-side. */
     onSortChange?: Handler<PltSortChangeDetail>;
 }

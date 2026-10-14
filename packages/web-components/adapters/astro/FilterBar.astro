@@ -1,18 +1,23 @@
 ---
 /** Astro adapter for <plt-filter-bar>; the fallback is a GET form with a submit button. */
-import type { PltFilter, PltFilterBarLabels } from "../../dist/collection/index.js";
+import type { PltFilter, PltFilterBarLabels, PltPreserved } from "../../dist/collection/index.js";
+import { preservedEntries } from "../../dist/collection/index.js";
 
 interface Props {
   filters: PltFilter[];
   action?: string;
   method?: "get" | "post";
   manual?: boolean;
+  orientation?: "horizontal" | "vertical";
   labels?: PltFilterBarLabels;
+  /** Query parameters another control owns; kept by a native submit. */
+  preserve?: PltPreserved;
   id?: string;
   class?: string;
 }
 
-const { filters, action = "", method = "get", manual = false, labels = {}, id, class: className } = Astro.props;
+const { filters, action = "", method = "get", manual = false, orientation = "horizontal", labels = {}, preserve = {}, id, class: className } = Astro.props;
+const preserved = preservedEntries(preserve);
 ---
 
 <plt-filter-bar
@@ -22,19 +27,38 @@ const { filters, action = "", method = "get", manual = false, labels = {}, id, c
   action={action}
   method={method}
   manual={manual || undefined}
+  orientation={orientation}
   labels={JSON.stringify(labels)}
+  preserve={JSON.stringify(preserve)}
 >
   <form data-plt-fallback class="plt-filter-bar" action={action} method={method}>
-    {filters.map((filter) => (
-      <label class="plt-filter-bar__field theme-label-bold">
-        {filter.label}
-        <select class="d-select" name={filter.id}>
-          {filter.options.map((option) => (
-            <option value={option.value} selected={option.selected}>{option.label}</option>
-          ))}
-        </select>
-      </label>
-    ))}
+    {preserved.map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+    {filters.map((filter) =>
+      filter.multiple ? (
+        <fieldset class="plt-filter-bar__field plt-filter-bar__group">
+          <legend class="theme-label-bold">{filter.label}</legend>
+          <ul class="plt-filter-bar__options">
+            {filter.options.filter((option) => option.value !== "").map((option) => (
+              <li>
+                <label class="plt-filter-bar__option">
+                  <input type="checkbox" class="d-checkbox d-checkbox-primary" name={filter.id} value={option.value} checked={option.selected} />
+                  <span class="theme-label-bold">{option.label}{option.count != null && <span class="theme-meta"> ({option.count})</span>}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+      ) : (
+        <label class="plt-filter-bar__field theme-label-bold">
+          {filter.label}
+          <select class="d-select" name={filter.id}>
+            {filter.options.map((option) => (
+              <option value={option.value} selected={option.selected}>{option.label}</option>
+            ))}
+          </select>
+        </label>
+      ),
+    )}
     <button type="submit" class="d-btn d-btn-primary theme-label-bold">{labels.apply ?? "Apply"}</button>
   </form>
 </plt-filter-bar>
