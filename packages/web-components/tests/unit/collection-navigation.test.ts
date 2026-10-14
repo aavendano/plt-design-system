@@ -117,6 +117,7 @@ describe("<plt-filter-bar>", () => {
     const size = select(element, 1);
     size.value = "S";
     size.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
     expect(events[0].cancelable).toBe(true);
     expect(events[0].detail).toEqual({
       values: { "filter.v.option.color": "Red", "filter.v.option.size": "S" },
@@ -153,6 +154,7 @@ describe("<plt-filter-bar>", () => {
     const size = select(element, 1);
     size.value = "S";
     size.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
     expect(submit).toHaveBeenCalledTimes(1);
     expect(element.form!.hasAttribute("data-plt-fallback")).toBe(false);
   });
@@ -226,6 +228,7 @@ describe("<plt-filter-bar> with multi-value filters and preserved params", () =>
     const second = boxes(element)[1];
     second.checked = true;
     second.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
     expect(listener.mock.calls[0][0].detail).toEqual({
       values: { "filter.p.vendor": ["Dorcel", "Doc Johnson"] },
       changed: "filter.p.vendor",
@@ -257,6 +260,29 @@ describe("<plt-filter-bar> with multi-value filters and preserved params", () =>
     expect(element.values).toEqual({ "filter.p.vendor": ["Doc Johnson"] });
     expect(boxes(element)[0].checked).toBe(false);
     expect(document.activeElement).toBe(boxes(element)[0]);
+  });
+
+  it("submits the new state after a chip removal or clear all, not the stale form", async () => {
+    const element = await mount();
+    const sent: string[] = [];
+    submit.mockImplementation(function (this: HTMLFormElement) {
+      // Only the brand group: `new FormData(form)` does not run the empty-value cleanup of a real submit.
+      sent.push(new FormData(this).getAll("filter.p.vendor").join(","));
+    });
+    const chip = element.querySelector<HTMLButtonElement>(".plt-filter-bar__chips button")!;
+    chip.click();
+    await flush(element);
+    await Promise.resolve();
+    expect(sent).toEqual([""]);
+
+    boxes(element)[1].checked = true;
+    boxes(element)[1].dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
+    await Promise.resolve();
+    element.querySelector<HTMLButtonElement>(".plt-filter-bar__active > button")!.click();
+    await flush(element);
+    await Promise.resolve();
+    expect(sent).toEqual(["", "Doc Johnson", ""]);
   });
 
   it("clear all empties multiple and single filters", async () => {

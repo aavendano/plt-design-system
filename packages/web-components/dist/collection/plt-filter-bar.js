@@ -65,16 +65,20 @@ class PltFilterBar extends LitElement {
     );
     this._commit(null);
   }
-  /** Emits the change; submits the form unless cancelled or in manual mode. */
-  _commit(changed) {
+  /**
+   * Emits the change; submits the form unless cancelled or in manual mode. The
+   * submit waits for the render so the form holds the new state: a chip or
+   * "clear all" changes `_values`, and the controls follow on the next update.
+   */
+  async _commit(changed) {
     const proceed = this._emit(changed);
-    if (proceed && !this.manual) {
-      this._submitting = true;
-      try {
-        this.form?.requestSubmit();
-      } finally {
-        this._submitting = false;
-      }
+    if (!proceed || this.manual) return;
+    await this.updateComplete;
+    this._submitting = true;
+    try {
+      this.form?.requestSubmit();
+    } finally {
+      this._submitting = false;
     }
   }
   _emit(changed) {

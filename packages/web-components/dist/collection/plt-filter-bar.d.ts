@@ -80,7 +80,11 @@ export declare class PltFilterBar extends LitElement {
     private _toggle;
     private _list;
     private _clear;
-    /** Emits the change; submits the form unless cancelled or in manual mode. */
+    /**
+     * Emits the change; submits the form unless cancelled or in manual mode. The
+     * submit waits for the render so the form holds the new state: a chip or
+     * "clear all" changes `_values`, and the controls follow on the next update.
+     */
     private _commit;
     private _emit;
     private _onSubmit;
