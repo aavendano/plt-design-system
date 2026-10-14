@@ -1,4 +1,5 @@
 import { LitElement, html, nothing } from "lit";
+import { live } from "lit/directives/live.js";
 import { emit, jsonConverter } from "../shared/element.js";
 import type { PltQuantityChangeDetail } from "../quantity-selector/types.js";
 import {
@@ -77,7 +78,7 @@ export class PltCartLine extends LitElement {
         <div class="plt-cart-line__controls">
           <plt-quantity-selector
             name=""
-            .value=${line.quantity}
+            .value=${live(line.quantity)}
             .min=${1}
             .max=${line.maxQuantity ?? null}
             .labels=${{ decrease: labels.decrease, increase: labels.increase, quantity: `${labels.quantity}, ${line.title}` }}

@@ -237,6 +237,25 @@ describe("<plt-cart-drawer>", () => {
     expect(element.querySelector(".plt-cart-drawer__error")!.textContent).toBe("Out of stock");
   });
 
+  it("puts the quantity back to what the cart says after a change that did not happen", async () => {
+    const element = await mount();
+    const line1 = element.querySelector("plt-cart-line")!;
+    const selector = line1.querySelector("plt-quantity-selector")!;
+    await flush(selector);
+    const input = () => line1.querySelector<HTMLInputElement>(".plt-quantity-selector input")!;
+    expect(input().value).toBe("2");
+    // The shopper asks for 3; the selector shows it at once.
+    line1.querySelectorAll<HTMLButtonElement>(".plt-quantity-selector button")[1].click();
+    await flush(selector);
+    expect(input().value).toBe("3");
+    // The cart refused: the consumer sets the lines again with the real quantity (2).
+    element.lines = [line(), line({ id: "line-2", title: "Glow Ring", quantity: 1, compareAtPrice: null })];
+    await flush(element);
+    await flush(line1);
+    await flush(selector);
+    expect(input().value).toBe("2");
+  });
+
   it("closes on a backdrop click and lets line events bubble", async () => {
     const element = await mount();
     element.show();
