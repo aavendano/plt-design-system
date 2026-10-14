@@ -1,0 +1,35 @@
+/* Extracted from Liquid sections/predictive-search.liquid for shared storefront CSS (tokens only where feasible). */
+.predictive-search__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .predictive-search__heading {
+    margin-bottom: 0.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .predictive-search__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .predictive-search__link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-field, 0.25rem);
+    transition: background-color 0.15s ease;
+  }
+
+  .predictive-search__link:hover,
+  .predictive-search__link:focus-visible {
+    background-color: var(--color-base-300);
+  }
+
+  .predictive-search__footer {
+    border-top: var(--plt-border-width, var(--border, 1.5px)) solid var(--color-base-300);
+    padding-top: 0.75rem;
+  }

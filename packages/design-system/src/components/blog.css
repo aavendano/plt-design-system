@@ -1,0 +1,42 @@
+/* Extracted from Liquid sections/blog.liquid for shared storefront CSS (tokens only where feasible). */
+.blog-magazine__grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'lead'
+      'secondary'
+      'tertiary'
+      'brief1'
+      'brief2'
+      'brief3';
+  }
+
+  .blog-magazine__area-lead {
+    grid-area: lead;
+  }
+  .blog-magazine__area-secondary {
+    grid-area: secondary;
+  }
+  .blog-magazine__area-tertiary {
+    grid-area: tertiary;
+  }
+  .blog-magazine__area-brief1 {
+    grid-area: brief1;
+  }
+  .blog-magazine__area-brief2 {
+    grid-area: brief2;
+  }
+  .blog-magazine__area-brief3 {
+    grid-area: brief3;
+  }
+
+  @media (min-width: 1024px) {
+    .blog-magazine__grid {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas:
+        'lead lead secondary'
+        'lead lead tertiary'
+        'brief1 brief2 brief3';
+    }
+  }

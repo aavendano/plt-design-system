@@ -1,0 +1,53 @@
+/* Extracted from Liquid snippets/marquee.liquid for shared storefront CSS (tokens only where feasible). */
+.marquee__wrapper {
+    display: flex;
+    gap: var(--marquee-gap);
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  .marquee__content {
+    min-width: max-content;
+    display: flex;
+    gap: var(--marquee-gap);
+  }
+
+  .marquee__items {
+    min-width: max-content;
+    display: flex;
+    gap: var(--marquee-gap);
+    align-items: center;
+  }
+
+  .marquee__item::after {
+    content: '·';
+    margin-inline-start: var(--marquee-gap);
+    opacity: 0.6;
+  }
+
+  .marquee__item:last-child::after {
+    content: none;
+    margin: 0;
+  }
+
+  .marquee[data-reduced-motion] .marquee__wrapper {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee:not([data-reduced-motion]) .marquee__wrapper {
+      animation: marquee-motion var(--marquee-speed, 25s) linear infinite var(--marquee-direction, normal);
+    }
+
+    .marquee:not([data-reduced-motion]):hover .marquee__wrapper {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes marquee-motion {
+    to {
+      transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
+    }
+  }

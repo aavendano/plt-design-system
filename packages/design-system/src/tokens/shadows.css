@@ -1,5 +1,6 @@
 :root {
-  --plt-shadow-offset: 4px;
-  --plt-shadow-hover-offset: 8px;
-  --plt-shadow-active-offset: 2px;
+  /* Matches Liquid brand `--shadow-offset: 2px` and hover ×2.5 (cheesecake mirror). */
+  --plt-shadow-offset: 2px;
+  --plt-shadow-hover-offset: 5px;
+  --plt-shadow-active-offset: 0px;
 }

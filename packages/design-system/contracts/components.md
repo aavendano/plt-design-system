@@ -325,3 +325,13 @@ Contracts above are the implemented set. Units the website still needs (`MegaMen
 ## daisyUI rendering invariant
 
 Contracts describe data only. They never replace component anatomy. Renderers must map these values into the daisyUI-first structures documented in `docs/daisyui-conformance.md`.
+
+## Theme ownership (storefronts)
+
+No storefront (Liquid, Astro, Hydrogen) may define its own theme tokens
+(`--color-*` brand palette, `--plt-*` geometry/type) or theme utilities
+(`.theme-*`, legacy `.nb-*`). Import the design-system theme
+(`themes/cheesecake.css` for the Liquid-brand mirror, or another
+`themes/*.css` file) and the shared primitives/typography from this package.
+Shopify-specific glue (section spacing, Alpine `x-cloak`, cart dialog chrome)
+may stay in the application. See `docs/storefront-visual-parity.md`.

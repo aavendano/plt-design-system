@@ -1,0 +1,56 @@
+/* Extracted from Liquid snippets/group.liquid for shared storefront CSS (tokens only where feasible). */
+.theme-group {
+    position: relative;
+    display: flex;
+    flex-direction: var(--group-flex-direction, column);
+    justify-content: var(--group-justify, flex-start);
+    align-items: var(--group-align, flex-start);
+    gap: var(--group-gap, 0);
+    width: var(--group-width, 100%);
+    height: var(--group-height, auto);
+    min-width: 0;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .theme-group.spacing-style {
+    padding-block: var(--padding-block-start, var(--group-legacy-padding, 0))
+      var(--padding-block-end, var(--group-legacy-padding, 0));
+    padding-inline: var(--padding-inline-start, var(--group-legacy-padding, 0))
+      var(--padding-inline-end, var(--group-legacy-padding, 0));
+  }
+
+  .theme-group__content {
+    position: relative;
+    z-index: 2;
+    display: contents;
+  }
+
+  .theme-group__link {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  .theme-group__link ~ .theme-group__content {
+    pointer-events: none;
+  }
+
+  .theme-group__link ~ .theme-group__content :is(a, button, input, textarea, select, label, summary) {
+    position: relative;
+    z-index: 4;
+    pointer-events: auto;
+  }
+
+  @media (max-width: 749px) {
+    .theme-group {
+      width: var(--group-width-mobile, var(--group-width, 100%));
+      min-width: var(--group-width-mobile-min, 0);
+    }
+
+    .theme-group--mobile-column {
+      flex-direction: column;
+      justify-content: var(--group-mobile-justify, flex-start);
+      align-items: var(--group-mobile-align, flex-start);
+    }
+  }

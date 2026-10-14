@@ -213,18 +213,68 @@ describe.each(frontends)("$name frontend", ({ name, field, ids }) => {
   });
 });
 
+/**
+ * Cross-frontend pixel parity.
+ * Threshold: exact byte equality of Playwright PNG buffers for a fixed-position
+ * crop. Any intentional visual drift must update this test and document why in
+ * the PR (see packages/design-system/docs/storefront-style-diff.md).
+ */
+async function screenshotFixed(page: Page, selector: string, width: string, path: string) {
+  const target = page.locator(selector).first();
+  await target.evaluate((element: HTMLElement, w) => {
+    document.body.style.visibility = "hidden";
+    Object.assign(element.style, { position: "fixed", top: "0", left: "0", width: w, visibility: "visible" });
+  }, width);
+  return target.screenshot({ path, animations: "disabled" });
+}
+
 describe("cross-frontend parity", () => {
   it("renders pixel-identical pickers in Liquid, Astro and React", async () => {
     const images: Buffer[] = [];
     for (const frontend of frontends) {
       const { page, close } = await open(frontend.name);
       // Same box in every page, so headers of different heights cannot shift it.
-      const picker = page.locator("plt-variant-picker");
-      await picker.evaluate((element: HTMLElement) => {
-        document.body.style.visibility = "hidden";
-        Object.assign(element.style, { position: "fixed", top: "0", left: "0", width: "600px", visibility: "visible" });
-      });
-      images.push(await picker.screenshot({ path: join(screenshots, `${frontend.name}-parity.png`), animations: "disabled" }));
+      images.push(
+        await screenshotFixed(page, "plt-variant-picker", "600px", join(screenshots, `${frontend.name}-parity.png`)),
+      );
+      await close();
+    }
+    expect(images[1].equals(images[0])).toBe(true);
+    expect(images[2].equals(images[0])).toBe(true);
+  });
+
+  it("renders pixel-identical quantity selectors in Liquid, Astro and React", async () => {
+    const images: Buffer[] = [];
+    for (const frontend of frontends) {
+      const { page, close } = await open(frontend.name);
+      await page.waitForSelector("plt-quantity-selector");
+      images.push(
+        await screenshotFixed(
+          page,
+          "plt-quantity-selector",
+          "200px",
+          join(screenshots, `${frontend.name}-quantity-parity.png`),
+        ),
+      );
+      await close();
+    }
+    expect(images[1].equals(images[0])).toBe(true);
+    expect(images[2].equals(images[0])).toBe(true);
+  });
+
+  it("renders pixel-identical pagination in Liquid, Astro and React", async () => {
+    const images: Buffer[] = [];
+    for (const frontend of frontends) {
+      const { page, close } = await open(frontend.name);
+      await page.waitForSelector("plt-pagination");
+      images.push(
+        await screenshotFixed(
+          page,
+          "plt-pagination",
+          "480px",
+          join(screenshots, `${frontend.name}-pagination-parity.png`),
+        ),
+      );
       await close();
     }
     expect(images[1].equals(images[0])).toBe(true);
