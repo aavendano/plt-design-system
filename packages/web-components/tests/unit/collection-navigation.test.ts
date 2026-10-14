@@ -316,6 +316,140 @@ describe("<plt-filter-bar> with multi-value filters and preserved params", () =>
   });
 });
 
+describe("range, collapsible and disabled filters", () => {
+  let submit: ReturnType<typeof vi.spyOn>;
+  const price: PltFilter = {
+    id: "filter.v.price",
+    label: "Price",
+    options: [],
+    collapsible: true,
+    range: {
+      min: { name: "filter.v.price.gte", value: 10, placeholder: "0" },
+      max: { name: "filter.v.price.lte", value: null, placeholder: "200" },
+    },
+  };
+  const brand: PltFilter = {
+    id: "filter.p.vendor",
+    label: "Brand",
+    multiple: true,
+    collapsible: true,
+    options: [
+      { label: "Dorcel", value: "Dorcel", count: 4 },
+      { label: "Empty", value: "Empty", count: 0, disabled: true },
+      { label: "Applied but empty", value: "Old", count: 0, disabled: true, selected: true },
+    ],
+  };
+
+  beforeEach(() => {
+    submit = vi.spyOn(HTMLFormElement.prototype, "requestSubmit").mockImplementation(() => {});
+  });
+  afterEach(() => {
+    submit.mockRestore();
+    document.body.innerHTML = "";
+  });
+
+  async function mount(attributes = "") {
+    document.body.innerHTML = `<plt-filter-bar action="/collections/all" ${attributes}></plt-filter-bar>`;
+    const element = document.querySelector("plt-filter-bar")!;
+    element.filters = [price, brand];
+    await flush(element);
+    return element;
+  }
+  const bound = (element: HTMLElement, name: string) => element.querySelector<HTMLInputElement>(`input[type="number"][name="${name}"]`)!;
+
+  it("keys a range by its bounds: selection, query and chips", () => {
+    const values = selectedValues([price]);
+    expect(values).toEqual({ "filter.v.price.gte": "10", "filter.v.price.lte": "" });
+    expect(toQuery(values)).toBe("filter.v.price.gte=10");
+    expect(activeFilters([price], values, { min: "Min", max: "Max" })).toEqual([
+      { id: "filter.v.price.gte", label: "Price", value: "10", valueLabel: "Min 10" },
+    ]);
+  });
+
+  it("renders two number inputs with their placeholders inside a collapsible group", async () => {
+    const element = await mount();
+    const group = element.querySelector("details.plt-filter-bar__details")!;
+    expect(group.querySelector("summary")!.textContent).toBe("Price");
+    expect(group.hasAttribute("open")).toBe(true); // it has an applied value
+    expect(bound(element, "filter.v.price.gte").value).toBe("10");
+    expect(bound(element, "filter.v.price.gte").placeholder).toBe("0");
+    expect(bound(element, "filter.v.price.lte").value).toBe("");
+    expect(bound(element, "filter.v.price.lte").getAttribute("aria-label")).toBe("Price Max");
+   
+    expect(element.querySelectorAll("details.plt-filter-bar__details")[1].hasAttribute("open")).toBe(true); // brand has an applied value too
+  });
+
+  it("emits a bound change, cancelable, and submits unless cancelled", async () => {
+    const element = await mount();
+    const seen: Array<{ changed: string | null; query: string }> = [];
+    element.addEventListener("plt:filter-change", (event) => {
+      const detail = (event as CustomEvent).detail;
+      seen.push({ changed: detail.changed, query: detail.query });
+    });
+    const max = bound(element, "filter.v.price.lte");
+    max.value = "50";
+    max.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
+    expect(seen[0]).toEqual({ changed: "filter.v.price.lte", query: expect.stringContaining("filter.v.price.lte=50") });
+    expect(seen[0].query).toContain("filter.v.price.gte=10");
+    expect(submit).toHaveBeenCalledTimes(1);
+  });
+
+  it("clears a bound for empty or non-numeric input", async () => {
+    const element = await mount();
+    const min = bound(element, "filter.v.price.gte");
+    min.value = "abc";
+    min.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
+    expect(element.values["filter.v.price.gte"]).toBeUndefined();
+    expect(bound(element, "filter.v.price.gte").value).toBe("");
+  });
+
+  it("removes a range chip and returns focus to its input", async () => {
+    const element = await mount();
+    const chip = [...element.querySelectorAll<HTMLButtonElement>(".plt-filter-bar__chips button")].find((button) => button.textContent!.includes("Min 10"))!;
+    chip.click();
+    await flush(element);
+    await flush(element);
+    expect(element.values["filter.v.price.gte"]).toBeUndefined();
+    expect(document.activeElement).toBe(bound(element, "filter.v.price.gte"));
+    expect(submit).toHaveBeenCalled();
+  });
+
+  it("clear all empties the range bounds too", async () => {
+    const element = await mount();
+    [...element.querySelectorAll<HTMLButtonElement>(".plt-filter-bar__active > button")][0].click();
+    await flush(element);
+    expect(element.values).toEqual({});
+  });
+
+  it("omits empty bounds from the submitted form data", async () => {
+    const element = await mount();
+    const data = new FormData();
+    data.append("filter.v.price.gte", "10");
+    data.append("filter.v.price.lte", "");
+    const event = new Event("formdata") as FormDataEvent;
+    Object.defineProperty(event, "formData", { value: data });
+    element.form!.dispatchEvent(event);
+    expect(data.has("filter.v.price.lte")).toBe(false);
+    expect(data.get("filter.v.price.gte")).toBe("10");
+  });
+
+  it("disables an option with no results unless it is applied", async () => {
+    const element = await mount();
+    const boxes = [...element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+    expect(boxes.find((box) => box.value === "Empty")!.disabled).toBe(true);
+    expect(boxes.find((box) => box.value === "Old")!.disabled).toBe(false);
+    expect(boxes.find((box) => box.value === "Dorcel")!.disabled).toBe(false);
+  });
+
+  it("hide-chips leaves the active filters to the frontend", async () => {
+    const element = await mount("hide-chips");
+    expect(element.querySelector(".plt-filter-bar__active")).toBeNull();
+    expect(element.hasAttribute("hide-chips")).toBe(true);
+  });
+});
+
 describe("<plt-sort-select> and <plt-pagination>", () => {
   afterEach(() => {
     document.body.innerHTML = "";

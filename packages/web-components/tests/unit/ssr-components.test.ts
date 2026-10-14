@@ -115,7 +115,7 @@ describe("server rendering of every component", () => {
   it("Liquid: filters, sort options and paginate", async () => {
     const filters = [
       { type: "list", param_name: "filter.v.option.color", label: "Color", values: [{ value: "Red", label: "Red", active: true, count: 4 }, { value: "Blue", label: "Blue", active: true, count: 2 }] },
-      { type: "price_range", param_name: "filter.v.price", label: "Price", values: [] },
+      { type: "price_range", param_name: "filter.v.price", label: "Price", values: [], range_min: 500, range_max: 20000, min_value: { param_name: "filter.v.price.gte", value: 10 }, max_value: { param_name: "filter.v.price.lte", value: null } },
     ];
     const filterHtml = await render(`${adapters}plt-filter-bar.liquid`, {
       filters,
@@ -125,8 +125,38 @@ describe("server rendering of every component", () => {
       search_terms: 'gift "set"',
     });
     expect(attribute(filterHtml, "filters")).toEqual([
-      { id: "filter.v.option.color", label: "Color", multiple: true, options: [{ label: "Red", value: "Red", selected: true, count: 4 }, { label: "Blue", value: "Blue", selected: true, count: 2 }] },
+      { id: "filter.v.option.color", label: "Color", multiple: true, collapsible: false, options: [{ label: "Red", value: "Red", selected: true, count: 4, disabled: false }, { label: "Blue", value: "Blue", selected: true, count: 2, disabled: false }] },
+      {
+        id: "filter.v.price",
+        label: "Price",
+        collapsible: false,
+        options: [],
+        range: { min: { name: "filter.v.price.gte", value: "10", placeholder: "5.00" }, max: { name: "filter.v.price.lte", value: "", placeholder: "200.00" } },
+      },
     ]);
+    expect(filterHtml).toContain('type="number" inputmode="decimal" min="0" step="any" name="filter.v.price.gte" value="10" placeholder="5.00" aria-label="Price Min"');
+    expect(filterHtml).not.toContain("hide-chips");
+
+    const collapsedHtml = await render(`${adapters}plt-filter-bar.liquid`, {
+      filters: [
+        { type: "list", param_name: "filter.p.vendor", label: "Brand", active_values: [], values: [{ value: "A", label: "A", active: false, count: 3 }, { value: "B", label: "B", active: false, count: 0 }] },
+        filters[1],
+      ],
+      collapsible: true,
+      hide_chips: true,
+      min_label: "Desde",
+      max_label: "Hasta",
+    });
+    const collapsedFilters = attribute(collapsedHtml, "filters");
+    expect(collapsedFilters[0].collapsible).toBe(true);
+    expect(collapsedFilters[0].options.map((option: { disabled: boolean }) => option.disabled)).toEqual([false, true]);
+    expect(attribute(collapsedHtml, "labels")).toMatchObject({ min: "Desde", max: "Hasta", apply: "Apply" });
+    expect(collapsedHtml).toMatch(/<plt-filter-bar [^>]* hide-chips>/);
+    expect(collapsedFilters[1].range.min.label).toBe("Desde");
+    expect(collapsedHtml).toContain('aria-label="Hasta"');
+    expect(collapsedHtml).toContain('<details class="plt-filter-bar__details"><summary class="theme-label-bold">Brand</summary>');
+    expect(collapsedHtml).toContain('<details class="plt-filter-bar__details" open><summary class="theme-label-bold">Price</summary>');
+    expect(collapsedHtml).toContain('value="B" disabled');
     expect(attribute(filterHtml, "preserve")).toEqual({ sort_by: "price-ascending", q: 'gift "set"' });
     expect(filterHtml).toContain('orientation="vertical"');
     expect(filterHtml).toContain('<input type="hidden" name="sort_by" value="price-ascending">');
@@ -142,7 +172,9 @@ describe("server rendering of every component", () => {
       search_terms: "gifts",
     });
     expect(attribute(sortHtml, "options")[1]).toEqual({ label: "Price, low to high", value: "price-ascending", selected: true });
-    expect(attribute(sortHtml, "preserve")).toEqual({ q: "gifts", "filter.v.option.color": ["Red", "Blue"] });
+    expect(attribute(sortHtml, "preserve")).toEqual({ q: "gifts", "filter.v.option.color": ["Red", "Blue"], "filter.v.price.gte": "10" });
+    expect(sortHtml).toContain('<input type="hidden" name="filter.v.price.gte" value="10">');
+    expect(sortHtml).not.toContain("filter.v.price.lte");
     expect(sortHtml).toContain('<form data-plt-fallback class="plt-sort-select" action="/search" method="get">');
     expect(sortHtml).toContain('<input type="hidden" name="q" value="gifts">');
     expect(sortHtml.match(/name="filter\.v\.option\.color"/g)).toHaveLength(2);
@@ -163,10 +195,12 @@ describe("server rendering of every component", () => {
     expect(attribute(pageHtml, "pages")).toEqual([
       { label: "1", url: "/collections/all?page=1", current: false, disabled: false },
       { label: "2", url: null, current: true, disabled: false },
-      { label: "&hellip;", url: null, current: false, disabled: true },
+      { label: "…", url: null, current: false, disabled: true },
       { label: "9", url: "/collections/all?page=9", current: false, disabled: false },
     ]);
     expect(pageHtml).toContain('previous-url="/collections/all?page=1"');
+    expect(pageHtml).toContain("<span>…</span>");
+    expect(pageHtml).not.toContain("hellip");
   });
 
   it("Liquid: the Navbar renderer wraps <plt-navbar> and renders mega menus", async () => {

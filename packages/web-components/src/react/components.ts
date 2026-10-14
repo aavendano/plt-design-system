@@ -145,6 +145,8 @@ export interface PltFilterBarProps extends BaseProps {
   method?: string;
   manual?: boolean;
   orientation?: "horizontal" | "vertical";
+  /** Leave the active-filter chips to the frontend. */
+  hideChips?: boolean;
   labels?: PltFilterBarLabels;
   /** Query parameters another control owns; kept by a native submit. */
   preserve?: PltPreserved;
@@ -155,8 +157,8 @@ export interface PltFilterBarProps extends BaseProps {
 export const PltFilterBar = createComponent<PltFilterBarProps>({
   tag: "plt-filter-bar",
   load: () => import("../collection/define.js"),
-  properties: ["filters", "action", "method", "manual", "orientation", "labels", "preserve"],
-  attributes: { action: "action", method: "method", manual: "manual", orientation: "orientation" },
+  properties: ["filters", "action", "method", "manual", "orientation", "hideChips", "labels", "preserve"],
+  attributes: { action: "action", method: "method", manual: "manual", orientation: "orientation", hideChips: "hide-chips" },
   events: { onFilterChange: "plt:filter-change" },
   fallback: ({ filters, action = "", method = "get", labels, preserve }) =>
     h(
@@ -166,7 +168,31 @@ export const PltFilterBar = createComponent<PltFilterBarProps>({
         h("input", { key: `preserve-${index}`, type: "hidden", name, defaultValue: value }),
       ),
       ...filters.map((filter) =>
-        filter.multiple
+        filter.range
+          ? h(
+              "fieldset",
+              { key: filter.id, className: "plt-filter-bar__field plt-filter-bar__range" },
+              h("legend", { className: "theme-label-bold" }, filter.label),
+              h(
+                "div",
+                { className: "plt-filter-bar__bounds" },
+                ...([["min", filter.range.min], ["max", filter.range.max]] as const).map(([kind, bound]) =>
+                  h("input", {
+                    key: bound.name,
+                    className: "d-input d-input-sm",
+                    type: "number",
+                    inputMode: "decimal",
+                    min: 0,
+                    step: "any",
+                    name: bound.name,
+                    defaultValue: bound.value ?? "",
+                    placeholder: bound.placeholder,
+                    "aria-label": bound.label ?? `${filter.label} ${labels?.[kind] ?? (kind === "min" ? "Min" : "Max")}`,
+                  }),
+                ),
+              ),
+            )
+          : filter.multiple
           ? h(
               "fieldset",
               { key: filter.id, className: "plt-filter-bar__field plt-filter-bar__group" },

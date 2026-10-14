@@ -18,5 +18,6 @@ export function shopifyLiquid(root) {
   engine.registerFilter("asset_url", (file) => `./assets/${file}`);
   engine.registerFilter("image_url", (image) => String(image));
   engine.registerFilter("money", (cents) => `$${(Number(cents) / 100).toFixed(2)}`);
+  engine.registerFilter("money_without_currency", (cents) => (Number(cents) / 100).toFixed(2));
   return engine;
 }
