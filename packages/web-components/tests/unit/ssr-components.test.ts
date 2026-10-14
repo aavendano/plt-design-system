@@ -84,7 +84,13 @@ describe("server rendering of every component", () => {
     expect(html).toContain('value="3"');
     expect(html).toContain('max="9"');
     expect(attribute(html, "labels")).toEqual({ decrease: "Decrease quantity", increase: "Increase quantity", quantity: 'Qty "x"' });
-    expect(html).toContain('<input data-plt-fallback class="d-input" type="number" name="quantity" value="3" min="1" max="9"');
+    expect(html).toContain('<input data-plt-fallback class="d-input" type="number" name="quantity" value="3" min="1" step="1" max="9"');
+  });
+
+  it("Liquid: quantity selector carries the variant quantity rule step", async () => {
+    const html = await render(`${adapters}plt-quantity-selector.liquid`, { value: 6, min: 6, step: 3, max: 30 });
+    expect(html).toMatch(/<plt-quantity-selector[^>]* min="6"[^>]* step="3"[^>]* max="30"/);
+    expect(html).toContain('min="6" step="3" max="30"');
   });
 
   it("Liquid: cart drawer maps the Shopify cart, formatting money server-side", async () => {
