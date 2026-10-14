@@ -158,8 +158,9 @@ describe("gallery capabilities in Chromium", () => {
     expect(violations).toEqual([]);
     await p.keyboard.press("Escape");
     expect(await dialog.evaluate((d: HTMLDialogElement) => d.open)).toBe(false);
-    expect(await p.evaluate(() => document.activeElement?.getAttribute("aria-label"))).toBe("Zoom image 0");
-    expect(await p.locator("[data-plt-gallery-lightbox-image]").getAttribute("src")).toBeNull();
+    // The dialog's `close` event, which restores focus and clears the image, is queued after close().
+    await expect.poll(() => p.evaluate(() => document.activeElement?.getAttribute("aria-label"))).toBe("Zoom image 0");
+    await expect.poll(() => p.locator("[data-plt-gallery-lightbox-image]").getAttribute("src")).toBeNull();
     await close();
   });
 
