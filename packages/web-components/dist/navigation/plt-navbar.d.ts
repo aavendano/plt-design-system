@@ -6,8 +6,13 @@ export interface PltMegaMenuToggleDetail {
     id: string;
     open: boolean;
 }
+export interface PltNavbarOverflowDetail {
+    /** Ids (`data-plt-navbar-item` values) of the links that left the bar, in order. */
+    hidden: string[];
+}
 export declare const NAVBAR_TOGGLE_EVENT = "plt:navbar-toggle";
 export declare const MEGAMENU_TOGGLE_EVENT = "plt:megamenu-toggle";
+export declare const NAVBAR_OVERFLOW_EVENT = "plt:navbar-overflow";
 /**
  * `<plt-navbar>` — behaviour for the Navbar and MegaMenu anatomy.
  *
@@ -39,9 +44,17 @@ export declare const MEGAMENU_TOGGLE_EVENT = "plt:megamenu-toggle";
  *   `data-deferred-srcset` and `data-deferred-sizes` get those attributes
  *   applied on idle (at most 2 s after connect) or at the first hover intent,
  *   focus, panel or mobile menu open, whichever comes first.
+ * - Overflow ("More"): the links in `[data-plt-navbar-overflow]` that do not fit
+ *   leave the bar, last first, so the order is kept, and the `[data-plt-navbar-more]`
+ *   item appears with an entry for each of them (`[data-plt-navbar-more-for]`),
+ *   plain links as well as links that open a panel. `overflow-min="2"` keeps at
+ *   least that many in the bar. The container's width must not depend on its
+ *   items (a flex child with `min-width: 0`, say). Without JavaScript nothing is
+ *   hidden; let the bar scroll instead.
  *
  * @fires plt:navbar-toggle - `{ open }`
  * @fires plt:megamenu-toggle - `{ id, open }`
+ * @fires plt:navbar-overflow - `{ hidden }`, when the set of links in "More" changes
  */
 export declare class PltNavbar extends LitElement {
     static properties: {
@@ -53,11 +66,17 @@ export declare class PltNavbar extends LitElement {
             type: StringConstructor;
             attribute: string;
         };
+        overflowMin: {
+            type: NumberConstructor;
+            attribute: string;
+        };
     };
     /** Milliseconds a hover must last before a panel opens; 0 opens at once. */
     hoverDelay: number;
     /** Present: publish the height on this element; `"root"`: on `<html>`. */
     publishHeight: string | null;
+    /** Links that always stay in the bar, however narrow it is. */
+    overflowMin: number;
     private _openPanel;
     /** Set while Escape returns focus to a trigger, so that focus does not reopen it. */
     private _returningFocus;
@@ -67,12 +86,34 @@ export declare class PltNavbar extends LitElement {
     private _idleHandle;
     private _resizeObserver;
     private _publishedOn;
+    private _overflowObserver;
+    private _reflowFrame;
+    private _lastOverflowWidth;
+    private _hiddenKey;
+    private _moreCloseTimer;
     private readonly _onDocumentClick;
     constructor();
     protected createRenderRoot(): this;
     connectedCallback(): void;
     disconnectedCallback(): void;
     protected updated(changed: PropertyValues<this>): void;
+    private _startOverflow;
+    private _stopOverflow;
+    private _scheduleReflow;
+    /**
+     * Measures the bar and moves the links that do not fit into "More". Called on
+     * connect, when the container resizes and when fonts load; call it after
+     * changing the links yourself.
+     */
+    reflow(): void;
+    /** Whether the "More" list is open. */
+    get moreOpen(): boolean;
+    openMore(): void;
+    closeMore(): void;
+    private _scheduleMoreClose;
+    private _moreEntries;
+    /** Keys inside "More"; returns whether it handled the event. */
+    private _onMoreKeydown;
     private _startPublishingHeight;
     private _stopPublishingHeight;
     /** Applies the deferred `src`, `srcset` and `sizes` now. Safe to call repeatedly. */
@@ -86,7 +127,11 @@ export declare class PltNavbar extends LitElement {
     private _setMobile;
     private _trigger;
     private _panelFor;
+    private _triggersFor;
+    /** A trigger for the panel that is on screen (a link in the bar or its entry in "More"), if any. */
+    private _visibleTrigger;
     private _triggerFor;
+    private _setExpanded;
     /** Opens the mega menu panel with this id (closing any other). */
     openMegaMenu(id: string): void;
     /** Closes the open mega menu panel, if any. */
