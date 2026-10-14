@@ -53,8 +53,11 @@ plt-cart-drawer { display: contents; }
 .plt-filter-bar__group > legend { padding: 0; margin-block-end: 0.5rem; }
 .plt-filter-bar__options { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
 .plt-filter-bar__option { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-plt-filter-bar[orientation="vertical"] .plt-filter-bar { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+plt-filter-bar[orientation="vertical"] { display: flex; flex-direction: column; gap: 1.5rem; }
+plt-filter-bar[orientation="vertical"] .plt-filter-bar { display: flex; flex-direction: column; align-items: stretch; gap: 1.5rem; }
 plt-filter-bar[orientation="vertical"] .plt-filter-bar__field { min-width: 0; }
+/* Applied filters come first in a long sidebar list, not after it. */
+plt-filter-bar[orientation="vertical"] .plt-filter-bar__active { order: -1; padding-block-end: 0; }
 
 /* Filter bar: applied filters as removable chips. */
 .plt-filter-bar__active {
