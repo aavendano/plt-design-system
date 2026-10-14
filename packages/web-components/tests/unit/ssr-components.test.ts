@@ -165,10 +165,12 @@ describe("server rendering of every component", () => {
     expect(attribute(pageHtml, "pages")).toEqual([
       { label: "1", url: "/collections/all?page=1", current: false, disabled: false },
       { label: "2", url: null, current: true, disabled: false },
-      { label: "&hellip;", url: null, current: false, disabled: true },
+      { label: "…", url: null, current: false, disabled: true },
       { label: "9", url: "/collections/all?page=9", current: false, disabled: false },
     ]);
     expect(pageHtml).toContain('previous-url="/collections/all?page=1"');
+    expect(pageHtml).toContain("<span>…</span>");
+    expect(pageHtml).not.toContain("hellip");
   });
 
   it("Liquid: the Navbar renderer wraps <plt-navbar> and renders mega menus", async () => {
