@@ -30,9 +30,7 @@
   --plt-color-highlight: color-mix(in oklab, var(--plt-color-secondary) 35%, transparent);
   --plt-color-highlight-content: var(--plt-color-base-content);
 
-  /* Secondary text (.theme-meta): base content faded toward the background,
-     but no further than WCAG AA allows for 14px text (4.5:1 on base-100 and
-     base-200). 75% passes every theme with a near-black base content; a theme
-     with a lighter base content raises the mix in its own file. */
-  --plt-color-meta: color-mix(in oklab, var(--plt-color-base-content) 75%, transparent);
+  /* Secondary text (.theme-meta): mirrors Liquid `text-base-content/60`.
+     Themes with lighter base content may raise the mix for AA. */
+  --plt-color-meta: color-mix(in oklab, var(--plt-color-base-content) 60%, transparent);
 }

@@ -1,9 +1,11 @@
-/* Theme: Cheesecake. The original PlayLoveToys look, neobrutalist: visible
- * 2-3px borders, hard offset shadows without blur, display type in capitals
+/* Theme: Cheesecake. Canonical mirror of Liquid storefront daisyUI `brand`:
+ * cream paper (#FAF7F2), purple / hot pink / teal, 1.5px borders, 3px section
+ * borders, 2px hard offset shadows (hover 5px), display type in capitals
  * (Fjalla One), Atkinson Hyperlegible for reading and Space Grotesk for
- * labels, on near-white paper with purple, hot pink and teal.
+ * labels.
  *
  * It is the default token set, so this file only imports the stock
  * stylesheet. `plt` is kept as an alias of the same look.
+ * See docs/storefront-visual-parity.md and docs/themes.md.
  */
 @import "../src/index.css";

@@ -4,6 +4,7 @@
   --plt-radius-box: 0.25rem;
   --plt-size-selector: 0.25rem;
   --plt-size-field: 0.25rem;
-  --plt-border-width: 2px;
+  /* Matches Liquid brand `--border: 1.5px` (cheesecake mirror). */
+  --plt-border-width: 1.5px;
   --plt-section-border-width: 3px;
 }

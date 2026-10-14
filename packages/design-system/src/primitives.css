@@ -15,7 +15,8 @@
 
 .theme-elevated:active {
   transform: translateY(0.125rem);
-  box-shadow: var(--plt-shadow-active-offset) var(--plt-shadow-active-offset) 0 0 var(--plt-shadow-color);
+  /* Liquid brand uses no shadow on press; offset token may be 0px. */
+  box-shadow: none;
 }
 
 /* Relief that has to sit above a card's children.

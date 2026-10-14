@@ -1,0 +1,41 @@
+/* Extracted from Liquid sections/article.liquid for shared storefront CSS (tokens only where feasible). */
+.article-f-pattern__content > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--plt-font-display), serif;
+    font-size: 3.75rem;
+    line-height: 0.85;
+    font-weight: 700;
+    padding-right: 0.5rem;
+    padding-top: 0.15rem;
+    color: var(--color-primary);
+  }
+
+  .article-f-pattern__content :where(h2) {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    margin-block: 2.5rem 1rem;
+    padding-block: 0.75rem;
+    border-block: calc(var(--border) * 2) solid var(--color-base-content);
+    font-family: var(--plt-font-display), var(--font-sans), sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-primary);
+  }
+
+  .article-f-pattern__content :where(h3) {
+    color: var(--color-base-content);
+    font-weight: 700;
+  }
+
+  .article-f-pattern__content :where(a) {
+    color: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-f-pattern [role='progressbar'] > div {
+      transition: none;
+    }
+  }
