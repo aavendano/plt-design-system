@@ -115,7 +115,7 @@ describe("server rendering of every component", () => {
   it("Liquid: filters, sort options and paginate", async () => {
     const filters = [
       { type: "list", param_name: "filter.v.option.color", label: "Color", values: [{ value: "Red", label: "Red", active: true, count: 4 }, { value: "Blue", label: "Blue", active: true, count: 2 }] },
-      { type: "price_range", param_name: "filter.v.price", label: "Price", values: [] },
+      { type: "price_range", param_name: "filter.v.price", label: "Price", values: [], min_value: { param_name: "filter.v.price.gte", value: 10 }, max_value: { param_name: "filter.v.price.lte", value: null } },
     ];
     const filterHtml = await render(`${adapters}plt-filter-bar.liquid`, {
       filters,
@@ -142,7 +142,9 @@ describe("server rendering of every component", () => {
       search_terms: "gifts",
     });
     expect(attribute(sortHtml, "options")[1]).toEqual({ label: "Price, low to high", value: "price-ascending", selected: true });
-    expect(attribute(sortHtml, "preserve")).toEqual({ q: "gifts", "filter.v.option.color": ["Red", "Blue"] });
+    expect(attribute(sortHtml, "preserve")).toEqual({ q: "gifts", "filter.v.option.color": ["Red", "Blue"], "filter.v.price.gte": "10" });
+    expect(sortHtml).toContain('<input type="hidden" name="filter.v.price.gte" value="10">');
+    expect(sortHtml).not.toContain("filter.v.price.lte");
     expect(sortHtml).toContain('<form data-plt-fallback class="plt-sort-select" action="/search" method="get">');
     expect(sortHtml).toContain('<input type="hidden" name="q" value="gifts">');
     expect(sortHtml.match(/name="filter\.v\.option\.color"/g)).toHaveLength(2);
