@@ -5,10 +5,15 @@
   plt:cart-line-change / plt:cart-line-remove, calls /cart/change.js, then
   sets `lines` and `subtotal` on the element. Open it with `element.show()`.
 
-  @param {cart} cart - Shopify cart
+  @param {object} cart - Shopify cart
   @param {string} [id] - Element id (default: plt-cart-drawer)
-  @param {string} [title] - Localized labels: title, close_label, checkout_label,
-    view_cart_label, empty_label, subtotal_label, remove_label
+  @param {string} [title] - Cart title
+  @param {string} [close_label] - Close button label
+  @param {string} [checkout_label] - Checkout link label
+  @param {string} [view_cart_label] - View-cart link label
+  @param {string} [empty_label] - Empty-cart message
+  @param {string} [subtotal_label] - Subtotal label
+  @param {string} [remove_label] - Line removal label prefix
   @param {string} [script_url] - Bundle URL; 'none' skips the tag
 {% enddoc %}
 {%- liquid

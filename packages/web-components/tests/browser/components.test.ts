@@ -73,7 +73,13 @@ async function open(name: string, { width = 1200, javaScriptEnabled = true } = {
   await page.goto(`${origin}/${name}/`);
   if (javaScriptEnabled) {
     await page.waitForFunction((tags) => tags.every((tag) => customElements.get(tag)), TAGS);
-    await page.waitForFunction(() => document.querySelector("plt-cart-drawer dialog") && document.querySelector("plt-filter-bar > form:not([data-plt-fallback]) select"));
+    await page.waitForFunction(
+      () =>
+        document.querySelector("plt-cart-drawer dialog") &&
+        document.querySelector(
+          'plt-filter-bar > form:not([data-plt-fallback]) select, plt-filter-bar > form:not([data-plt-fallback]) input[type="checkbox"]',
+        ),
+    );
   }
   return { page, errors, close: () => context.close() };
 }
@@ -209,9 +215,9 @@ describe.each(frontends)("$name storefront", ({ name, clientRouted }) => {
 
   it("collection: filters, chips, sort and pagination", async () => {
     const { page, close } = await open(name);
-    const color = page.locator("plt-filter-bar > form:not([data-plt-fallback]) select").first();
+    const color = page.locator('plt-filter-bar > form:not([data-plt-fallback]) input[name="filter.v.option.color"][value="Red"]');
     if (clientRouted) {
-      await color.selectOption("Red");
+      await color.check();
       await expect.poll(() => page.url()).toContain("filter.v.option.color=Red");
       expect(page.url()).not.toContain("filter.v.option.size");
       const chip = page.getByRole("button", { name: "Remove filter: Color Red" });
@@ -219,7 +225,7 @@ describe.each(frontends)("$name storefront", ({ name, clientRouted }) => {
       await page.locator(".plt-collection-controls").screenshot({ path: join(screenshots, `${name}-filters.png`), animations: "disabled" });
       await chip.click();
       await expect.poll(() => page.url()).not.toContain("filter.v.option.color");
-      expect(await focused(page)).toContain("select");
+      expect(await focused(page)).toContain("input");
 
       await page.locator("plt-sort-select > form:not([data-plt-fallback]) select").selectOption("price-ascending");
       await expect.poll(() => page.url()).toContain("sort_by=price-ascending");
@@ -229,7 +235,7 @@ describe.each(frontends)("$name storefront", ({ name, clientRouted }) => {
       await expect.poll(() => page.locator("[data-log]").textContent()).toContain("plt:page-change");
     } else {
       // Default behaviour: real GET navigation, empty filters omitted.
-      await Promise.all([page.waitForURL(/filter\.v\.option\.color=Red/), color.selectOption("Red")]);
+      await Promise.all([page.waitForURL(/filter\.v\.option\.color=Red/), color.check()]);
       expect(page.url()).not.toContain("filter.v.option.size");
       await page.waitForFunction(() => customElements.get("plt-sort-select") && document.querySelector("plt-sort-select > form:not([data-plt-fallback]) select"));
       await Promise.all([page.waitForURL(/sort_by=price-ascending/), page.locator("plt-sort-select > form:not([data-plt-fallback]) select").selectOption("price-ascending")]);
@@ -242,7 +248,7 @@ describe.each(frontends)("$name storefront", ({ name, clientRouted }) => {
   it("works without JavaScript: fallbacks for quantity, filters, sort and pagination", async () => {
     const { page, close } = await open(name, { javaScriptEnabled: false });
     expect(await page.locator('plt-quantity-selector > input[data-plt-fallback][name="quantity"]').isVisible()).toBe(true);
-    expect(await page.locator('plt-filter-bar > form[data-plt-fallback] select[name="filter.v.option.color"]').isVisible()).toBe(true);
+    expect(await page.locator('plt-filter-bar > form[data-plt-fallback] input[type="checkbox"][name="filter.v.option.color"]').first().isVisible()).toBe(true);
     expect(await page.locator("plt-filter-bar > form[data-plt-fallback] button[type=submit]").isVisible()).toBe(true);
     expect(await page.locator('plt-sort-select > form[data-plt-fallback] select[name="sort_by"]').isVisible()).toBe(true);
     expect(await page.locator('plt-pagination > nav[data-plt-fallback] a[href="?page=2"]').first().isVisible()).toBe(true);

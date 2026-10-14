@@ -103,7 +103,8 @@ class PltFilterBar extends LitElement {
     if (filter?.multiple) this._toggle(id, value, false);
     else this._set(id, "");
     await this.updateComplete;
-    const control = filter?.multiple ? [...this.querySelectorAll("input[type=checkbox]")].find((input) => input.name === id && input.value === value) : byId(this, `${this._idPrefix}-${id}`);
+    const scope = this.form ?? this;
+    const control = filter?.multiple ? [...scope.querySelectorAll("input[type=checkbox]")].find((input) => input.name === id && input.value === value) : byId(scope, `${this._idPrefix}-${id}`);
     control?.focus();
   }
   _renderField(filter) {
