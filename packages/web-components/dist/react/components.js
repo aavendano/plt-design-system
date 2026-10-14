@@ -168,6 +168,8 @@ const PltPagination = createComponent({
 const PltNavbar = createComponent({
   tag: "plt-navbar",
   load: () => import("../navigation/define.js"),
+  properties: ["hoverDelay", "publishHeight"],
+  attributes: { hoverDelay: "hover-delay", publishHeight: "publish-height" },
   events: { onToggle: "plt:navbar-toggle", onMegaMenuToggle: "plt:megamenu-toggle" }
 });
 export {

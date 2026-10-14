@@ -30,7 +30,7 @@ None fetches data, formats money, mutates the cart or routes: the frontend does.
 | Collection | `<plt-filter-bar>` | `filters` (a filter may be `multiple`: checkbox group, `range`: two number inputs, or `collapsible`), `action`, `manual`, `orientation`, `hide-chips`, `labels`, `preserve` | `plt:filter-change` (cancelable) |
 | Collection | `<plt-sort-select>` | `options`, `name`, `label` | `plt:sort-change` (cancelable) |
 | Collection | `<plt-pagination>` | `pages`, `previous-url`, `next-url` | `plt:page-change` (cancelable) |
-| Navigation | `<plt-navbar>` | Navbar + MegaMenu markup | `plt:navbar-toggle`, `plt:megamenu-toggle` |
+| Navigation | `<plt-navbar>` | Navbar + MegaMenu markup; opt-in `hover-delay`, `[data-plt-megamenu]`, `publish-height`, deferred images (see `contracts/components.md`) | `plt:navbar-toggle`, `plt:megamenu-toggle` |
 
 Two kinds of element:
 

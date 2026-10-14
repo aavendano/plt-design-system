@@ -102,6 +102,10 @@ export declare const PltPagination: import("react").ForwardRefExoticComponent<Pl
 export interface PltNavbarProps extends BaseProps {
     /** Navbar markup (toggle, mobile panel, mega menu triggers and panels). */
     children: ReactNode;
+    /** Milliseconds a hover must last before a mega menu panel opens (default: at once). */
+    hoverDelay?: number;
+    /** Keep `--plt-navbar-height` equal to the navbar's height: `""` on the element, `"root"` on `<html>`. */
+    publishHeight?: string;
     onToggle?: Handler<PltNavbarToggleDetail>;
     onMegaMenuToggle?: Handler<PltMegaMenuToggleDetail>;
 }
