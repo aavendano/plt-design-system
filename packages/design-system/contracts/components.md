@@ -216,15 +216,15 @@ Style hooks only. `plt-collection-filters` wraps a `d-collapse` panel (`plt-coll
 
 ## FilterBar
 
-Required: `filters` — array of `{ id, label, options: [{ label, value, selected?, count? }], multiple? }`.
+Required: `filters` — array of `{ id, label, options: [{ label, value, selected?, count?, disabled? }], multiple?, range?, collapsible?, open? }`.
 
 Optional: `action`, `method`, `submit_label`.
 
-A filter with `multiple: true` is a checkbox group (options with value `""` are ignored; `count` is shown next to the label) and sends every checked value under the same `id`. Without it the filter is a select.
+A filter with `multiple: true` is a checkbox group (options with value `""` are ignored; `count` is shown next to the label) and sends every checked value under the same `id`. Without it the filter is a select. A filter with `range: { min, max }` (each bound `{ name, value?, placeholder?, label? }`) is two number inputs, each sent under its own parameter (a price, say; `id` only names the group and `options` is empty). `collapsible` wraps a filter in a `<details>` group, open by default when it has an applied value (`open` overrides). An option with `disabled` is not selectable unless it is applied (a value with no results).
 
 Facet data resolution stays outside the contract.
 
-Interactive version: `<plt-filter-bar>` (`filters`, `action`, `method`, `manual`, `orientation`, `labels`, `preserve`) adds active-filter chips (one per value) and "clear all". Each change emits a cancelable `plt:filter-change` (`{ values, changed, query }`; `values` holds a string per select filter and an array per `multiple` filter, and `query` repeats the name for arrays); if not cancelled the form submits (GET, empty filters omitted). Client-routed frontends cancel it and navigate. `manual` shows an Apply button instead. `orientation="vertical"` stacks the controls for a sidebar. `preserve` is `{ name: string | string[] }` of query parameters another control owns (the sort order, say); they are carried as hidden inputs so a native submit keeps them.
+Interactive version: `<plt-filter-bar>` (`filters`, `action`, `method`, `manual`, `orientation`, `hide-chips`, `labels`, `preserve`) adds active-filter chips (one per value; a range bound is a chip such as "Price: Min 10") and "clear all"; `hide-chips` leaves the active filters to the frontend. `labels` also takes `min` and `max`, the prefix of a range chip and of a bound's accessible name. Each change emits a cancelable `plt:filter-change` (`{ values, changed, query }`; `values` holds a string per select filter and per range bound (keyed by the bound's `name`) and an array per `multiple` filter, and `query` repeats the name for arrays); if not cancelled the form submits (GET, empty filters omitted). Client-routed frontends cancel it and navigate. `manual` shows an Apply button instead. `orientation="vertical"` stacks the controls for a sidebar. `preserve` is `{ name: string | string[] }` of query parameters another control owns (the sort order, say); they are carried as hidden inputs so a native submit keeps them.
 
 ## SortSelect
 

@@ -9,7 +9,9 @@ const DEFAULT_LABELS = {
   apply: "Apply",
   active: "Active filters",
   clear: "Clear all",
-  remove: "Remove filter"
+  remove: "Remove filter",
+  min: "Min",
+  max: "Max"
 };
 class PltFilterBar extends LitElement {
   constructor() {
@@ -21,6 +23,7 @@ class PltFilterBar extends LitElement {
     this.method = "get";
     this.manual = false;
     this.orientation = "horizontal";
+    this.hideChips = false;
     this.labels = {};
     this.preserve = {};
     this._values = {};
@@ -59,9 +62,15 @@ class PltFilterBar extends LitElement {
     const value = this._values[id];
     return Array.isArray(value) ? value : value ? [value] : [];
   }
+  /** Sets one bound of a `range` filter; an empty or non-numeric entry clears it. */
+  _setBound(name, raw) {
+    const value = raw.trim();
+    this._values = { ...this._values, [name]: value !== "" && Number.isFinite(Number(value)) ? value : "" };
+    this._commit(name);
+  }
   _clear() {
     this._values = Object.fromEntries(
-      (this.filters ?? []).map((filter) => [filter.id, filter.multiple ? [] : ""])
+      Object.entries(this._values).map(([name, value]) => [name, Array.isArray(value) ? [] : ""])
     );
     this._commit(null);
   }
@@ -95,19 +104,61 @@ class PltFilterBar extends LitElement {
   }
   _onFormData(event) {
     for (const filter of this.filters ?? []) {
-      if (!filter.multiple && !this._values[filter.id]) event.formData.delete(filter.id);
+      if (filter.range) {
+        for (const bound of [filter.range.min, filter.range.max]) {
+          if (!this._values[bound.name]) event.formData.delete(bound.name);
+        }
+      } else if (!filter.multiple && !this._values[filter.id]) event.formData.delete(filter.id);
     }
   }
   async _removeChip(id, value) {
-    const filter = (this.filters ?? []).find((candidate) => candidate.id === id);
-    if (filter?.multiple) this._toggle(id, value, false);
+    const filters = this.filters ?? [];
+    const filter = filters.find((candidate) => candidate.id === id);
+    const isBound = filters.some((candidate) => candidate.range && [candidate.range.min.name, candidate.range.max.name].includes(id));
+    if (isBound) this._setBound(id, "");
+    else if (filter?.multiple) this._toggle(id, value, false);
     else this._set(id, "");
     await this.updateComplete;
     const scope = this.form ?? this;
-    const control = filter?.multiple ? [...scope.querySelectorAll("input[type=checkbox]")].find((input) => input.name === id && input.value === value) : byId(scope, `${this._idPrefix}-${id}`);
+    const control = isBound ? [...scope.querySelectorAll("input[type=number]")].find((input) => input.name === id) : filter?.multiple ? [...scope.querySelectorAll("input[type=checkbox]")].find((input) => input.name === id && input.value === value) : byId(scope, `${this._idPrefix}-${id}`);
     control?.focus();
   }
+  _hasValue(filter) {
+    const names = filter.range ? [filter.range.min.name, filter.range.max.name] : [filter.id];
+    return names.some((name) => {
+      const value = this._values[name];
+      return Array.isArray(value) ? value.length > 0 : Boolean(value);
+    });
+  }
   _renderField(filter) {
+    const field = this._renderControl(filter);
+    if (!filter.collapsible) return field;
+    return html`<details class="plt-filter-bar__details" ?open=${filter.open ?? this._hasValue(filter)}>
+      <summary class="theme-label-bold">${filter.label}</summary>
+      ${field}
+    </details>`;
+  }
+  _renderRange(filter, labels) {
+    const range = filter.range;
+    const bound = (item, fallback) => html`<input
+      class="d-input d-input-sm"
+      type="number"
+      inputmode="decimal"
+      min="0"
+      step="any"
+      name=${item.name}
+      placeholder=${item.placeholder ?? ""}
+      aria-label=${item.label ?? `${filter.label} ${fallback}`}
+      .value=${live(this._values[item.name] ?? "")}
+      @change=${(event) => this._setBound(item.name, event.target.value)}
+    />`;
+    return html`<fieldset class="plt-filter-bar__field plt-filter-bar__range" aria-label=${filter.collapsible ? filter.label : nothing}>
+      ${filter.collapsible ? nothing : html`<legend class="theme-label-bold">${filter.label}</legend>`}
+      <div class="plt-filter-bar__bounds">${bound(range.min, labels.min)} ${bound(range.max, labels.max)}</div>
+    </fieldset>`;
+  }
+  _renderControl(filter) {
+    if (filter.range) return this._renderRange(filter, { ...DEFAULT_LABELS, ...this.labels ?? {} });
     if (!filter.multiple) {
       return html`<div class="plt-filter-bar__field">
         <label class="theme-label-bold" for=${`${this._idPrefix}-${filter.id}`}>${filter.label}</label>
@@ -125,8 +176,8 @@ class PltFilterBar extends LitElement {
       </div>`;
     }
     const selected = this._list(filter.id);
-    return html`<fieldset class="plt-filter-bar__field plt-filter-bar__group">
-      <legend class="theme-label-bold">${filter.label}</legend>
+    return html`<fieldset class="plt-filter-bar__field plt-filter-bar__group" aria-label=${filter.collapsible ? filter.label : nothing}>
+      ${filter.collapsible ? nothing : html`<legend class="theme-label-bold">${filter.label}</legend>`}
       <ul class="plt-filter-bar__options">
         ${filter.options.filter((option) => option.value !== "").map(
       (option) => html`<li>
@@ -136,6 +187,7 @@ class PltFilterBar extends LitElement {
                   class="d-checkbox d-checkbox-primary"
                   name=${filter.id}
                   value=${option.value}
+                  ?disabled=${option.disabled && !selected.includes(option.value)}
                   .checked=${live(selected.includes(option.value))}
                   @change=${(event) => this._toggle(filter.id, option.value, event.target.checked)}
                 />
@@ -149,7 +201,7 @@ class PltFilterBar extends LitElement {
   render() {
     const labels = { ...DEFAULT_LABELS, ...this.labels ?? {} };
     const filters = this.filters ?? [];
-    const active = activeFilters(filters, this._values);
+    const active = this.hideChips ? [] : activeFilters(filters, this._values, { min: labels.min, max: labels.max });
     return html`<form
         class="plt-filter-bar"
         action=${this.action}
@@ -184,6 +236,7 @@ PltFilterBar.properties = {
   method: { type: String },
   manual: { type: Boolean, reflect: true },
   orientation: { type: String, reflect: true },
+  hideChips: { type: Boolean, attribute: "hide-chips", reflect: true },
   labels: { type: Object, converter: jsonConverter("plt-filter-bar", () => ({})) },
   preserve: { type: Object, converter: jsonConverter("plt-filter-bar", () => ({})) },
   _values: { state: true }

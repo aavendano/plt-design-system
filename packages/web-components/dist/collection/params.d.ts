@@ -15,6 +15,9 @@ export interface ActiveFilter {
     valueLabel: string;
 }
 /** Applied filters with display labels, one per value, for the active-filter chips. */
-export declare function activeFilters(filters: readonly PltFilter[], values: Record<string, PltFilterValue>): ActiveFilter[];
+export declare function activeFilters(filters: readonly PltFilter[], values: Record<string, PltFilterValue>, rangeLabels?: {
+    min: string;
+    max: string;
+}): ActiveFilter[];
 /** Hidden-input entries for preserved params. */
 export declare function preservedEntries(preserved: PltPreserved | null | undefined): Array<[string, string]>;

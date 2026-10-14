@@ -5,6 +5,18 @@ export interface PltChoice {
   selected?: boolean;
   /** Result count, shown next to the option of a `multiple` filter. */
   count?: number | null;
+  /** Not selectable (for example a value with no results); an applied value stays enabled. */
+  disabled?: boolean;
+}
+
+/** One bound of a `range` filter: its own query parameter and number input. */
+export interface PltRangeBound {
+  /** Query parameter, e.g. `filter.v.price.gte` on Shopify. */
+  name: string;
+  value?: string | number | null;
+  placeholder?: string;
+  /** Accessible name of the input; defaults to the `min` / `max` label. */
+  label?: string;
 }
 
 export interface PltFilter {
@@ -19,6 +31,16 @@ export interface PltFilter {
    */
   options: PltChoice[];
   multiple?: boolean;
+  /**
+   * A numeric range (a price, say): two number inputs, each sent under its own
+   * parameter, instead of options. `id` only names the group; the values are
+   * keyed by the bound names. Changing a bound emits `plt:filter-change`.
+   */
+  range?: { min: PltRangeBound; max: PltRangeBound };
+  /** Wraps the filter in a `<details>` group that can be collapsed. */
+  collapsible?: boolean;
+  /** Initial state of a collapsible filter; defaults to open when it has an applied value. */
+  open?: boolean;
 }
 
 /** One value per single filter, an array of values per `multiple` filter. */
@@ -43,6 +65,9 @@ export interface PltFilterBarLabels {
   active?: string;
   clear?: string;
   remove?: string;
+  /** Prefix of a range minimum, in the active chip and as the input name. */
+  min?: string;
+  max?: string;
 }
 
 export interface PltPaginationLabels {

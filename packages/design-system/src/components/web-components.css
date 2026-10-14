@@ -83,6 +83,16 @@ plt-cart-drawer { display: contents; }
 .plt-filter-bar__group > legend { padding: 0; margin-block-end: 0.5rem; }
 .plt-filter-bar__options { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
 .plt-filter-bar__option { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+/* Range filters (two number inputs) and collapsible filter groups. */
+.plt-filter-bar__range { margin: 0; padding: 0; border: 0; min-width: 0; }
+.plt-filter-bar__range > legend { padding: 0; margin-block-end: 0.5rem; }
+.plt-filter-bar__bounds { display: flex; gap: 0.5rem; }
+.plt-filter-bar__bounds > input { min-width: 0; flex: 1 1 0; }
+.plt-filter-bar__details { border-bottom: var(--plt-section-border-width, var(--border)) solid var(--plt-border-color, var(--color-base-content)); padding-block: 0.5rem; }
+.plt-filter-bar__details:last-of-type { border-bottom-width: 0; }
+.plt-filter-bar__details > summary { cursor: pointer; padding-block: 0.25rem; list-style-position: outside; }
+.plt-filter-bar__details > summary:focus-visible { outline: 2px solid var(--plt-color-primary, var(--color-primary)); outline-offset: 2px; }
+.plt-filter-bar__details > .plt-filter-bar__field { margin-block-start: 0.5rem; }
 plt-filter-bar[orientation="vertical"] { display: flex; flex-direction: column; gap: 1.5rem; }
 plt-filter-bar[orientation="vertical"] .plt-filter-bar { display: flex; flex-direction: column; align-items: stretch; gap: 1.5rem; }
 plt-filter-bar[orientation="vertical"] .plt-filter-bar__field { min-width: 0; }

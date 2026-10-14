@@ -3,10 +3,17 @@ function selectedOptions(filter) {
 }
 function selectedValues(filters) {
   return Object.fromEntries(
-    filters.map((filter) => [
-      filter.id,
-      filter.multiple ? selectedOptions(filter) : filter.options.find((option) => option.selected)?.value ?? ""
-    ])
+    filters.flatMap((filter) => {
+      if (filter.range) {
+        return [filter.range.min, filter.range.max].map((bound) => [bound.name, bound.value == null ? "" : String(bound.value)]);
+      }
+      return [
+        [
+          filter.id,
+          filter.multiple ? selectedOptions(filter) : filter.options.find((option) => option.selected)?.value ?? ""
+        ]
+      ];
+    })
   );
 }
 const isEmpty = (value) => value == null || value === "" || Array.isArray(value) && value.length === 0;
@@ -21,8 +28,14 @@ function toEntries(values) {
 function toQuery(values) {
   return new URLSearchParams(toEntries(values)).toString();
 }
-function activeFilters(filters, values) {
+function activeFilters(filters, values, rangeLabels = { min: "Min", max: "Max" }) {
   return filters.flatMap((filter) => {
+    if (filter.range) {
+      return [["min", filter.range.min], ["max", filter.range.max]].flatMap(([kind, bound]) => {
+        const value = values[bound.name];
+        return typeof value === "string" && value !== "" ? [{ id: bound.name, label: filter.label, value, valueLabel: `${rangeLabels[kind]} ${value}` }] : [];
+      });
+    }
     const raw = values[filter.id];
     const list = (Array.isArray(raw) ? raw : [raw ?? ""]).filter((value) => value !== "");
     return list.map((value) => {

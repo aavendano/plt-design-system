@@ -66,6 +66,8 @@ export interface PltFilterBarProps extends BaseProps {
     method?: string;
     manual?: boolean;
     orientation?: "horizontal" | "vertical";
+    /** Leave the active-filter chips to the frontend. */
+    hideChips?: boolean;
     labels?: PltFilterBarLabels;
     /** Query parameters another control owns; kept by a native submit. */
     preserve?: PltPreserved;

@@ -13,6 +13,9 @@ import { type PltFilter, type PltFilterBarLabels, type PltFilterValue, type PltP
  * submitting on each change. `preserve` carries query parameters that another
  * control owns (the sort order, say) as hidden inputs, so a native submit
  * keeps them; `orientation="vertical"` stacks the controls for a sidebar.
+ * A filter with `range` renders two number inputs (each its own parameter), one
+ * with `collapsible` sits in a `<details>`, and `hide-chips` leaves the active
+ * filters to the frontend.
  *
  * @fires plt:filter-change - cancelable; `{ values, changed, query }`
  */
@@ -39,6 +42,11 @@ export declare class PltFilterBar extends LitElement {
             type: StringConstructor;
             reflect: boolean;
         };
+        hideChips: {
+            type: BooleanConstructor;
+            attribute: string;
+            reflect: boolean;
+        };
         labels: {
             type: ObjectConstructor;
             converter: {
@@ -62,6 +70,7 @@ export declare class PltFilterBar extends LitElement {
     method: string;
     manual: boolean;
     orientation: "horizontal" | "vertical";
+    hideChips: boolean;
     labels: PltFilterBarLabels;
     preserve: PltPreserved;
     private _values;
@@ -79,6 +88,8 @@ export declare class PltFilterBar extends LitElement {
     /** Checks or unchecks one value of a `multiple` filter. */
     private _toggle;
     private _list;
+    /** Sets one bound of a `range` filter; an empty or non-numeric entry clears it. */
+    private _setBound;
     private _clear;
     /**
      * Emits the change; submits the form unless cancelled or in manual mode. The
@@ -90,7 +101,10 @@ export declare class PltFilterBar extends LitElement {
     private _onSubmit;
     private _onFormData;
     private _removeChip;
+    private _hasValue;
     private _renderField;
+    private _renderRange;
+    private _renderControl;
     protected render(): import("lit-html").TemplateResult<1>;
 }
 declare global {

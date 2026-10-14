@@ -9,6 +9,8 @@ interface Props {
   method?: "get" | "post";
   manual?: boolean;
   orientation?: "horizontal" | "vertical";
+  /** Leave the active-filter chips to the frontend. */
+  hideChips?: boolean;
   labels?: PltFilterBarLabels;
   /** Query parameters another control owns; kept by a native submit. */
   preserve?: PltPreserved;
@@ -16,7 +18,7 @@ interface Props {
   class?: string;
 }
 
-const { filters, action = "", method = "get", manual = false, orientation = "horizontal", labels = {}, preserve = {}, id, class: className } = Astro.props;
+const { filters, action = "", method = "get", manual = false, orientation = "horizontal", hideChips = false, labels = {}, preserve = {}, id, class: className } = Astro.props;
 const preserved = preservedEntries(preserve);
 ---
 
@@ -28,13 +30,22 @@ const preserved = preservedEntries(preserve);
   method={method}
   manual={manual || undefined}
   orientation={orientation}
+  hide-chips={hideChips || undefined}
   labels={JSON.stringify(labels)}
   preserve={JSON.stringify(preserve)}
 >
   <form data-plt-fallback class="plt-filter-bar" action={action} method={method}>
     {preserved.map(([name, value]) => <input type="hidden" name={name} value={value} />)}
     {filters.map((filter) =>
-      filter.multiple ? (
+      filter.range ? (
+        <fieldset class="plt-filter-bar__field plt-filter-bar__range">
+          <legend class="theme-label-bold">{filter.label}</legend>
+          <div class="plt-filter-bar__bounds">
+            <input class="d-input d-input-sm" type="number" inputmode="decimal" min="0" step="any" name={filter.range.min.name} value={filter.range.min.value ?? ""} placeholder={filter.range.min.placeholder} aria-label={filter.range.min.label ?? `${filter.label} ${labels.min ?? "Min"}`} />
+            <input class="d-input d-input-sm" type="number" inputmode="decimal" min="0" step="any" name={filter.range.max.name} value={filter.range.max.value ?? ""} placeholder={filter.range.max.placeholder} aria-label={filter.range.max.label ?? `${filter.label} ${labels.max ?? "Max"}`} />
+          </div>
+        </fieldset>
+      ) : filter.multiple ? (
         <fieldset class="plt-filter-bar__field plt-filter-bar__group">
           <legend class="theme-label-bold">{filter.label}</legend>
           <ul class="plt-filter-bar__options">

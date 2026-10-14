@@ -9,12 +9,18 @@ function selectedOptions(filter: PltFilter): string[] {
 /** Selected value per filter: the first `selected` option, "" for none; an array for `multiple` filters. */
 export function selectedValues(filters: readonly PltFilter[]): Record<string, PltFilterValue> {
   return Object.fromEntries(
-    filters.map((filter) => [
-      filter.id,
-      filter.multiple
-        ? selectedOptions(filter)
-        : (filter.options.find((option) => option.selected)?.value ?? ""),
-    ]),
+    filters.flatMap((filter): Array<[string, PltFilterValue]> => {
+      // A range owns two parameters (its bounds), not its own id.
+      if (filter.range) {
+        return [filter.range.min, filter.range.max].map((bound): [string, PltFilterValue] => [bound.name, bound.value == null ? "" : String(bound.value)]);
+      }
+      return [
+        [
+          filter.id,
+          filter.multiple ? selectedOptions(filter) : (filter.options.find((option) => option.selected)?.value ?? ""),
+        ],
+      ];
+    }),
   );
 }
 
@@ -46,8 +52,21 @@ export interface ActiveFilter {
 }
 
 /** Applied filters with display labels, one per value, for the active-filter chips. */
-export function activeFilters(filters: readonly PltFilter[], values: Record<string, PltFilterValue>): ActiveFilter[] {
+export function activeFilters(
+  filters: readonly PltFilter[],
+  values: Record<string, PltFilterValue>,
+  rangeLabels: { min: string; max: string } = { min: "Min", max: "Max" },
+): ActiveFilter[] {
   return filters.flatMap((filter) => {
+    if (filter.range) {
+      // One chip per applied bound; its id is the bound's parameter.
+      return ([["min", filter.range.min], ["max", filter.range.max]] as const).flatMap(([kind, bound]) => {
+        const value = values[bound.name];
+        return typeof value === "string" && value !== ""
+          ? [{ id: bound.name, label: filter.label, value, valueLabel: `${rangeLabels[kind]} ${value}` }]
+          : [];
+      });
+    }
     const raw = values[filter.id];
     const list = (Array.isArray(raw) ? raw : [raw ?? ""]).filter((value) => value !== "");
     return list.map((value) => {
