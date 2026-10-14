@@ -17,6 +17,9 @@ import {
  *
  * The consumer owns the cart: it sets `lines`, `subtotal` and the URLs, and
  * updates them after each mutation (setting `busy` while one is in flight).
+ * When a mutation fails it sets `error` to the message to show (already
+ * translated); the message sits in a live region, so assistive technology
+ * announces it, and clearing `error` removes it.
  *
  * @fires plt:cart-drawer-open
  * @fires plt:cart-drawer-close
@@ -29,6 +32,7 @@ export class PltCartDrawer extends LitElement {
     checkoutUrl: { type: String, attribute: "checkout-url" },
     cartUrl: { type: String, attribute: "cart-url" },
     busy: { type: Boolean, reflect: true },
+    error: { type: String },
     labels: { type: Object, converter: jsonConverter("plt-cart-drawer", () => ({})) },
   };
 
@@ -38,6 +42,7 @@ export class PltCartDrawer extends LitElement {
   declare checkoutUrl: string;
   declare cartUrl: string;
   declare busy: boolean;
+  declare error: string;
   declare labels: PltCartLabels;
 
   private readonly _titleId = nextId("plt-cart-drawer-title");
@@ -52,6 +57,7 @@ export class PltCartDrawer extends LitElement {
     this.checkoutUrl = "";
     this.cartUrl = "";
     this.busy = false;
+    this.error = "";
     this.labels = {};
   }
 
@@ -132,6 +138,7 @@ export class PltCartDrawer extends LitElement {
             <span aria-hidden="true">×</span>
           </button>
         </header>
+        <div class="plt-cart-drawer__error theme-label-bold" role="alert" ?data-empty=${!this.error}>${this.error}</div>
         <div class="plt-cart-drawer__body" aria-busy=${this.busy ? "true" : "false"}>
           ${lines.length
             ? html`<ul class="plt-cart-lines">

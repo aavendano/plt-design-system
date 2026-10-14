@@ -137,7 +137,7 @@ Optional: `subtotal`, `checkout_url`, `cart_url`, `checkout_label`, `view_cart_l
 
 Line items and quantity/remove controls are injected via a slot / render block. Cart state stays outside the contract.
 
-Interactive version: `<plt-cart-drawer>` — a modal `<dialog>` side sheet (focus contained, Escape closes, focus and page scroll restored). Data: `lines` (CartLine data below), `subtotal`, `checkout-url`, `cart-url`, `labels`, `busy`; methods `show()` / `hide()` / `toggle()`; events `plt:cart-drawer-open` / `plt:cart-drawer-close`. Line events bubble through it. The consumer owns every cart mutation and formats every price.
+Interactive version: `<plt-cart-drawer>` — a modal `<dialog>` side sheet (focus contained, Escape closes, focus and page scroll restored). Data: `lines` (CartLine data below), `subtotal`, `checkout-url`, `cart-url`, `labels`, `busy`, `error` (message for a failed mutation, already translated; shown in a live region above the lines, empty removes it); methods `show()` / `hide()` / `toggle()`; events `plt:cart-drawer-open` / `plt:cart-drawer-close`. Line events bubble through it. The consumer owns every cart mutation and formats every price.
 
 ## CartLine
 

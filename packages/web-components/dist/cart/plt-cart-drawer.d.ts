@@ -8,6 +8,9 @@ import { type PltCartLabels, type PltCartLineData } from "./types.js";
  *
  * The consumer owns the cart: it sets `lines`, `subtotal` and the URLs, and
  * updates them after each mutation (setting `busy` while one is in flight).
+ * When a mutation fails it sets `error` to the message to show (already
+ * translated); the message sits in a live region, so assistive technology
+ * announces it, and clearing `error` removes it.
  *
  * @fires plt:cart-drawer-open
  * @fires plt:cart-drawer-close
@@ -40,6 +43,9 @@ export declare class PltCartDrawer extends LitElement {
             type: BooleanConstructor;
             reflect: boolean;
         };
+        error: {
+            type: StringConstructor;
+        };
         labels: {
             type: ObjectConstructor;
             converter: {
@@ -54,6 +60,7 @@ export declare class PltCartDrawer extends LitElement {
     checkoutUrl: string;
     cartUrl: string;
     busy: boolean;
+    error: string;
     labels: PltCartLabels;
     private readonly _titleId;
     private _release;
