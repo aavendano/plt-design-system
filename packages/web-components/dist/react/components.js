@@ -1,5 +1,6 @@
 import { createElement as h } from "react";
 import { createComponent } from "./create.js";
+import { preservedEntries } from "../collection/params.js";
 const PltQuantitySelector = createComponent({
   tag: "plt-quantity-selector",
   load: () => import("../quantity-selector/define.js"),
@@ -52,14 +53,42 @@ const PltCartDrawer = createComponent({
 const PltFilterBar = createComponent({
   tag: "plt-filter-bar",
   load: () => import("../collection/define.js"),
-  properties: ["filters", "action", "method", "manual", "labels"],
-  attributes: { action: "action", method: "method", manual: "manual" },
+  properties: ["filters", "action", "method", "manual", "orientation", "labels", "preserve"],
+  attributes: { action: "action", method: "method", manual: "manual", orientation: "orientation" },
   events: { onFilterChange: "plt:filter-change" },
-  fallback: ({ filters, action = "", method = "get", labels }) => h(
+  fallback: ({ filters, action = "", method = "get", labels, preserve }) => h(
     "form",
     { "data-plt-fallback": "", className: "plt-filter-bar", action, method },
+    ...preservedEntries(preserve).map(
+      ([name, value], index) => h("input", { key: `preserve-${index}`, type: "hidden", name, defaultValue: value })
+    ),
     ...filters.map(
-      (filter) => h(
+      (filter) => filter.multiple ? h(
+        "fieldset",
+        { key: filter.id, className: "plt-filter-bar__field plt-filter-bar__group" },
+        h("legend", { className: "theme-label-bold" }, filter.label),
+        h(
+          "ul",
+          { className: "plt-filter-bar__options" },
+          ...filter.options.filter((option) => option.value !== "").map(
+            (option) => h(
+              "li",
+              { key: option.value },
+              h(
+                "label",
+                { className: "plt-filter-bar__option" },
+                h("input", { type: "checkbox", className: "d-checkbox d-checkbox-primary", name: filter.id, value: option.value, defaultChecked: option.selected }),
+                h(
+                  "span",
+                  { className: "theme-label-bold" },
+                  option.label,
+                  option.count != null ? h("span", { className: "theme-meta" }, ` (${option.count})`) : null
+                )
+              )
+            )
+          )
+        )
+      ) : h(
         "label",
         { key: filter.id, className: "plt-filter-bar__field theme-label-bold" },
         filter.label,
@@ -76,12 +105,15 @@ const PltFilterBar = createComponent({
 const PltSortSelect = createComponent({
   tag: "plt-sort-select",
   load: () => import("../collection/define.js"),
-  properties: ["options", "name", "label", "action", "method", "manual", "applyLabel"],
+  properties: ["options", "name", "label", "action", "method", "manual", "applyLabel", "preserve"],
   attributes: { name: "name", label: "label", action: "action", method: "method", manual: "manual" },
   events: { onSortChange: "plt:sort-change" },
-  fallback: ({ options, name = "sort", label = "Sort by", action = "", method = "get", applyLabel = "Apply" }) => h(
+  fallback: ({ options, name = "sort", label = "Sort by", action = "", method = "get", applyLabel = "Apply", preserve }) => h(
     "form",
     { "data-plt-fallback": "", className: "plt-sort-select", action, method },
+    ...preservedEntries(preserve).map(
+      ([n, value], index) => h("input", { key: `preserve-${index}`, type: "hidden", name: n, defaultValue: value })
+    ),
     h(
       "label",
       { className: "theme-label-bold" },

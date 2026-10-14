@@ -3,15 +3,33 @@ export interface PltChoice {
   label: string;
   value: string;
   selected?: boolean;
+  /** Result count, shown next to the option of a `multiple` filter. */
+  count?: number | null;
 }
 
 export interface PltFilter {
   /** Form field name, e.g. `filter.v.option.color` on Shopify. */
   id: string;
   label: string;
-  /** Include an option with value "" for "any". */
+  /**
+   * Single-value filters render a select: include an option with value "" for
+   * "any". With `multiple` the filter renders a checkbox group instead: every
+   * checked option is sent under the same `id`, and options with value ""
+   * are ignored.
+   */
   options: PltChoice[];
+  multiple?: boolean;
 }
+
+/** One value per single filter, an array of values per `multiple` filter. */
+export type PltFilterValue = string | string[];
+
+/**
+ * Query parameters owned by another control (the sort order next to the
+ * filters, say). They are carried as hidden inputs so a native GET submit
+ * keeps them; an array repeats the name.
+ */
+export type PltPreserved = Record<string, string | string[]>;
 
 export interface PltPage {
   label: string;
@@ -34,11 +52,11 @@ export interface PltPaginationLabels {
 }
 
 export interface PltFilterChangeDetail {
-  /** Non-empty values by filter id. */
-  values: Record<string, string>;
+  /** Non-empty values by filter id; an array for `multiple` filters. */
+  values: Record<string, PltFilterValue>;
   /** Filter that changed; `null` for "clear all" and manual submits. */
   changed: string | null;
-  /** The values as a query string (no leading `?`). */
+  /** The filter values as a query string (no leading `?`); arrays repeat the name. */
   query: string;
 }
 

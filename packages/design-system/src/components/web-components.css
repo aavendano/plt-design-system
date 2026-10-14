@@ -21,7 +21,8 @@ plt-pagination { display: block; }
 /* Cart line: struck-through compare-at price and the busy state. */
 .plt-cart-line__compare {
   margin-inline-end: 0.35em;
-  color: color-mix(in oklab, var(--plt-color-base-content, var(--color-base-content)) 55%, transparent);
+  /* The AA-safe secondary text colour; a 55% tint of base content failed contrast. */
+  color: var(--plt-color-meta, var(--plt-color-base-content, var(--color-base-content)));
   font-weight: 400;
 }
 .plt-cart-line[aria-busy="true"] { opacity: 0.7; }
@@ -46,6 +47,14 @@ plt-cart-drawer { display: contents; }
   background: color-mix(in oklab, var(--plt-color-neutral, var(--color-neutral)) 45%, transparent);
 }
 .plt-cart-drawer__dialog .plt-cart-lines > li:last-child .plt-cart-line { border-bottom: 0; }
+
+/* Filter bar: a checkbox group for a multi-value filter, and a stacked layout for sidebars. */
+.plt-filter-bar__group { margin: 0; padding: 0; border: 0; min-width: 0; }
+.plt-filter-bar__group > legend { padding: 0; margin-block-end: 0.5rem; }
+.plt-filter-bar__options { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.plt-filter-bar__option { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+plt-filter-bar[orientation="vertical"] .plt-filter-bar { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+plt-filter-bar[orientation="vertical"] .plt-filter-bar__field { min-width: 0; }
 
 /* Filter bar: applied filters as removable chips. */
 .plt-filter-bar__active {

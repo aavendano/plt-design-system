@@ -1,6 +1,7 @@
 import { LitElement, html, nothing } from "lit";
 import { live } from "lit/directives/live.js";
 import { emit, jsonConverter, nextId, retireFallback } from "../shared/element.js";
+import { preservedEntries } from "./params.js";
 import { SORT_CHANGE_EVENT } from "./types.js";
 class PltSortSelect extends LitElement {
   constructor() {
@@ -13,6 +14,7 @@ class PltSortSelect extends LitElement {
     this.method = "get";
     this.manual = false;
     this.applyLabel = "Apply";
+    this.preserve = {};
     this._value = "";
   }
   createRenderRoot() {
@@ -41,6 +43,7 @@ class PltSortSelect extends LitElement {
   }
   render() {
     return html`<form class="plt-sort-select" action=${this.action} method=${this.method || "get"}>
+      ${preservedEntries(this.preserve).map(([name, value]) => html`<input type="hidden" name=${name} value=${value} />`)}
       <label class="theme-label-bold" for=${this._id}>${this.label}</label>
       <select
         class="d-select"
@@ -65,6 +68,7 @@ PltSortSelect.properties = {
   method: { type: String },
   manual: { type: Boolean, reflect: true },
   applyLabel: { type: String, attribute: "apply-label" },
+  preserve: { type: Object, converter: jsonConverter("plt-sort-select", () => ({})) },
   _value: { state: true }
 };
 export {

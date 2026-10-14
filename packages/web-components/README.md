@@ -27,7 +27,7 @@ None fetches data, formats money, mutates the cart or routes: the frontend does.
 | Product | `<plt-quick-view>` | ProductQuickView markup (`<dialog>`); `open`, `show()`, `close()` | `plt:quick-view-open`, `plt:quick-view-close` |
 | Cart | `<plt-cart-line>` | `line` (`{ id, title, quantity, price, … }`), `busy` | `plt:cart-line-change`, `plt:cart-line-remove` |
 | Cart | `<plt-cart-drawer>` | `lines`, `subtotal`, `checkout-url`, `cart-url`, `busy`; `show()` | `plt:cart-drawer-open`, `plt:cart-drawer-close` (+ line events) |
-| Collection | `<plt-filter-bar>` | `filters`, `action`, `manual`, `labels` | `plt:filter-change` (cancelable) |
+| Collection | `<plt-filter-bar>` | `filters` (a filter may be `multiple`: checkbox group), `action`, `manual`, `orientation`, `labels`, `preserve` | `plt:filter-change` (cancelable) |
 | Collection | `<plt-sort-select>` | `options`, `name`, `label` | `plt:sort-change` (cancelable) |
 | Collection | `<plt-pagination>` | `pages`, `previous-url`, `next-url` | `plt:page-change` (cancelable) |
 | Navigation | `<plt-navbar>` | Navbar + MegaMenu markup | `plt:navbar-toggle`, `plt:megamenu-toggle` |

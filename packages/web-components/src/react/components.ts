@@ -18,11 +18,13 @@ import type {
   PltFilter,
   PltFilterBarLabels,
   PltFilterChangeDetail,
+  PltPreserved,
   PltPage,
   PltPageChangeDetail,
   PltPaginationLabels,
   PltSortChangeDetail,
 } from "../collection/types.js";
+import { preservedEntries } from "../collection/params.js";
 import type { PltGalleryChangeDetail } from "../product/plt-product-gallery.js";
 import type { PltMegaMenuToggleDetail, PltNavbarToggleDetail } from "../navigation/plt-navbar.js";
 
@@ -142,7 +144,10 @@ export interface PltFilterBarProps extends BaseProps {
   action?: string;
   method?: string;
   manual?: boolean;
+  orientation?: "horizontal" | "vertical";
   labels?: PltFilterBarLabels;
+  /** Query parameters another control owns; kept by a native submit. */
+  preserve?: PltPreserved;
   /** Cancel the event (`event.preventDefault()`) to navigate client-side. */
   onFilterChange?: Handler<PltFilterChangeDetail>;
 }
@@ -150,24 +155,56 @@ export interface PltFilterBarProps extends BaseProps {
 export const PltFilterBar = createComponent<PltFilterBarProps>({
   tag: "plt-filter-bar",
   load: () => import("../collection/define.js"),
-  properties: ["filters", "action", "method", "manual", "labels"],
-  attributes: { action: "action", method: "method", manual: "manual" },
+  properties: ["filters", "action", "method", "manual", "orientation", "labels", "preserve"],
+  attributes: { action: "action", method: "method", manual: "manual", orientation: "orientation" },
   events: { onFilterChange: "plt:filter-change" },
-  fallback: ({ filters, action = "", method = "get", labels }) =>
+  fallback: ({ filters, action = "", method = "get", labels, preserve }) =>
     h(
       "form",
       { "data-plt-fallback": "", className: "plt-filter-bar", action, method },
+      ...preservedEntries(preserve).map(([name, value], index) =>
+        h("input", { key: `preserve-${index}`, type: "hidden", name, defaultValue: value }),
+      ),
       ...filters.map((filter) =>
-        h(
-          "label",
-          { key: filter.id, className: "plt-filter-bar__field theme-label-bold" },
-          filter.label,
-          h(
-            "select",
-            { className: "d-select", name: filter.id, defaultValue: filter.options.find((o) => o.selected)?.value },
-            ...filter.options.map((option) => h("option", { key: option.value, value: option.value }, option.label)),
-          ),
-        ),
+        filter.multiple
+          ? h(
+              "fieldset",
+              { key: filter.id, className: "plt-filter-bar__field plt-filter-bar__group" },
+              h("legend", { className: "theme-label-bold" }, filter.label),
+              h(
+                "ul",
+                { className: "plt-filter-bar__options" },
+                ...filter.options
+                  .filter((option) => option.value !== "")
+                  .map((option) =>
+                    h(
+                      "li",
+                      { key: option.value },
+                      h(
+                        "label",
+                        { className: "plt-filter-bar__option" },
+                        h("input", { type: "checkbox", className: "d-checkbox d-checkbox-primary", name: filter.id, value: option.value, defaultChecked: option.selected }),
+                        h(
+                          "span",
+                          { className: "theme-label-bold" },
+                          option.label,
+                          option.count != null ? h("span", { className: "theme-meta" }, ` (${option.count})`) : null,
+                        ),
+                      ),
+                    ),
+                  ),
+              ),
+            )
+          : h(
+              "label",
+              { key: filter.id, className: "plt-filter-bar__field theme-label-bold" },
+              filter.label,
+              h(
+                "select",
+                { className: "d-select", name: filter.id, defaultValue: filter.options.find((o) => o.selected)?.value },
+                ...filter.options.map((option) => h("option", { key: option.value, value: option.value }, option.label)),
+              ),
+            ),
       ),
       h("button", { type: "submit", className: "d-btn d-btn-primary theme-label-bold" }, labels?.apply ?? "Apply"),
     ),
@@ -181,6 +218,8 @@ export interface PltSortSelectProps extends BaseProps {
   method?: string;
   manual?: boolean;
   applyLabel?: string;
+  /** Query parameters another control owns; kept by a native submit. */
+  preserve?: PltPreserved;
   /** Cancel the event (`event.preventDefault()`) to navigate client-side. */
   onSortChange?: Handler<PltSortChangeDetail>;
 }
@@ -188,13 +227,16 @@ export interface PltSortSelectProps extends BaseProps {
 export const PltSortSelect = createComponent<PltSortSelectProps>({
   tag: "plt-sort-select",
   load: () => import("../collection/define.js"),
-  properties: ["options", "name", "label", "action", "method", "manual", "applyLabel"],
+  properties: ["options", "name", "label", "action", "method", "manual", "applyLabel", "preserve"],
   attributes: { name: "name", label: "label", action: "action", method: "method", manual: "manual" },
   events: { onSortChange: "plt:sort-change" },
-  fallback: ({ options, name = "sort", label = "Sort by", action = "", method = "get", applyLabel = "Apply" }) =>
+  fallback: ({ options, name = "sort", label = "Sort by", action = "", method = "get", applyLabel = "Apply", preserve }) =>
     h(
       "form",
       { "data-plt-fallback": "", className: "plt-sort-select", action, method },
+      ...preservedEntries(preserve).map(([n, value], index) =>
+        h("input", { key: `preserve-${index}`, type: "hidden", name: n, defaultValue: value }),
+      ),
       h(
         "label",
         { className: "theme-label-bold" },

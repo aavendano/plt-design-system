@@ -1,7 +1,8 @@
 import { LitElement, html, nothing, type PropertyValues } from "lit";
 import { live } from "lit/directives/live.js";
 import { emit, jsonConverter, nextId, retireFallback } from "../shared/element.js";
-import { SORT_CHANGE_EVENT, type PltChoice, type PltSortChangeDetail } from "./types.js";
+import { preservedEntries } from "./params.js";
+import { SORT_CHANGE_EVENT, type PltChoice, type PltPreserved, type PltSortChangeDetail } from "./types.js";
 
 /**
  * `<plt-sort-select>` — SortSelect anatomy inside a GET form.
@@ -9,6 +10,8 @@ import { SORT_CHANGE_EVENT, type PltChoice, type PltSortChangeDetail } from "./t
  * A change emits a cancelable `plt:sort-change`; if nobody cancels it the form
  * submits (normal navigation with `?{name}={value}`). Client-routed frontends
  * cancel it and navigate themselves. `manual` adds a submit button instead.
+ * `preserve` carries query parameters that another control owns (the active
+ * filters, say) as hidden inputs, so a native submit keeps them.
  *
  * @fires plt:sort-change - cancelable; `{ name, value }`
  */
@@ -21,6 +24,7 @@ export class PltSortSelect extends LitElement {
     method: { type: String },
     manual: { type: Boolean, reflect: true },
     applyLabel: { type: String, attribute: "apply-label" },
+    preserve: { type: Object, converter: jsonConverter("plt-sort-select", () => ({})) },
     _value: { state: true },
   };
 
@@ -31,6 +35,7 @@ export class PltSortSelect extends LitElement {
   declare method: string;
   declare manual: boolean;
   declare applyLabel: string;
+  declare preserve: PltPreserved;
   declare private _value: string;
 
   private readonly _id = nextId("plt-sort");
@@ -44,6 +49,7 @@ export class PltSortSelect extends LitElement {
     this.method = "get";
     this.manual = false;
     this.applyLabel = "Apply";
+    this.preserve = {};
     this._value = "";
   }
 
@@ -79,6 +85,7 @@ export class PltSortSelect extends LitElement {
 
   protected override render() {
     return html`<form class="plt-sort-select" action=${this.action} method=${this.method || "get"}>
+      ${preservedEntries(this.preserve).map(([name, value]) => html`<input type="hidden" name=${name} value=${value} />`)}
       <label class="theme-label-bold" for=${this._id}>${this.label}</label>
       <select
         class="d-select"

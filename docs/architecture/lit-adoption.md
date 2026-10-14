@@ -39,7 +39,7 @@ frontends.
 | --- | --- | --- |
 | Ficha de producto | `<plt-variant-picker>`, `<plt-quantity-selector>`, `<plt-product-gallery>`, `<plt-quick-view>` | Galería y quick view: CE vanilla del DS. Cantidad: solo marcado, clics a cargo de cada plataforma. |
 | Carrito | `<plt-cart-line>`, `<plt-cart-drawer>` | Renderers sin comportamiento (drawer de daisyUI con checkbox); controles y estado en cada plataforma. |
-| Colección / listado | `<plt-filter-bar>`, `<plt-sort-select>`, `<plt-pagination>` | Formularios estáticos con botón «Apply». |
+| Colección / listado | `<plt-filter-bar>`, `<plt-sort-select>`, `<plt-pagination>` | Formularios estáticos con botón «Apply». Al integrar el storefront se añadieron filtros de varios valores (`multiple`: checkboxes con conteo; marca y categoría de Shopify lo son) y `preserve` (parámetros que otro control posee, p. ej. el orden, viajan como campos ocultos). |
 | Navegación | `<plt-navbar>` (menú móvil + megamenú) | Toggle móvil vanilla; el megamenú lo reimplementaba cada plataforma (Hydrogen: `useMegaMenu`). |
 
 ### Decisiones adicionales

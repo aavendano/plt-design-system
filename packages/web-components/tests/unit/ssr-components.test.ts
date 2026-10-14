@@ -50,8 +50,24 @@ describe("server rendering of every component", () => {
     expect(filters).toContain('<option value="red" selected="">Red</option>');
     expect(filters).not.toContain("filters=");
 
-    const sort = renderToString(h(PltSortSelect, { options: [{ label: "A", value: "a" }], name: "sort_by" }));
+    const multi = renderToString(
+      h(PltFilterBar, {
+        filters: [{ id: "filter.p.vendor", label: "Brand", multiple: true, options: [{ label: "Dorcel", value: "Dorcel", count: 4, selected: true }, { label: "Any", value: "" }] }],
+        preserve: { sort_by: "price-ascending", tag: ["a", "b"] },
+        orientation: "vertical",
+      }),
+    );
+    expect(multi).toContain('<plt-filter-bar orientation="vertical">');
+    expect(multi).toMatch(/<input type="hidden" name="sort_by" value="price-ascending"\/>/);
+    expect(multi).toMatch(/<input type="hidden" name="tag" value="a"\/><input type="hidden" name="tag" value="b"\/>/);
+    expect(multi).toContain('<legend class="theme-label-bold">Brand</legend>');
+    expect(multi).toMatch(/<input type="checkbox" class="d-checkbox d-checkbox-primary" name="filter\.p\.vendor" checked="" value="Dorcel"\/>/);
+    expect(multi).toContain('<span class="theme-meta"> (4)</span>');
+    expect(multi).not.toContain('value=""');
+
+    const sort = renderToString(h(PltSortSelect, { options: [{ label: "A", value: "a" }], name: "sort_by", preserve: { "filter.p.vendor": "Dorcel" } }));
     expect(sort).toContain('<select class="d-select" name="sort_by">');
+    expect(sort).toMatch(/<input type="hidden" name="filter\.p\.vendor" value="Dorcel"\/>/);
 
     const pages = renderToString(h(PltPagination, { pages: [{ label: "1", url: "?page=1" }, { label: "2", current: true }], nextUrl: "?page=3" }));
     expect(pages).toContain('<plt-pagination next-url="?page=3"><nav data-plt-fallback="" aria-label="Pagination"><a href="?page=1">1</a><span aria-current="page">2</span><a href="?page=3">Next</a></nav>');

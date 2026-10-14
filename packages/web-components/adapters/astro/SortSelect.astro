@@ -1,6 +1,7 @@
 ---
 /** Astro adapter for <plt-sort-select>; the fallback is a GET form with a submit button. */
-import type { PltChoice } from "../../dist/collection/index.js";
+import type { PltChoice, PltPreserved } from "../../dist/collection/index.js";
+import { preservedEntries } from "../../dist/collection/index.js";
 
 interface Props {
   options: PltChoice[];
@@ -10,11 +11,14 @@ interface Props {
   method?: "get" | "post";
   manual?: boolean;
   applyLabel?: string;
+  /** Query parameters another control owns; kept by a native submit. */
+  preserve?: PltPreserved;
   id?: string;
   class?: string;
 }
 
-const { options, name = "sort", label = "Sort by", action = "", method = "get", manual = false, applyLabel = "Apply", id, class: className } = Astro.props;
+const { options, name = "sort", label = "Sort by", action = "", method = "get", manual = false, applyLabel = "Apply", preserve = {}, id, class: className } = Astro.props;
+const preserved = preservedEntries(preserve);
 ---
 
 <plt-sort-select
@@ -27,8 +31,10 @@ const { options, name = "sort", label = "Sort by", action = "", method = "get", 
   method={method}
   manual={manual || undefined}
   apply-label={applyLabel}
+  preserve={JSON.stringify(preserve)}
 >
   <form data-plt-fallback class="plt-sort-select" action={action} method={method}>
+    {preserved.map(([name, value]) => <input type="hidden" name={name} value={value} />)}
     <label class="theme-label-bold">
       {label}
       <select class="d-select" name={name}>

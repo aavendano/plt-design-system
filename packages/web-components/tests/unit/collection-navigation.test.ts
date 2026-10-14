@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "../../src/collection/define";
 import "../../src/navigation/define";
 import "../../src/product/define";
-import { activeFilters, selectedValues, toQuery } from "../../src/collection/params";
+import { activeFilters, nonEmptyValues, preservedEntries, selectedValues, toQuery } from "../../src/collection/params";
 import type { PltFilter } from "../../src/collection/types";
 
 const flush = (element: { updateComplete: Promise<unknown> }) => element.updateComplete;
@@ -35,6 +35,44 @@ describe("collection params", () => {
     expect(activeFilters(filters, values)).toEqual([
       { id: "filter.v.option.color", label: "Color", value: "Red", valueLabel: "Red" },
     ]);
+  });
+});
+
+describe("multi-value filters", () => {
+  const multi: PltFilter[] = [
+    {
+      id: "filter.p.vendor",
+      label: "Brand",
+      multiple: true,
+      options: [
+        { label: "Dorcel", value: "Dorcel", count: 4, selected: true },
+        { label: "Doc Johnson", value: "Doc Johnson", count: 9, selected: true },
+        { label: "Magic Wand", value: "Magic Wand", count: 2 },
+      ],
+    },
+    { id: "filter.v.availability", label: "Availability", options: [{ label: "All", value: "" }, { label: "In stock", value: "1" }] },
+  ];
+
+  it("selects arrays for multiple filters and repeats the name in the query", () => {
+    const values = selectedValues(multi);
+    expect(values).toEqual({ "filter.p.vendor": ["Dorcel", "Doc Johnson"], "filter.v.availability": "" });
+    expect(nonEmptyValues(values)).toEqual({ "filter.p.vendor": ["Dorcel", "Doc Johnson"] });
+    expect(toQuery(values)).toBe("filter.p.vendor=Dorcel&filter.p.vendor=Doc+Johnson");
+    expect(activeFilters(multi, values).map((item) => item.valueLabel)).toEqual(["Dorcel", "Doc Johnson"]);
+  });
+
+  it("treats an empty array as no filter", () => {
+    expect(nonEmptyValues({ a: [], b: "", c: ["x"] })).toEqual({ c: ["x"] });
+    expect(toQuery({ a: [], c: ["x", "y"] })).toBe("c=x&c=y");
+  });
+
+  it("lists preserved params, repeating array names and dropping empties", () => {
+    expect(preservedEntries({ sort_by: "price-ascending", tag: ["a", "b"], empty: "" })).toEqual([
+      ["sort_by", "price-ascending"],
+      ["tag", "a"],
+      ["tag", "b"],
+    ]);
+    expect(preservedEntries(undefined)).toEqual([]);
   });
 });
 
@@ -135,6 +173,123 @@ describe("<plt-filter-bar>", () => {
   });
 });
 
+describe("<plt-filter-bar> with multi-value filters and preserved params", () => {
+  let submit: ReturnType<typeof vi.spyOn>;
+  const brands: PltFilter[] = [
+    {
+      id: "filter.p.vendor",
+      label: "Brand",
+      multiple: true,
+      options: [
+        { label: "Dorcel", value: "Dorcel", count: 4, selected: true },
+        { label: "Doc Johnson", value: "Doc Johnson", count: 9 },
+        { label: "Any", value: "" },
+      ],
+    },
+    { id: "filter.v.availability", label: "Availability", options: [{ label: "All", value: "" }, { label: "In stock", value: "1" }] },
+  ];
+
+  beforeEach(() => {
+    submit = vi.spyOn(HTMLFormElement.prototype, "requestSubmit").mockImplementation(() => {});
+  });
+  afterEach(() => {
+    submit.mockRestore();
+    document.body.innerHTML = "";
+  });
+
+  async function mount(attributes = "") {
+    document.body.innerHTML = `<plt-filter-bar action="/collections/all" ${attributes}></plt-filter-bar>`;
+    const element = document.querySelector("plt-filter-bar")!;
+    element.filters = brands;
+    await flush(element);
+    return element;
+  }
+
+  const boxes = (element: HTMLElement) => [...element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+
+  it("renders a labelled checkbox group with counts and skips the empty option", async () => {
+    const element = await mount();
+    const group = element.querySelector("fieldset.plt-filter-bar__group")!;
+    expect(group.querySelector("legend")!.textContent).toBe("Brand");
+    expect(boxes(element).map((box) => [box.name, box.value, box.checked])).toEqual([
+      ["filter.p.vendor", "Dorcel", true],
+      ["filter.p.vendor", "Doc Johnson", false],
+    ]);
+    expect(group.textContent).toContain("Dorcel (4)");
+    expect(group.textContent).toContain("Doc Johnson (9)");
+  });
+
+  it("reports arrays, repeats the name in the query and submits each toggle", async () => {
+    const element = await mount();
+    const listener = vi.fn();
+    element.addEventListener("plt:filter-change", listener);
+    const second = boxes(element)[1];
+    second.checked = true;
+    second.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(listener.mock.calls[0][0].detail).toEqual({
+      values: { "filter.p.vendor": ["Dorcel", "Doc Johnson"] },
+      changed: "filter.p.vendor",
+      query: "filter.p.vendor=Dorcel&filter.p.vendor=Doc+Johnson",
+    });
+    expect(submit).toHaveBeenCalledTimes(1);
+
+    const first = boxes(element)[0];
+    first.checked = false;
+    first.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(element.values).toEqual({ "filter.p.vendor": ["Doc Johnson"] });
+  });
+
+  it("shows one chip per value; removing one keeps the others and returns focus to its checkbox", async () => {
+    const element = await mount();
+    element.addEventListener("plt:filter-change", (event) => event.preventDefault());
+    const second = boxes(element)[1];
+    second.checked = true;
+    second.dispatchEvent(new Event("change", { bubbles: true }));
+    await flush(element);
+    const chips = [...element.querySelectorAll<HTMLButtonElement>(".plt-filter-bar__chips button")];
+    expect(chips.map((chip) => chip.getAttribute("aria-label"))).toEqual([
+      "Remove filter: Brand Dorcel",
+      "Remove filter: Brand Doc Johnson",
+    ]);
+    chips[0].click();
+    await flush(element);
+    await Promise.resolve();
+    expect(element.values).toEqual({ "filter.p.vendor": ["Doc Johnson"] });
+    expect(boxes(element)[0].checked).toBe(false);
+    expect(document.activeElement).toBe(boxes(element)[0]);
+  });
+
+  it("clear all empties multiple and single filters", async () => {
+    const element = await mount();
+    element.addEventListener("plt:filter-change", (event) => event.preventDefault());
+    element.querySelector<HTMLButtonElement>(".plt-filter-bar__active > button")!.click();
+    await flush(element);
+    expect(element.values).toEqual({});
+    expect(boxes(element).every((box) => !box.checked)).toBe(true);
+  });
+
+  it("carries preserved params as hidden inputs and reflects orientation", async () => {
+    const element = await mount('orientation="vertical"');
+    element.preserve = { sort_by: "price-ascending", tag: ["a", "b"] };
+    await flush(element);
+    const hidden = [...element.querySelectorAll<HTMLInputElement>('form:not([data-plt-fallback]) input[type="hidden"]')];
+    expect(hidden.map((input) => [input.name, input.value])).toEqual([
+      ["sort_by", "price-ascending"],
+      ["tag", "a"],
+      ["tag", "b"],
+    ]);
+    expect(element.getAttribute("orientation")).toBe("vertical");
+  });
+
+  it("accepts preserve as a JSON attribute", async () => {
+    document.body.innerHTML = `<plt-filter-bar preserve='{"sort_by":"title-ascending"}'></plt-filter-bar>`;
+    const element = document.querySelector("plt-filter-bar")!;
+    element.filters = brands;
+    await flush(element);
+    expect(element.querySelector<HTMLInputElement>('input[type="hidden"]')!.value).toBe("title-ascending");
+  });
+});
+
 describe("<plt-sort-select> and <plt-pagination>", () => {
   afterEach(() => {
     document.body.innerHTML = "";
@@ -159,6 +314,20 @@ describe("<plt-sort-select> and <plt-pagination>", () => {
     selectEl.dispatchEvent(new Event("change", { bubbles: true }));
     expect(listener.mock.calls[0][0].detail).toEqual({ name: "sort_by", value: "manual" });
     expect(submit).toHaveBeenCalledTimes(1);
+  });
+
+  it("sort: carries preserved params as hidden inputs", async () => {
+    document.body.innerHTML = '<plt-sort-select name="sort_by"></plt-sort-select>';
+    const element = document.querySelector("plt-sort-select")!;
+    element.options = [{ label: "Featured", value: "manual" }];
+    element.preserve = { "filter.p.vendor": ["Dorcel", "Doc Johnson"], q: "wand" };
+    await flush(element);
+    const hidden = [...element.querySelectorAll<HTMLInputElement>('input[type="hidden"]')];
+    expect(hidden.map((input) => [input.name, input.value])).toEqual([
+      ["filter.p.vendor", "Dorcel"],
+      ["filter.p.vendor", "Doc Johnson"],
+      ["q", "wand"],
+    ]);
   });
 
   it("pagination: renders links, marks the current page, lets clicks be cancelled", async () => {
