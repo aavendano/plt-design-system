@@ -1,4 +1,4 @@
-import { LitElement } from "lit";
+import { LitElement, type PropertyValues } from "lit";
 import { byId, emit } from "../shared/element.js";
 
 export interface PltNavbarToggleDetail {
@@ -14,7 +14,12 @@ export const NAVBAR_TOGGLE_EVENT = "plt:navbar-toggle";
 export const MEGAMENU_TOGGLE_EVENT = "plt:megamenu-toggle";
 
 const CLOSE_DELAY_MS = 150;
+const IDLE_TIMEOUT_MS = 2000;
 const TRIGGER = "[aria-controls][aria-haspopup], [data-plt-megamenu-trigger]";
+/** A mega menu panel: the ProductDetail-era class, or the attribute for markup that keeps its own classes. */
+const PANEL = ".plt-megamenu, [data-plt-megamenu]";
+const DEFERRED = "[data-plt-navbar-deferred]";
+const HEIGHT_PROPERTY = "--plt-navbar-height";
 
 /**
  * `<plt-navbar>` — behaviour for the Navbar and MegaMenu anatomy.
@@ -32,20 +37,53 @@ const TRIGGER = "[aria-controls][aria-haspopup], [data-plt-megamenu-trigger]";
  * open at a time. The element renders nothing: it works on server markup from
  * any renderer, and listeners are delegated so re-rendered children keep working.
  *
+ * Opt-in capabilities, each switched on by an attribute or by the markup that
+ * carries it, so existing consumers are untouched:
+ *
+ * - `hover-delay="150"`: a hovering pointer opens a panel after this many ms
+ *   (and only if it is still on the trigger), so crossing the bar does not
+ *   flicker panels. Focus and ArrowDown still open at once.
+ * - `[data-plt-megamenu]`: marks a panel the same way `.plt-megamenu` does, for
+ *   markup that keeps its own classes. Panels toggle `data-open`.
+ * - `publish-height` (or `publish-height="root"`): keeps `--plt-navbar-height`
+ *   equal to this element's height, on the element or on `<html>`. The element
+ *   must be a block box (a wrapper that is `display: inline` has no height).
+ * - `[data-plt-navbar-deferred]`: images carrying `data-deferred-src`,
+ *   `data-deferred-srcset` and `data-deferred-sizes` get those attributes
+ *   applied on idle (at most 2 s after connect) or at the first hover intent,
+ *   focus, panel or mobile menu open, whichever comes first.
+ *
  * @fires plt:navbar-toggle - `{ open }`
  * @fires plt:megamenu-toggle - `{ id, open }`
  */
 export class PltNavbar extends LitElement {
+  static override properties = {
+    hoverDelay: { type: Number, attribute: "hover-delay" },
+    publishHeight: { type: String, attribute: "publish-height" },
+  };
+
+  /** Milliseconds a hover must last before a panel opens; 0 opens at once. */
+  declare hoverDelay: number;
+  /** Present: publish the height on this element; `"root"`: on `<html>`. */
+  declare publishHeight: string | null;
+
   private _openPanel: HTMLElement | null = null;
   /** Set while Escape returns focus to a trigger, so that focus does not reopen it. */
   private _returningFocus = false;
   private _closeTimer: ReturnType<typeof setTimeout> | null = null;
+  private _openTimer: ReturnType<typeof setTimeout> | null = null;
+  private _pendingTrigger: HTMLElement | null = null;
+  private _idleHandle: { cancel: () => void } | null = null;
+  private _resizeObserver: ResizeObserver | null = null;
+  private _publishedOn: HTMLElement | null = null;
   private readonly _onDocumentClick = (event: MouseEvent) => {
     if (this.isOpen() && !this.contains(event.target as Node)) this.close();
   };
 
   constructor() {
     super();
+    this.hoverDelay = 0;
+    this.publishHeight = null;
     this.addEventListener("click", (event) => this._onClick(event));
     this.addEventListener("keydown", (event) => this._onKeydown(event));
     this.addEventListener("pointerover", (event) => this._onPointer(event, true));
@@ -61,12 +99,78 @@ export class PltNavbar extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
     document.addEventListener("click", this._onDocumentClick);
+    this._startPublishingHeight();
+    if (this.querySelector(DEFERRED)) this._scheduleDeferred();
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener("click", this._onDocumentClick);
     this._cancelClose();
+    this._cancelOpen();
+    this._idleHandle?.cancel();
+    this._idleHandle = null;
+    this._stopPublishingHeight();
+  }
+
+  protected override updated(changed: PropertyValues<this>) {
+    if (changed.has("publishHeight") && this.isConnected) {
+      this._stopPublishingHeight();
+      this._startPublishingHeight();
+    }
+  }
+
+  // --- Opt-in: published height ---------------------------------------------
+
+  private _startPublishingHeight() {
+    if (this.publishHeight === null || this.publishHeight === undefined) return;
+    this._publishedOn = this.publishHeight === "root" ? document.documentElement : this;
+    const publish = () => this._publishedOn?.style.setProperty(HEIGHT_PROPERTY, `${this.getBoundingClientRect().height}px`);
+    publish();
+    if (typeof ResizeObserver === "function") {
+      this._resizeObserver = new ResizeObserver(publish);
+      this._resizeObserver.observe(this);
+    }
+  }
+
+  private _stopPublishingHeight() {
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
+    this._publishedOn?.style.removeProperty(HEIGHT_PROPERTY);
+    this._publishedOn = null;
+  }
+
+  // --- Opt-in: deferred images -----------------------------------------------
+
+  /** Applies the deferred `src`, `srcset` and `sizes` now. Safe to call repeatedly. */
+  activateDeferred() {
+    this._idleHandle?.cancel();
+    this._idleHandle = null;
+    for (const element of this.querySelectorAll<HTMLElement>(DEFERRED)) {
+      const { deferredSrc, deferredSrcset, deferredSizes } = element.dataset;
+      if (deferredSrcset) element.setAttribute("srcset", deferredSrcset);
+      if (deferredSizes) element.setAttribute("sizes", deferredSizes);
+      if (deferredSrc) element.setAttribute("src", deferredSrc);
+      delete element.dataset.deferredSrc;
+      delete element.dataset.deferredSrcset;
+      delete element.dataset.deferredSizes;
+      element.removeAttribute("data-plt-navbar-deferred");
+    }
+  }
+
+  private _scheduleDeferred() {
+    if (this._idleHandle) return;
+    const run = () => {
+      this._idleHandle = null;
+      this.activateDeferred();
+    };
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(run, { timeout: IDLE_TIMEOUT_MS });
+      this._idleHandle = { cancel: () => cancelIdleCallback(id) };
+    } else {
+      const id = setTimeout(run, 200);
+      this._idleHandle = { cancel: () => clearTimeout(id) };
+    }
   }
 
   // --- Mobile menu (former vanilla contract) -------------------------------
@@ -95,6 +199,7 @@ export class PltNavbar extends LitElement {
     const toggle = this.toggle;
     const panel = this.panel;
     if (!toggle || !panel || this.isOpen() === open) return;
+    if (open) this.activateDeferred();
     toggle.setAttribute("aria-expanded", String(open));
     panel.dataset.open = String(open);
     panel.hidden = !open;
@@ -111,7 +216,7 @@ export class PltNavbar extends LitElement {
 
   private _panelFor(trigger: Element): HTMLElement | null {
     const panel = byId(this, trigger.getAttribute("aria-controls"));
-    return panel?.classList.contains("plt-megamenu") ? panel : null;
+    return panel?.matches(PANEL) ? panel : null;
   }
 
   private _triggerFor(panel: HTMLElement): HTMLElement | null {
@@ -121,7 +226,7 @@ export class PltNavbar extends LitElement {
   /** Opens the mega menu panel with this id (closing any other). */
   openMegaMenu(id: string) {
     const panel = byId(this, id);
-    if (panel?.classList.contains("plt-megamenu")) this._show(panel);
+    if (panel?.matches(PANEL)) this._show(panel);
   }
 
   /** Closes the open mega menu panel, if any. */
@@ -137,6 +242,8 @@ export class PltNavbar extends LitElement {
 
   private _show(panel: HTMLElement) {
     this._cancelClose();
+    this._cancelOpen();
+    this.activateDeferred();
     if (this._openPanel === panel) return;
     this.closeMegaMenu();
     this._openPanel = panel;
@@ -155,10 +262,16 @@ export class PltNavbar extends LitElement {
     this._closeTimer = null;
   }
 
+  private _cancelOpen() {
+    if (this._openTimer) clearTimeout(this._openTimer);
+    this._openTimer = null;
+    this._pendingTrigger = null;
+  }
+
   private _inMegaArea(node: EventTarget | null): boolean {
     const element = node as Element | null;
     if (!element?.closest) return false;
-    return Boolean(this._trigger(element) || element.closest(".plt-megamenu"));
+    return Boolean(this._trigger(element) || element.closest(PANEL));
   }
 
   // --- Delegated listeners ----------------------------------------------------
@@ -170,7 +283,7 @@ export class PltNavbar extends LitElement {
       return;
     }
     // Following a link inside a panel closes it (client-routed frontends stay on the page).
-    if (target?.closest?.(".plt-megamenu a")) this.closeMegaMenu();
+    if (target?.closest?.(".plt-megamenu a, [data-plt-megamenu] a")) this.closeMegaMenu();
   }
 
   private _onKeydown(event: KeyboardEvent) {
@@ -208,13 +321,27 @@ export class PltNavbar extends LitElement {
     if (event.pointerType === "touch") return;
     if (entering) {
       const trigger = this._trigger(event.target);
-      const panel = trigger ? this._panelFor(trigger) : (event.target as Element | null)?.closest?.(".plt-megamenu");
-      if (panel instanceof HTMLElement) {
-        if (trigger) this._show(panel);
-        else if (panel === this._openPanel) this._cancelClose();
+      const panel = trigger ? this._panelFor(trigger) : (event.target as Element | null)?.closest?.(PANEL);
+      if (!(panel instanceof HTMLElement)) return;
+      if (!trigger) {
+        if (panel === this._openPanel) this._cancelClose();
+        return;
       }
-    } else if (this._openPanel && !this._inMegaArea(event.relatedTarget)) {
-      this._scheduleClose();
+      // Wanting a panel is enough to load its images, even when the panel itself waits.
+      this.activateDeferred();
+      if (this.hoverDelay > 0 && this._openPanel !== panel) {
+        // Moving between the trigger's own children must not restart the wait.
+        if (this._openTimer && this._pendingTrigger === trigger) return;
+        this._cancelOpen();
+        this._pendingTrigger = trigger;
+        this._openTimer = setTimeout(() => this._show(panel), this.hoverDelay);
+      } else {
+        this._show(panel);
+      }
+    } else {
+      // A pending open belongs to one trigger: leaving it (not just moving inside it) drops the open.
+      if (this._openTimer && !this._pendingTrigger?.contains(event.relatedTarget as Node | null)) this._cancelOpen();
+      if (this._openPanel && !this._inMegaArea(event.relatedTarget)) this._scheduleClose();
     }
   }
 

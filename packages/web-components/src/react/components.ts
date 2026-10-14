@@ -312,6 +312,10 @@ export const PltPagination = createComponent<PltPaginationProps>({
 export interface PltNavbarProps extends BaseProps {
   /** Navbar markup (toggle, mobile panel, mega menu triggers and panels). */
   children: ReactNode;
+  /** Milliseconds a hover must last before a mega menu panel opens (default: at once). */
+  hoverDelay?: number;
+  /** Keep `--plt-navbar-height` equal to the navbar's height: `""` on the element, `"root"` on `<html>`. */
+  publishHeight?: string;
   onToggle?: Handler<PltNavbarToggleDetail>;
   onMegaMenuToggle?: Handler<PltMegaMenuToggleDetail>;
 }
@@ -319,5 +323,7 @@ export interface PltNavbarProps extends BaseProps {
 export const PltNavbar = createComponent<PltNavbarProps>({
   tag: "plt-navbar",
   load: () => import("../navigation/define.js"),
+  properties: ["hoverDelay", "publishHeight"],
+  attributes: { hoverDelay: "hover-delay", publishHeight: "publish-height" },
   events: { onToggle: "plt:navbar-toggle", onMegaMenuToggle: "plt:megamenu-toggle" },
 });

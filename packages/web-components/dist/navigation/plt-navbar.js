@@ -3,7 +3,11 @@ import { byId, emit } from "../shared/element.js";
 const NAVBAR_TOGGLE_EVENT = "plt:navbar-toggle";
 const MEGAMENU_TOGGLE_EVENT = "plt:megamenu-toggle";
 const CLOSE_DELAY_MS = 150;
+const IDLE_TIMEOUT_MS = 2e3;
 const TRIGGER = "[aria-controls][aria-haspopup], [data-plt-megamenu-trigger]";
+const PANEL = ".plt-megamenu, [data-plt-megamenu]";
+const DEFERRED = "[data-plt-navbar-deferred]";
+const HEIGHT_PROPERTY = "--plt-navbar-height";
 class PltNavbar extends LitElement {
   constructor() {
     super();
@@ -11,9 +15,16 @@ class PltNavbar extends LitElement {
     /** Set while Escape returns focus to a trigger, so that focus does not reopen it. */
     this._returningFocus = false;
     this._closeTimer = null;
+    this._openTimer = null;
+    this._pendingTrigger = null;
+    this._idleHandle = null;
+    this._resizeObserver = null;
+    this._publishedOn = null;
     this._onDocumentClick = (event) => {
       if (this.isOpen() && !this.contains(event.target)) this.close();
     };
+    this.hoverDelay = 0;
+    this.publishHeight = null;
     this.addEventListener("click", (event) => this._onClick(event));
     this.addEventListener("keydown", (event) => this._onKeydown(event));
     this.addEventListener("pointerover", (event) => this._onPointer(event, true));
@@ -27,11 +38,70 @@ class PltNavbar extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener("click", this._onDocumentClick);
+    this._startPublishingHeight();
+    if (this.querySelector(DEFERRED)) this._scheduleDeferred();
   }
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener("click", this._onDocumentClick);
     this._cancelClose();
+    this._cancelOpen();
+    this._idleHandle?.cancel();
+    this._idleHandle = null;
+    this._stopPublishingHeight();
+  }
+  updated(changed) {
+    if (changed.has("publishHeight") && this.isConnected) {
+      this._stopPublishingHeight();
+      this._startPublishingHeight();
+    }
+  }
+  // --- Opt-in: published height ---------------------------------------------
+  _startPublishingHeight() {
+    if (this.publishHeight === null || this.publishHeight === void 0) return;
+    this._publishedOn = this.publishHeight === "root" ? document.documentElement : this;
+    const publish = () => this._publishedOn?.style.setProperty(HEIGHT_PROPERTY, `${this.getBoundingClientRect().height}px`);
+    publish();
+    if (typeof ResizeObserver === "function") {
+      this._resizeObserver = new ResizeObserver(publish);
+      this._resizeObserver.observe(this);
+    }
+  }
+  _stopPublishingHeight() {
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
+    this._publishedOn?.style.removeProperty(HEIGHT_PROPERTY);
+    this._publishedOn = null;
+  }
+  // --- Opt-in: deferred images -----------------------------------------------
+  /** Applies the deferred `src`, `srcset` and `sizes` now. Safe to call repeatedly. */
+  activateDeferred() {
+    this._idleHandle?.cancel();
+    this._idleHandle = null;
+    for (const element of this.querySelectorAll(DEFERRED)) {
+      const { deferredSrc, deferredSrcset, deferredSizes } = element.dataset;
+      if (deferredSrcset) element.setAttribute("srcset", deferredSrcset);
+      if (deferredSizes) element.setAttribute("sizes", deferredSizes);
+      if (deferredSrc) element.setAttribute("src", deferredSrc);
+      delete element.dataset.deferredSrc;
+      delete element.dataset.deferredSrcset;
+      delete element.dataset.deferredSizes;
+      element.removeAttribute("data-plt-navbar-deferred");
+    }
+  }
+  _scheduleDeferred() {
+    if (this._idleHandle) return;
+    const run = () => {
+      this._idleHandle = null;
+      this.activateDeferred();
+    };
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(run, { timeout: IDLE_TIMEOUT_MS });
+      this._idleHandle = { cancel: () => cancelIdleCallback(id) };
+    } else {
+      const id = setTimeout(run, 200);
+      this._idleHandle = { cancel: () => clearTimeout(id) };
+    }
   }
   // --- Mobile menu (former vanilla contract) -------------------------------
   get toggle() {
@@ -53,6 +123,7 @@ class PltNavbar extends LitElement {
     const toggle = this.toggle;
     const panel = this.panel;
     if (!toggle || !panel || this.isOpen() === open) return;
+    if (open) this.activateDeferred();
     toggle.setAttribute("aria-expanded", String(open));
     panel.dataset.open = String(open);
     panel.hidden = !open;
@@ -66,7 +137,7 @@ class PltNavbar extends LitElement {
   }
   _panelFor(trigger) {
     const panel = byId(this, trigger.getAttribute("aria-controls"));
-    return panel?.classList.contains("plt-megamenu") ? panel : null;
+    return panel?.matches(PANEL) ? panel : null;
   }
   _triggerFor(panel) {
     return [...this.querySelectorAll(TRIGGER)].find((t) => t.getAttribute("aria-controls") === panel.id) ?? null;
@@ -74,7 +145,7 @@ class PltNavbar extends LitElement {
   /** Opens the mega menu panel with this id (closing any other). */
   openMegaMenu(id) {
     const panel = byId(this, id);
-    if (panel?.classList.contains("plt-megamenu")) this._show(panel);
+    if (panel?.matches(PANEL)) this._show(panel);
   }
   /** Closes the open mega menu panel, if any. */
   closeMegaMenu() {
@@ -88,6 +159,8 @@ class PltNavbar extends LitElement {
   }
   _show(panel) {
     this._cancelClose();
+    this._cancelOpen();
+    this.activateDeferred();
     if (this._openPanel === panel) return;
     this.closeMegaMenu();
     this._openPanel = panel;
@@ -103,10 +176,15 @@ class PltNavbar extends LitElement {
     if (this._closeTimer) clearTimeout(this._closeTimer);
     this._closeTimer = null;
   }
+  _cancelOpen() {
+    if (this._openTimer) clearTimeout(this._openTimer);
+    this._openTimer = null;
+    this._pendingTrigger = null;
+  }
   _inMegaArea(node) {
     const element = node;
     if (!element?.closest) return false;
-    return Boolean(this._trigger(element) || element.closest(".plt-megamenu"));
+    return Boolean(this._trigger(element) || element.closest(PANEL));
   }
   // --- Delegated listeners ----------------------------------------------------
   _onClick(event) {
@@ -115,7 +193,7 @@ class PltNavbar extends LitElement {
       this.isOpen() ? this.close() : this.open();
       return;
     }
-    if (target?.closest?.(".plt-megamenu a")) this.closeMegaMenu();
+    if (target?.closest?.(".plt-megamenu a, [data-plt-megamenu] a")) this.closeMegaMenu();
   }
   _onKeydown(event) {
     if (event.key === "Escape") {
@@ -151,13 +229,24 @@ class PltNavbar extends LitElement {
     if (event.pointerType === "touch") return;
     if (entering) {
       const trigger = this._trigger(event.target);
-      const panel = trigger ? this._panelFor(trigger) : event.target?.closest?.(".plt-megamenu");
-      if (panel instanceof HTMLElement) {
-        if (trigger) this._show(panel);
-        else if (panel === this._openPanel) this._cancelClose();
+      const panel = trigger ? this._panelFor(trigger) : event.target?.closest?.(PANEL);
+      if (!(panel instanceof HTMLElement)) return;
+      if (!trigger) {
+        if (panel === this._openPanel) this._cancelClose();
+        return;
       }
-    } else if (this._openPanel && !this._inMegaArea(event.relatedTarget)) {
-      this._scheduleClose();
+      this.activateDeferred();
+      if (this.hoverDelay > 0 && this._openPanel !== panel) {
+        if (this._openTimer && this._pendingTrigger === trigger) return;
+        this._cancelOpen();
+        this._pendingTrigger = trigger;
+        this._openTimer = setTimeout(() => this._show(panel), this.hoverDelay);
+      } else {
+        this._show(panel);
+      }
+    } else {
+      if (this._openTimer && !this._pendingTrigger?.contains(event.relatedTarget)) this._cancelOpen();
+      if (this._openPanel && !this._inMegaArea(event.relatedTarget)) this._scheduleClose();
     }
   }
   _onFocusIn(event) {
@@ -176,6 +265,10 @@ class PltNavbar extends LitElement {
     this.closeMegaMenu();
   }
 }
+PltNavbar.properties = {
+  hoverDelay: { type: Number, attribute: "hover-delay" },
+  publishHeight: { type: String, attribute: "publish-height" }
+};
 export {
   MEGAMENU_TOGGLE_EVENT,
   NAVBAR_TOGGLE_EVENT,

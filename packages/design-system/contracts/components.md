@@ -113,6 +113,15 @@ Optional: `logo_url`, `logo_alt`, `home_url`.
 
 Interactive slots (search, cart) stay outside the contract; platforms inject them via named slots (`actions`, `mobile-actions`). Behaviour is bundled: the component root is wrapped in `<plt-navbar>` (`@playlovetoys/web-components`, Lit), which drives `data-plt-navbar-toggle` / `aria-expanded` / `aria-controls` / `data-open` for the mobile menu (click to open/close, Escape closes and returns focus, click-outside closes) and the mega menu (below). No platform JS required. Emits `plt:navbar-toggle` (`{ open }`) and `plt:megamenu-toggle` (`{ id, open }`).
 
+Opt-in capabilities of `<plt-navbar>`, switched on by an attribute or by the markup that carries it; a frontend that uses none of them behaves as before. They serve frontends that keep their own navbar markup (a Shopify theme with featured cards, say) and want the shared behaviour:
+
+| Hook | On | Behaviour |
+| --- | --- | --- |
+| `hover-delay="150"` | `<plt-navbar>` | A hovering mouse opens a panel after this many ms, and only if the pointer is still on that trigger, so crossing the bar opens nothing. Moving between the trigger's own children does not restart the wait. While another panel is open it stays until the new one commits. Focus and ArrowDown still open at once. Default `0`: immediate. |
+| `[data-plt-megamenu]` | panel | Marks a mega menu panel like `.plt-megamenu` does, for markup that keeps its own classes. The panel toggles `data-open="true|false"`; showing and hiding it is the frontend's CSS. |
+| `publish-height` or `publish-height="root"` | `<plt-navbar>` | Keeps `--plt-navbar-height` equal to the element's height (a `ResizeObserver`), on the element, or on `<html>` with `root`. The element must be a block box: give the wrapper `display: block`. Removed when the element disconnects. |
+| `[data-plt-navbar-deferred]` | `img` | An image that carries `data-deferred-src`, `data-deferred-srcset` and `data-deferred-sizes` (any subset) gets them applied as `src`, `srcset` and `sizes` on idle (at most 2 s after connect), or at the first hover on a trigger, focus on one, panel open or mobile menu open, whichever comes first. `navbar.activateDeferred()` does it on demand. |
+
 ## MegaMenu
 
 Panel shown under a `Navbar` link whose menu item has grandchildren. Text columns only; images and featured products are not part of the contract.

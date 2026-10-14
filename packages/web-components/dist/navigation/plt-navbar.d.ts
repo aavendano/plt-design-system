@@ -1,4 +1,4 @@
-import { LitElement } from "lit";
+import { LitElement, type PropertyValues } from "lit";
 export interface PltNavbarToggleDetail {
     open: boolean;
 }
@@ -24,19 +24,60 @@ export declare const MEGAMENU_TOGGLE_EVENT = "plt:megamenu-toggle";
  * open at a time. The element renders nothing: it works on server markup from
  * any renderer, and listeners are delegated so re-rendered children keep working.
  *
+ * Opt-in capabilities, each switched on by an attribute or by the markup that
+ * carries it, so existing consumers are untouched:
+ *
+ * - `hover-delay="150"`: a hovering pointer opens a panel after this many ms
+ *   (and only if it is still on the trigger), so crossing the bar does not
+ *   flicker panels. Focus and ArrowDown still open at once.
+ * - `[data-plt-megamenu]`: marks a panel the same way `.plt-megamenu` does, for
+ *   markup that keeps its own classes. Panels toggle `data-open`.
+ * - `publish-height` (or `publish-height="root"`): keeps `--plt-navbar-height`
+ *   equal to this element's height, on the element or on `<html>`. The element
+ *   must be a block box (a wrapper that is `display: inline` has no height).
+ * - `[data-plt-navbar-deferred]`: images carrying `data-deferred-src`,
+ *   `data-deferred-srcset` and `data-deferred-sizes` get those attributes
+ *   applied on idle (at most 2 s after connect) or at the first hover intent,
+ *   focus, panel or mobile menu open, whichever comes first.
+ *
  * @fires plt:navbar-toggle - `{ open }`
  * @fires plt:megamenu-toggle - `{ id, open }`
  */
 export declare class PltNavbar extends LitElement {
+    static properties: {
+        hoverDelay: {
+            type: NumberConstructor;
+            attribute: string;
+        };
+        publishHeight: {
+            type: StringConstructor;
+            attribute: string;
+        };
+    };
+    /** Milliseconds a hover must last before a panel opens; 0 opens at once. */
+    hoverDelay: number;
+    /** Present: publish the height on this element; `"root"`: on `<html>`. */
+    publishHeight: string | null;
     private _openPanel;
     /** Set while Escape returns focus to a trigger, so that focus does not reopen it. */
     private _returningFocus;
     private _closeTimer;
+    private _openTimer;
+    private _pendingTrigger;
+    private _idleHandle;
+    private _resizeObserver;
+    private _publishedOn;
     private readonly _onDocumentClick;
     constructor();
     protected createRenderRoot(): this;
     connectedCallback(): void;
     disconnectedCallback(): void;
+    protected updated(changed: PropertyValues<this>): void;
+    private _startPublishingHeight;
+    private _stopPublishingHeight;
+    /** Applies the deferred `src`, `srcset` and `sizes` now. Safe to call repeatedly. */
+    activateDeferred(): void;
+    private _scheduleDeferred;
     get toggle(): HTMLElement | null;
     get panel(): HTMLElement | null;
     isOpen(): boolean;
@@ -53,6 +94,7 @@ export declare class PltNavbar extends LitElement {
     private _show;
     private _scheduleClose;
     private _cancelClose;
+    private _cancelOpen;
     private _inMegaArea;
     private _onClick;
     private _onKeydown;
