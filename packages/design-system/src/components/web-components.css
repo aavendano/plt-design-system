@@ -126,14 +126,41 @@ plt-filter-bar[orientation="vertical"] .plt-filter-bar__active { order: -1; padd
 
 
 /* Gallery: the selected thumbnail and keyboard focus are visible. */
-.plt-product-detail__thumb[aria-current="true"] {
+.plt-product-detail__thumb[aria-current="true"],
+[data-plt-gallery-thumb][aria-current="true"] {
   outline: 2px solid var(--plt-color-primary, var(--color-primary));
   outline-offset: 2px;
 }
-.plt-product-detail__thumb:focus-visible {
+.plt-product-detail__thumb:focus-visible,
+[data-plt-gallery-thumb]:focus-visible {
   outline: 2px solid var(--plt-color-accent, var(--color-accent));
   outline-offset: 2px;
 }
+/* A scrolling thumbnail track clips outlines that sit outside the thumbnail; draw them inside. */
+[data-plt-gallery-thumb-track] [data-plt-gallery-thumb][aria-current="true"],
+[data-plt-gallery-thumb-track] [data-plt-gallery-thumb]:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Gallery slides: utility classes on a slide must not beat `hidden`. */
+[data-plt-gallery-slide][hidden] { display: none; }
+
+/* Gallery hover zoom: the element sets --plt-zoom-x/y from the pointer. Fine pointers on wide screens only. */
+[data-plt-gallery-zoom] { overflow: hidden; cursor: zoom-in; }
+@media (min-width: 1024px) and (hover: hover) {
+  [data-plt-gallery-zoom] img { transition: transform 0.15s ease-out; }
+  [data-plt-gallery-zoom]:hover img {
+    transform: scale(2);
+    transform-origin: var(--plt-zoom-x, 50%) var(--plt-zoom-y, 50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-plt-gallery-zoom] img { transition: none; }
+}
+
+/* Gallery thumbnail track scrolls without a visible scrollbar. */
+[data-plt-gallery-thumb-track] { scrollbar-width: none; -ms-overflow-style: none; }
+[data-plt-gallery-thumb-track]::-webkit-scrollbar { display: none; }
 
 /* Navbar: an open mega menu trigger reads as current. */
 .plt-navbar__links a[aria-expanded="true"] { color: var(--plt-color-primary, var(--color-primary)); }
