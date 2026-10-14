@@ -73,7 +73,13 @@ async function open(name: string, { width = 1200, javaScriptEnabled = true } = {
   await page.goto(`${origin}/${name}/`);
   if (javaScriptEnabled) {
     await page.waitForFunction((tags) => tags.every((tag) => customElements.get(tag)), TAGS);
-    await page.waitForFunction(() => document.querySelector("plt-cart-drawer dialog") && document.querySelector("plt-filter-bar > form:not([data-plt-fallback]) select"));
+    await page.waitForFunction(
+      () =>
+        document.querySelector("plt-cart-drawer dialog") &&
+        document.querySelector(
+          'plt-filter-bar > form:not([data-plt-fallback]) select, plt-filter-bar > form:not([data-plt-fallback]) input[type="checkbox"]',
+        ),
+    );
   }
   return { page, errors, close: () => context.close() };
 }

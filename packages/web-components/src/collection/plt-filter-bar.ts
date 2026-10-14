@@ -163,10 +163,11 @@ export class PltFilterBar extends LitElement {
     if (filter?.multiple) this._toggle(id, value, false);
     else this._set(id, "");
     await this.updateComplete;
-    // Return focus to the control the chip stood for.
+    // Return focus to the control the chip stood for (ignore retired fallback controls).
+    const scope = this.form ?? this;
     const control = filter?.multiple
-      ? [...this.querySelectorAll<HTMLInputElement>("input[type=checkbox]")].find((input) => input.name === id && input.value === value)
-      : byId<HTMLSelectElement>(this, `${this._idPrefix}-${id}`);
+      ? [...scope.querySelectorAll<HTMLInputElement>("input[type=checkbox]")].find((input) => input.name === id && input.value === value)
+      : byId<HTMLSelectElement>(scope, `${this._idPrefix}-${id}`);
     control?.focus();
   }
 
