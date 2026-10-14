@@ -13,8 +13,8 @@
   @param {string} [orientation] - horizontal (default) or vertical
   @param {boolean} [collapsible] - Wrap each filter in a collapsible <details> group
   @param {boolean} [hide_chips] - Leave the active-filter chips to the theme
-  @param {string} [min_label] - Range minimum label (default: Min)
-  @param {string} [max_label] - Range maximum label (default: Max)
+  @param {string} [min_label] - Accessible name of a range minimum input and prefix of its chip (default: "<filter label> Min" and "Min")
+  @param {string} [max_label] - Same for the range maximum (default: Max)
   @param {string} [remove_label] - Chip removal label prefix
   @param {string} [clear_label] - "Clear all" label
   @param {string} [active_label] - Label of the active-filters group
@@ -44,7 +44,7 @@
       ]}
     {%- elsif filter.type == 'price_range' -%}
       {%- unless first -%},{%- endunless -%}{%- assign first = false -%}
-      {"id":{{ filter.param_name | json }},"label":{{ filter.label | json }},"collapsible":{{ is_collapsible | json }},"options":[],"range":{"min":{"name":{{ filter.min_value.param_name | json }},"value":{{ filter.min_value.value | append: '' | json }},"placeholder":{{ filter.range_min | money_without_currency | strip_html | json }}},"max":{"name":{{ filter.max_value.param_name | json }},"value":{{ filter.max_value.value | append: '' | json }},"placeholder":{{ filter.range_max | money_without_currency | strip_html | json }}}}}
+      {"id":{{ filter.param_name | json }},"label":{{ filter.label | json }},"collapsible":{{ is_collapsible | json }},"options":[],"range":{"min":{"name":{{ filter.min_value.param_name | json }},"value":{{ filter.min_value.value | append: '' | json }},"placeholder":{{ filter.range_min | money_without_currency | strip_html | json }}{% if min_label != blank %},"label":{{ min_label | json }}{% endif %}},"max":{"name":{{ filter.max_value.param_name | json }},"value":{{ filter.max_value.value | append: '' | json }},"placeholder":{{ filter.range_max | money_without_currency | strip_html | json }}{% if max_label != blank %},"label":{{ max_label | json }}{% endif %}}}}
     {%- endif -%}
   {%- endfor -%}
   ]
@@ -71,8 +71,8 @@
           <fieldset class="plt-filter-bar__field plt-filter-bar__range"{% if is_collapsible %} aria-label="{{ filter.label | escape }}"{% endif %}>
             {%- unless is_collapsible -%}<legend class="theme-label-bold">{{ filter.label | escape }}</legend>{%- endunless -%}
             <div class="plt-filter-bar__bounds">
-              <input class="d-input d-input-sm" type="number" inputmode="decimal" min="0" step="any" name="{{ filter.min_value.param_name | escape }}" value="{{ filter.min_value.value | escape }}" placeholder="{{ filter.range_min | money_without_currency | strip_html | escape }}" aria-label="{{ filter.label | escape }} {{ min_label | default: 'Min' | escape }}">
-              <input class="d-input d-input-sm" type="number" inputmode="decimal" min="0" step="any" name="{{ filter.max_value.param_name | escape }}" value="{{ filter.max_value.value | escape }}" placeholder="{{ filter.range_max | money_without_currency | strip_html | escape }}" aria-label="{{ filter.label | escape }} {{ max_label | default: 'Max' | escape }}">
+              <input class="d-input d-input-sm" type="number" inputmode="decimal" min="0" step="any" name="{{ filter.min_value.param_name | escape }}" value="{{ filter.min_value.value | escape }}" placeholder="{{ filter.range_min | money_without_currency | strip_html | escape }}" aria-label="{% if min_label != blank %}{{ min_label | escape }}{% else %}{{ filter.label | escape }} Min{% endif %}">
+              <input class="d-input d-input-sm" type="number" inputmode="decimal" min="0" step="any" name="{{ filter.max_value.param_name | escape }}" value="{{ filter.max_value.value | escape }}" placeholder="{{ filter.range_max | money_without_currency | strip_html | escape }}" aria-label="{% if max_label != blank %}{{ max_label | escape }}{% else %}{{ filter.label | escape }} Max{% endif %}">
             </div>
           </fieldset>
         {%- endif -%}

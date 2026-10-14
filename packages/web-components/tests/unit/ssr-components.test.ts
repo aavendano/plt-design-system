@@ -152,6 +152,8 @@ describe("server rendering of every component", () => {
     expect(collapsedFilters[0].options.map((option: { disabled: boolean }) => option.disabled)).toEqual([false, true]);
     expect(attribute(collapsedHtml, "labels")).toMatchObject({ min: "Desde", max: "Hasta", apply: "Apply" });
     expect(collapsedHtml).toMatch(/<plt-filter-bar [^>]* hide-chips>/);
+    expect(collapsedFilters[1].range.min.label).toBe("Desde");
+    expect(collapsedHtml).toContain('aria-label="Hasta"');
     expect(collapsedHtml).toContain('<details class="plt-filter-bar__details"><summary class="theme-label-bold">Brand</summary>');
     expect(collapsedHtml).toContain('<details class="plt-filter-bar__details" open><summary class="theme-label-bold">Price</summary>');
     expect(collapsedHtml).toContain('value="B" disabled');
