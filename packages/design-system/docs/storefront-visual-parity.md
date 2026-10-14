@@ -177,12 +177,19 @@ Per `docs/themes.md`: after `@import "tailwindcss"`, import **one** theme
 (`themes/cheesecake.css`). Do not also ship a local `@plugin "daisyui/theme"`
 block with literal brand values.
 
-Liquid and Astro pipelines today pin `@playlovetoys/platform` (git) and can
-import:
+Liquid and Astro pipelines pin `@playlovetoys/platform` (git) and import:
 
 `@playlovetoys/platform/packages/design-system/themes/cheesecake.css`
 
-or the package export `@playlovetoys/design-system/themes/cheesecake` when the
-resolved package exposes it. Phase 1 may import `tokens` + `geometry` +
-`daisyui-theme` first if a full theme import would duplicate still-local
-`@utility theme-*` (removed in Phase 2).
+## 11. Implementation status (2026-10-14)
+
+| Phase | Status | Evidence |
+| --- | --- | --- |
+| 0 Measure | Done (static) | This doc |
+| 1 Tokens | Done | `tokens/radius.css`, `tokens/shadows.css`; storefronts import cheesecake |
+| 2 Utilities | Done | Local `@utility theme-*` / `nb-*` removed; DS primitives are source |
+| 3 Liquid CSS | Done | `src/components/{mega-menu,product-review-stars,…}.css` |
+| 4 Markup | Inventory done | `storefront-composition-inventory.md` — renderer adoption remains iterative |
+| 5 Safety | Done | `storefront-style-diff.md`, contracts theme-ownership, extended `frontends.test.ts` |
+
+PRs (do not merge until reviewed): DS #46, Liquid #18, Astro #11, Hydrogen #147.
