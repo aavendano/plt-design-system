@@ -136,6 +136,11 @@ plt-filter-bar[orientation="vertical"] .plt-filter-bar__active { order: -1; padd
   outline: 2px solid var(--plt-color-accent, var(--color-accent));
   outline-offset: 2px;
 }
+/* A scrolling thumbnail track clips outlines that sit outside the thumbnail; draw them inside. */
+[data-plt-gallery-thumb-track] [data-plt-gallery-thumb][aria-current="true"],
+[data-plt-gallery-thumb-track] [data-plt-gallery-thumb]:focus-visible {
+  outline-offset: -2px;
+}
 
 /* Gallery slides: utility classes on a slide must not beat `hidden`. */
 [data-plt-gallery-slide][hidden] { display: none; }
