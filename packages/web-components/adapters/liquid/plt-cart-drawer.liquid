@@ -14,6 +14,9 @@
   @param {string} [empty_label] - Empty-cart message
   @param {string} [subtotal_label] - Subtotal label
   @param {string} [remove_label] - Line removal label prefix
+  @param {string} [decrease_label] - Quantity decrease button label
+  @param {string} [increase_label] - Quantity increase button label
+  @param {string} [quantity_label] - Quantity input label
   @param {string} [script_url] - Bundle URL; 'none' skips the tag
 {% enddoc %}
 {%- liquid
@@ -40,7 +43,7 @@
   ]
 {%- endcapture -%}
 {%- capture labels_json -%}
-  {"title":{{ title | default: 'Cart' | json }},"close":{{ close_label | default: 'Close cart' | json }},"checkout":{{ checkout_label | default: 'Checkout' | json }},"viewCart":{{ view_cart_label | default: 'View cart' | json }},"empty":{{ empty_label | default: 'Your cart is empty.' | json }},"subtotal":{{ subtotal_label | default: 'Subtotal' | json }},"remove":{{ remove_label | default: 'Remove' | json }}}
+  {"title":{{ title | default: 'Cart' | json }},"close":{{ close_label | default: 'Close cart' | json }},"checkout":{{ checkout_label | default: 'Checkout' | json }},"viewCart":{{ view_cart_label | default: 'View cart' | json }},"empty":{{ empty_label | default: 'Your cart is empty.' | json }},"subtotal":{{ subtotal_label | default: 'Subtotal' | json }},"remove":{{ remove_label | default: 'Remove' | json }},"decrease":{{ decrease_label | default: 'Decrease quantity' | json }},"increase":{{ increase_label | default: 'Increase quantity' | json }},"quantity":{{ quantity_label | default: 'Quantity' | json }}}
 {%- endcapture -%}
 <plt-cart-drawer
   id="{{ id | default: 'plt-cart-drawer' | escape }}"

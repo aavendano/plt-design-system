@@ -101,14 +101,14 @@ describe("server rendering of every component", () => {
         { key: "40007:def", quantity: 1, url: "/products/ring", image: null, final_line_price: 1900, original_line_price: 1900, product: { title: "Ring", has_only_default_variant: true }, variant: { title: "Default Title" } },
       ],
     };
-    const html = await render(`${adapters}plt-cart-drawer.liquid`, { cart, routes: { cart_url: "/cart" }, title: "Panier" });
+    const html = await render(`${adapters}plt-cart-drawer.liquid`, { cart, routes: { cart_url: "/cart" }, title: "Panier", decrease_label: "Moins", increase_label: "Plus", quantity_label: "Quantité" });
     expect(attribute(html, "lines")).toEqual([
       { id: "40001:abc", title: "Play Tee <b>", url: "/products/tee?variant=40001", imageUrl: "tee.jpg", imageAlt: "Play Tee <b>", variantTitle: "Red / S", quantity: 2, price: "$38.00", compareAtPrice: "$44.00" },
       { id: "40007:def", title: "Ring", url: "/products/ring", imageUrl: null, imageAlt: "Ring", variantTitle: null, quantity: 1, price: "$19.00", compareAtPrice: null },
     ]);
     expect(html).toContain('subtotal="$57.00"');
     expect(html).toContain('cart-url="/cart"');
-    expect(attribute(html, "labels").title).toBe("Panier");
+    expect(attribute(html, "labels")).toMatchObject({ title: "Panier", decrease: "Moins", increase: "Plus", quantity: "Quantité" });
     expect(html).not.toContain("<b>");
   });
 
