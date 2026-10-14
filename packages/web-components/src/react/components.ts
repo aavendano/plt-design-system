@@ -117,6 +117,7 @@ export interface PltCartDrawerProps extends BaseProps {
   checkoutUrl?: string;
   cartUrl?: string;
   busy?: boolean;
+  error?: string;
   labels?: PltCartLabels;
   onOpen?: Handler<Record<string, never>>;
   onClose?: Handler<Record<string, never>>;
@@ -127,7 +128,7 @@ export interface PltCartDrawerProps extends BaseProps {
 export const PltCartDrawer = createComponent<PltCartDrawerProps>({
   tag: "plt-cart-drawer",
   load: () => import("../cart/define.js"),
-  properties: ["open", "lines", "subtotal", "checkoutUrl", "cartUrl", "busy", "labels"],
+  properties: ["open", "lines", "subtotal", "checkoutUrl", "cartUrl", "busy", "error", "labels"],
   attributes: { checkoutUrl: "checkout-url", cartUrl: "cart-url", busy: "busy" },
   events: {
     onOpen: "plt:cart-drawer-open",

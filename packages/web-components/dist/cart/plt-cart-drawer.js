@@ -18,6 +18,7 @@ class PltCartDrawer extends LitElement {
     this.checkoutUrl = "";
     this.cartUrl = "";
     this.busy = false;
+    this.error = "";
     this.labels = {};
   }
   createRenderRoot() {
@@ -86,6 +87,7 @@ class PltCartDrawer extends LitElement {
             <span aria-hidden="true">×</span>
           </button>
         </header>
+        <div class="plt-cart-drawer__error theme-label-bold" role="alert" ?data-empty=${!this.error}>${this.error}</div>
         <div class="plt-cart-drawer__body" aria-busy=${this.busy ? "true" : "false"}>
           ${lines.length ? html`<ul class="plt-cart-lines">
                 ${repeat(
@@ -113,6 +115,7 @@ PltCartDrawer.properties = {
   checkoutUrl: { type: String, attribute: "checkout-url" },
   cartUrl: { type: String, attribute: "cart-url" },
   busy: { type: Boolean, reflect: true },
+  error: { type: String },
   labels: { type: Object, converter: jsonConverter("plt-cart-drawer", () => ({})) }
 };
 export {

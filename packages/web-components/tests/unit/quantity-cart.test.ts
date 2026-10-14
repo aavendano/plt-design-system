@@ -207,6 +207,36 @@ describe("<plt-cart-drawer>", () => {
     expect(events).toEqual(["open", "close"]);
   });
 
+  it("shows a failed-mutation message in a live region and clears it", async () => {
+    const element = await mount();
+    const region = () => element.querySelector<HTMLElement>(".plt-cart-drawer__error")!;
+    // The region is there from the start (so the first message is announced) and empty.
+    expect(region().getAttribute("role")).toBe("alert");
+    expect(region().textContent!.trim()).toBe("");
+    expect(region().hasAttribute("data-empty")).toBe(true);
+
+    element.error = "We could not update your cart. Please try again.";
+    await flush(element);
+    expect(region().textContent).toBe("We could not update your cart. Please try again.");
+    expect(region().hasAttribute("data-empty")).toBe(false);
+    // Same node, so assistive technology sees the text change rather than a new element.
+    expect(element.querySelectorAll(".plt-cart-drawer__error")).toHaveLength(1);
+    // Lines stay as the consumer last set them.
+    expect(element.querySelectorAll("plt-cart-line")).toHaveLength(2);
+
+    element.error = "";
+    await flush(element);
+    expect(region().textContent!.trim()).toBe("");
+    expect(region().hasAttribute("data-empty")).toBe(true);
+  });
+
+  it("reads the error from an attribute", async () => {
+    document.body.innerHTML = `<plt-cart-drawer error="Out of stock"></plt-cart-drawer>`;
+    const element = document.querySelector("plt-cart-drawer")!;
+    await flush(element);
+    expect(element.querySelector(".plt-cart-drawer__error")!.textContent).toBe("Out of stock");
+  });
+
   it("closes on a backdrop click and lets line events bubble", async () => {
     const element = await mount();
     element.show();

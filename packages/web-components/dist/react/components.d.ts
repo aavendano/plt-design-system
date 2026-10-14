@@ -53,6 +53,7 @@ export interface PltCartDrawerProps extends BaseProps {
     checkoutUrl?: string;
     cartUrl?: string;
     busy?: boolean;
+    error?: string;
     labels?: PltCartLabels;
     onOpen?: Handler<Record<string, never>>;
     onClose?: Handler<Record<string, never>>;
