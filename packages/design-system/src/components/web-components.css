@@ -119,3 +119,11 @@ plt-filter-bar[orientation="vertical"] .plt-filter-bar__active { order: -1; padd
 
 /* Navbar: an open mega menu trigger reads as current. */
 .plt-navbar__links a[aria-expanded="true"] { color: var(--plt-color-primary, var(--color-primary)); }
+
+/* Pagination: the current page is a disabled button, which daisyUI greys out; keep it visibly selected. */
+.plt-pagination .d-btn.d-btn-primary:disabled {
+  background-color: var(--plt-color-primary, var(--color-primary));
+  border-color: var(--plt-color-primary, var(--color-primary));
+  color: var(--plt-color-primary-content, var(--color-primary-content));
+  opacity: 1;
+}
