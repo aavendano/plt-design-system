@@ -23,7 +23,7 @@ None fetches data, formats money, mutates the cart or routes: the frontend does.
 | --- | --- | --- | --- |
 | Product | `<plt-variant-picker>` | `options`, `variants`, `selected-variant-id`, `name`, `labels` | `plt:variant-change` |
 | Product | `<plt-quantity-selector>` | `value`, `min`, `max`, `step`, `name`, `labels` | `plt:quantity-change` |
-| Product | `<plt-product-gallery>` | ProductDetail gallery markup; `selected-index`, `select(i)` | `plt:gallery-change` |
+| Product | `<plt-product-gallery>` | ProductDetail gallery markup; `selected-index`, `select(i)`, `selectMedia(id)`; opt-in slides, hover zoom, lightbox and thumbnail track (see `contracts/components.md`) | `plt:gallery-change` |
 | Product | `<plt-quick-view>` | ProductQuickView markup (`<dialog>`); `open`, `show()`, `close()` | `plt:quick-view-open`, `plt:quick-view-close` |
 | Cart | `<plt-cart-line>` | `line` (`{ id, title, quantity, price, … }`), `busy` | `plt:cart-line-change`, `plt:cart-line-remove` |
 | Cart | `<plt-cart-drawer>` | `lines`, `subtotal`, `checkout-url`, `cart-url`, `busy`; `show()` | `plt:cart-drawer-open`, `plt:cart-drawer-close` (+ line events) |

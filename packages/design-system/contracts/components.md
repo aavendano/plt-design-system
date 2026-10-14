@@ -170,7 +170,18 @@ Optional: `vendor`, `compare_at_price`, `badge`, `description`, `images` — arr
 
 Gallery override, option pickers and add-to-cart actions are injected via slots / render blocks.
 
-The gallery is wrapped in `<plt-product-gallery>` (`@playlovetoys/web-components`, Lit): `.plt-product-detail__thumb` buttons swap `.plt-product-detail__gallery-main img` (including `srcset`/`sizes`) and carry `aria-current`; arrow keys, Home and End move between thumbnails; `selectedIndex` / `select(index)` let the page show a variant's image; emits `plt:gallery-change` (`{ index, src }`).
+The gallery is wrapped in `<plt-product-gallery>` (`@playlovetoys/web-components`, Lit): `.plt-product-detail__thumb` buttons swap `.plt-product-detail__gallery-main img` (including `srcset`/`sizes`) and carry `aria-current`; arrow keys, Home and End move between thumbnails; `selectedIndex` / `select(index)` let the page show a variant's image; emits `plt:gallery-change` (`{ index, src, mediaId? }`).
+
+Opt-in capabilities, switched on by the markup that carries them (a frontend that does not render these attributes behaves as before). Media markup (image, video, embed, 3D) stays in each frontend; the element owns selection, zoom, the lightbox and the thumbnail track:
+
+| Hook (attribute on the markup) | Behaviour |
+| --- | --- |
+| `[data-plt-gallery-slide]` (one per thumbnail, same order; optional `data-media-id`) | The selected slide is shown, the others get `hidden`. Video in a hidden slide pauses (YouTube/Vimeo embeds get a pause command) and an `autoplay` video resumes when shown. `gallery.selectMedia(id)` selects by `data-media-id` and returns whether one matched, so the page can follow a variant's featured media. |
+| `[data-plt-gallery-thumb]` | A thumbnail without the ProductDetail class. With `role="tab"` it also carries `aria-selected`. |
+| `[data-plt-gallery-zoom]` (wraps an `img`) | Mouse pointers set `--plt-zoom-x` / `--plt-zoom-y`; CSS scales the image on hover for fine pointers at 1024px and up. Touch is ignored; reduced motion drops the transition. |
+| `[data-plt-gallery-zoom-open]` + `dialog[data-plt-gallery-lightbox]` containing `[data-plt-gallery-lightbox-image]` and `[data-plt-gallery-lightbox-close]` | Opens the large image (`href`, or `data-zoom-src`; label from `data-zoom-alt`) in a modal `<dialog>`: the page behind is inert, Escape, the close button and the backdrop close it, and focus returns to the opener. Render the opener as a link to the large image, so it still works without JavaScript. |
+| `[data-plt-gallery-thumb-track]`, `[data-plt-gallery-thumbs-prev]`, `[data-plt-gallery-thumbs-next]` | The track scrolls the selected thumbnail into view (it never scrolls the page); the buttons page it by one thumbnail. |
+
 
 Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
 
