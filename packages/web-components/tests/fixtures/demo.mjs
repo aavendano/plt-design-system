@@ -26,19 +26,19 @@ export const filters = [
   {
     id: "filter.v.option.color",
     label: "Color",
+    multiple: true,
     options: [
-      { label: "All", value: "", selected: true },
-      { label: "Red", value: "Red", selected: false },
-      { label: "Blue", value: "Blue", selected: false },
+      { label: "Red", value: "Red", selected: false, count: 4 },
+      { label: "Blue", value: "Blue", selected: false, count: 2 },
     ],
   },
   {
     id: "filter.v.option.size",
     label: "Size",
+    multiple: true,
     options: [
-      { label: "All", value: "", selected: true },
-      { label: "S", value: "S", selected: false },
-      { label: "M", value: "M", selected: false },
+      { label: "S", value: "S", selected: false, count: 3 },
+      { label: "M", value: "M", selected: false, count: 3 },
     ],
   },
 ];
@@ -48,7 +48,7 @@ export const liquidFilters = filters.map((filter) => ({
   type: "list",
   param_name: filter.id,
   label: filter.label,
-  values: filter.options.filter((option) => option.value).map((option) => ({ value: option.value, label: option.label, active: false })),
+  values: filter.options.map((option) => ({ value: option.value, label: option.label, active: false, count: option.count })),
 }));
 
 export const sortOptions = [

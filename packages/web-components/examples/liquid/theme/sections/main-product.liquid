@@ -30,8 +30,8 @@
   <section class="plt-collection" id="collection" data-collection>
     <h2 class="theme-headline-sm">Collection</h2>
     <div class="plt-collection-controls">
-      {% render 'plt-filter-bar', filters: filters, action: '', script_url: 'none' %}
-      {% render 'plt-sort-select', options: sort_options, current: 'manual', script_url: 'none' %}
+      {% render 'plt-filter-bar', filters: filters, action: '', sort_by: 'manual', search_terms: 'play', script_url: 'none' %}
+      {% render 'plt-sort-select', options: sort_options, current: 'manual', filters: filters, search_terms: 'play', script_url: 'none' %}
     </div>
     <ul class="demo-grid">
       {%- for card in cards -%}
