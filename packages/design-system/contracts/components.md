@@ -128,6 +128,9 @@ Opt-in capabilities of `<plt-navbar>`, switched on by an attribute or by the mar
 | `[data-plt-navbar-more-list]` | `ul` in More (start with `hidden`) | The open list. The design system hangs it below the button, so it never covers it. |
 | `[data-plt-navbar-more-for="id"]` | `li` in the list (start with `hidden`) | One entry per link, **plain links included**; only the entries of hidden links are shown. An entry that carries `aria-haspopup`/`aria-controls` opens the same mega menu panel as the link in the bar. |
 | `overflow-min="1"` | `<plt-navbar>` | Links that always stay in the bar, however narrow it gets. Default `1`. |
+| `dialog[data-plt-navbar-drawer]` | the element `aria-controls` of `[data-plt-navbar-toggle]` | Opt-in modal mobile menu. Open uses `showModal()` (native focus trap, Escape, inert page) and the shared scroll lock used by the cart drawer and quick view. Close restores focus to the toggle and releases the lock (including when two modals overlap). Backdrop clicks close it. Without this attribute the toggle keeps the plain panel contract (`data-open` / `hidden`). |
+| `data-label-open` / `data-label-close` | `[data-plt-navbar-toggle]` | Become the toggle's `aria-label` when the menu is closed or open. |
+| `[data-plt-navbar-drawer-close]` | control inside the drawer | Closes the modal drawer. |
 
 Keyboard in More: Enter/Space on the button toggles; ArrowDown/ArrowUp/Home/End move between entries; ArrowRight enters an entry's panel; Escape closes the panel first, then the list, and returns focus to the button; a click outside, focus leaving, or following a link closes it. Event `plt:navbar-overflow` (`detail.hidden`: ids of the hidden links, in order) fires when that set changes, including to `[]`.
 

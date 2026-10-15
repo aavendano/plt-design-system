@@ -1,5 +1,5 @@
 import { LitElement, type PropertyValues } from "lit";
-import { byId, emit } from "../shared/element.js";
+import { byId, emit, lockScroll } from "../shared/element.js";
 
 export interface PltNavbarToggleDetail {
   open: boolean;
@@ -32,6 +32,8 @@ const MORE = "[data-plt-navbar-more]";
 const MORE_TOGGLE = "[data-plt-navbar-more-toggle]";
 const MORE_LIST = "[data-plt-navbar-more-list]";
 const MORE_ENTRY = "[data-plt-navbar-more-for]";
+/** Opt-in mobile drawer: a `<dialog data-plt-navbar-drawer>` opened with `showModal()`. */
+const DRAWER = "dialog[data-plt-navbar-drawer]";
 
 /**
  * `<plt-navbar>` — behaviour for the Navbar and MegaMenu anatomy.
@@ -40,6 +42,12 @@ const MORE_ENTRY = "[data-plt-navbar-more-for]";
  * `[data-plt-navbar-toggle]` with `aria-controls` toggles the panel
  * (`aria-expanded`, `data-open`, `hidden`); Escape closes and returns focus;
  * a click outside closes.
+ *
+ * Opt-in modal drawer: when `aria-controls` points at a
+ * `dialog[data-plt-navbar-drawer]`, open uses `showModal()` (native focus trap,
+ * Escape, inert page) and the shared scroll lock; the toggle's
+ * `data-label-open` / `data-label-close` become its `aria-label`. Backdrop
+ * clicks close it. Frontends that keep a plain panel are unchanged.
  *
  * Mega menu (previously left to each platform): a trigger — the top-level
  * link with `aria-haspopup` + `aria-controls`, or `[data-plt-megamenu-trigger]`
@@ -104,9 +112,12 @@ export class PltNavbar extends LitElement {
   private _lastOverflowWidth = -1;
   private _hiddenKey = "";
   private _moreCloseTimer: ReturnType<typeof setTimeout> | null = null;
+  private _releaseScroll: (() => void) | null = null;
+  private readonly _onDialogClose = () => this._closedDrawer();
   private readonly _onDocumentClick = (event: MouseEvent) => {
     const target = event.target as Element | null;
-    if (this.isOpen() && !this.contains(target as Node)) this.close();
+    // Modal drawers use the dialog backdrop; do not close them on document click.
+    if (this.isOpen() && !this._drawer() && !this.contains(target as Node)) this.close();
     if (this.moreOpen && !target?.closest?.(MORE) && !this._openPanel?.contains(target as Node)) this.closeMore();
   };
 
@@ -130,6 +141,7 @@ export class PltNavbar extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
     document.addEventListener("click", this._onDocumentClick);
+    this._drawer()?.addEventListener("close", this._onDialogClose);
     this._startPublishingHeight();
     if (this.querySelector(DEFERRED)) this._scheduleDeferred();
     this._startOverflow();
@@ -138,6 +150,7 @@ export class PltNavbar extends LitElement {
   override disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener("click", this._onDocumentClick);
+    this._drawer()?.removeEventListener("close", this._onDialogClose);
     this._cancelClose();
     this._cancelOpen();
     this._idleHandle?.cancel();
@@ -146,6 +159,10 @@ export class PltNavbar extends LitElement {
     this._stopOverflow();
     if (this._moreCloseTimer) clearTimeout(this._moreCloseTimer);
     this._moreCloseTimer = null;
+    if (this._releaseScroll) {
+      this._releaseScroll();
+      this._releaseScroll = null;
+    }
   }
 
   protected override updated(changed: PropertyValues<this>) {
@@ -386,7 +403,7 @@ export class PltNavbar extends LitElement {
     }
   }
 
-  // --- Mobile menu (former vanilla contract) -------------------------------
+  // --- Mobile menu (former vanilla contract + opt-in modal drawer) ---------
 
   get toggle(): HTMLElement | null {
     return this.querySelector("[data-plt-navbar-toggle]");
@@ -396,7 +413,14 @@ export class PltNavbar extends LitElement {
     return byId(this, this.toggle?.getAttribute("aria-controls"));
   }
 
+  private _drawer(): HTMLDialogElement | null {
+    const panel = this.panel;
+    return panel?.matches(DRAWER) ? (panel as HTMLDialogElement) : null;
+  }
+
   isOpen(): boolean {
+    const drawer = this._drawer();
+    if (drawer) return drawer.open;
     return this.toggle?.getAttribute("aria-expanded") === "true";
   }
 
@@ -405,6 +429,11 @@ export class PltNavbar extends LitElement {
   }
 
   close() {
+    const drawer = this._drawer();
+    if (drawer?.open) {
+      drawer.close();
+      return;
+    }
     this._setMobile(false);
   }
 
@@ -413,10 +442,58 @@ export class PltNavbar extends LitElement {
     const panel = this.panel;
     if (!toggle || !panel || this.isOpen() === open) return;
     if (open) this.activateDeferred();
+
+    const drawer = this._drawer();
+    if (drawer) {
+      if (open) {
+        this.closeMegaMenu();
+        this.closeMore();
+        this._releaseScroll = lockScroll();
+        if (typeof drawer.showModal === "function") drawer.showModal();
+        else drawer.setAttribute("open", "");
+        toggle.setAttribute("aria-expanded", "true");
+        drawer.dataset.open = "true";
+        this._syncToggleLabel(true);
+        emit<PltNavbarToggleDetail>(this, NAVBAR_TOGGLE_EVENT, { open: true });
+      } else {
+        drawer.close();
+      }
+      return;
+    }
+
     toggle.setAttribute("aria-expanded", String(open));
     panel.dataset.open = String(open);
     panel.hidden = !open;
+    this._syncToggleLabel(open);
     emit<PltNavbarToggleDetail>(this, NAVBAR_TOGGLE_EVENT, { open });
+  }
+
+  /** Applies after a modal drawer `close` (Escape, backdrop, or `dialog.close()`). */
+  private _closedDrawer() {
+    const toggle = this.toggle;
+    const drawer = this._drawer();
+    if (!drawer || !this._releaseScroll) {
+      if (toggle) {
+        toggle.setAttribute("aria-expanded", "false");
+        this._syncToggleLabel(false);
+      }
+      if (drawer) drawer.dataset.open = "false";
+      return;
+    }
+    this._releaseScroll();
+    this._releaseScroll = null;
+    toggle?.setAttribute("aria-expanded", "false");
+    drawer.dataset.open = "false";
+    this._syncToggleLabel(false);
+    if (toggle && typeof toggle.focus === "function") toggle.focus();
+    emit<PltNavbarToggleDetail>(this, NAVBAR_TOGGLE_EVENT, { open: false });
+  }
+
+  private _syncToggleLabel(open: boolean) {
+    const toggle = this.toggle;
+    if (!toggle) return;
+    const label = open ? toggle.dataset.labelClose : toggle.dataset.labelOpen;
+    if (label) toggle.setAttribute("aria-label", label);
   }
 
   // --- Mega menu ------------------------------------------------------------
@@ -507,6 +584,23 @@ export class PltNavbar extends LitElement {
     if (target?.closest?.("[data-plt-navbar-toggle]")) {
       this.isOpen() ? this.close() : this.open();
       return;
+    }
+    if (target?.closest?.("[data-plt-navbar-drawer-close]")) {
+      this.close();
+      return;
+    }
+    const drawer = this._drawer();
+    if (drawer && target === drawer) {
+      const rect = drawer.getBoundingClientRect();
+      const outside =
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom;
+      if (outside) {
+        this.close();
+        return;
+      }
     }
     if (target?.closest?.(MORE_TOGGLE)) {
       this.moreOpen ? this.closeMore() : this.openMore();

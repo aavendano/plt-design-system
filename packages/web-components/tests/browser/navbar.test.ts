@@ -140,4 +140,42 @@ describe("plt-navbar capabilities in Chromium", () => {
     await expect.poll(() => p.locator("#img").evaluate((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     await context.close();
   });
+
+  it("modal drawer: showModal, focus trap, scroll lock, Escape returns focus", async () => {
+    const context = await browser.newContext({ viewport: { width: 1000, height: 600 } });
+    const p = await context.newPage();
+    await p.setContent(`<!doctype html><html lang="en"><body style="margin:0;height:2000px">
+<style>plt-navbar{display:block}dialog[data-plt-navbar-drawer]{width:min(20rem,100vw);height:100dvh;margin:0;border:0;padding:1rem}</style>
+<plt-navbar>
+  <button id="toggle" data-plt-navbar-toggle aria-expanded="false" aria-controls="drawer"
+    data-label-open="Open menu" data-label-close="Close menu" aria-label="Open menu">Menu</button>
+  <dialog id="drawer" data-plt-navbar-drawer data-open="false">
+    <button type="button" data-plt-navbar-drawer-close id="close">Close</button>
+    <a id="link" href="#shop">Shop</a>
+  </dialog>
+</plt-navbar>
+<script type="module">${bundle}</script></body></html>`);
+    await p.waitForFunction(() => customElements.get("plt-navbar") && document.querySelector("plt-navbar")!.hasUpdated);
+    await p.locator("#toggle").click();
+    await expect.poll(() => p.locator("#drawer").evaluate((d) => (d as HTMLDialogElement).open)).toBe(true);
+    expect(await p.evaluate(() => document.body.style.overflow)).toBe("hidden");
+    expect(await p.locator("#toggle").getAttribute("aria-label")).toBe("Close menu");
+    await p.locator("#link").focus();
+    expect(await p.evaluate(() => document.activeElement?.id)).toBe("link");
+    const violations = await p.evaluate(async (axe) => {
+      const el = document.createElement("script");
+      el.textContent = axe;
+      document.head.append(el);
+      const results = await (window as unknown as { axe: { run: (c: Element) => Promise<{ violations: { id: string }[] }> } }).axe.run(
+        document.querySelector("dialog")!,
+      );
+      return results.violations.map((v) => v.id);
+    }, axeSource);
+    expect(violations).toEqual([]);
+    await p.keyboard.press("Escape");
+    await expect.poll(() => p.locator("#drawer").evaluate((d) => (d as HTMLDialogElement).open)).toBe(false);
+    expect(await p.evaluate(() => document.body.style.overflow)).toBe("");
+    expect(await p.evaluate(() => document.activeElement?.id)).toBe("toggle");
+    await context.close();
+  });
 });

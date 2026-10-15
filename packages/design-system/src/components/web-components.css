@@ -172,6 +172,27 @@ plt-filter-bar[orientation="vertical"] .plt-filter-bar__active { order: -1; padd
 /* Navbar: an open mega menu trigger reads as current. */
 .plt-navbar__links a[aria-expanded="true"] { color: var(--plt-color-primary, var(--color-primary)); }
 
+/* Navbar modal drawer: neutral shell; hosts style the panel contents. */
+dialog[data-plt-navbar-drawer] {
+  inset: 0;
+  width: min(24rem, 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  margin-inline-end: auto;
+  padding: 0;
+  border: 0;
+  background: var(--plt-color-base-100, var(--color-base-100));
+  color: var(--plt-color-base-content, var(--color-base-content));
+}
+dialog[data-plt-navbar-drawer]::backdrop {
+  background: color-mix(in oklab, var(--plt-color-neutral, var(--color-neutral)) 45%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog[data-plt-navbar-drawer] { transition: none; }
+}
+
 /* Navbar overflow ("More"): hooks hidden by the element must stay hidden whatever utility class the item carries. */
 [data-plt-navbar-item][hidden],
 [data-plt-navbar-more][hidden],

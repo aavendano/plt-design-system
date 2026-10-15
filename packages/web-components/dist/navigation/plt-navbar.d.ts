@@ -21,6 +21,12 @@ export declare const NAVBAR_OVERFLOW_EVENT = "plt:navbar-overflow";
  * (`aria-expanded`, `data-open`, `hidden`); Escape closes and returns focus;
  * a click outside closes.
  *
+ * Opt-in modal drawer: when `aria-controls` points at a
+ * `dialog[data-plt-navbar-drawer]`, open uses `showModal()` (native focus trap,
+ * Escape, inert page) and the shared scroll lock; the toggle's
+ * `data-label-open` / `data-label-close` become its `aria-label`. Backdrop
+ * clicks close it. Frontends that keep a plain panel are unchanged.
+ *
  * Mega menu (previously left to each platform): a trigger — the top-level
  * link with `aria-haspopup` + `aria-controls`, or `[data-plt-megamenu-trigger]`
  * — opens the `.plt-megamenu` panel it controls on hover or focus; ArrowDown
@@ -91,6 +97,8 @@ export declare class PltNavbar extends LitElement {
     private _lastOverflowWidth;
     private _hiddenKey;
     private _moreCloseTimer;
+    private _releaseScroll;
+    private readonly _onDialogClose;
     private readonly _onDocumentClick;
     constructor();
     protected createRenderRoot(): this;
@@ -121,10 +129,14 @@ export declare class PltNavbar extends LitElement {
     private _scheduleDeferred;
     get toggle(): HTMLElement | null;
     get panel(): HTMLElement | null;
+    private _drawer;
     isOpen(): boolean;
     open(): void;
     close(): void;
     private _setMobile;
+    /** Applies after a modal drawer `close` (Escape, backdrop, or `dialog.close()`). */
+    private _closedDrawer;
+    private _syncToggleLabel;
     private _trigger;
     private _panelFor;
     private _triggersFor;
