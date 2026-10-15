@@ -21,7 +21,9 @@ export const NAVBAR_OVERFLOW_EVENT = "plt:navbar-overflow";
 
 const CLOSE_DELAY_MS = 150;
 const IDLE_TIMEOUT_MS = 2000;
-const TRIGGER = "[aria-controls][aria-haspopup], [data-plt-megamenu-trigger]";
+/** Mega triggers only — exclude `aria-haspopup="dialog"` (host Aside / modal openers). */
+const TRIGGER =
+  "[aria-controls][aria-haspopup]:not([aria-haspopup='dialog']), [data-plt-megamenu-trigger]";
 /** A mega menu panel: the ProductDetail-era class, or the attribute for markup that keeps its own classes. */
 const PANEL = ".plt-megamenu, [data-plt-megamenu]";
 const DEFERRED = "[data-plt-navbar-deferred]";

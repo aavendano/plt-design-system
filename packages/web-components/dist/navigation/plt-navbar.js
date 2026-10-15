@@ -5,7 +5,7 @@ const MEGAMENU_TOGGLE_EVENT = "plt:megamenu-toggle";
 const NAVBAR_OVERFLOW_EVENT = "plt:navbar-overflow";
 const CLOSE_DELAY_MS = 150;
 const IDLE_TIMEOUT_MS = 2e3;
-const TRIGGER = "[aria-controls][aria-haspopup], [data-plt-megamenu-trigger]";
+const TRIGGER = "[aria-controls][aria-haspopup]:not([aria-haspopup='dialog']), [data-plt-megamenu-trigger]";
 const PANEL = ".plt-megamenu, [data-plt-megamenu]";
 const DEFERRED = "[data-plt-navbar-deferred]";
 const HEIGHT_PROPERTY = "--plt-navbar-height";

@@ -28,7 +28,23 @@
   }
 
   .mega-menu-column {
+    display: block;
+    position: static;
+    padding: 0;
     min-width: 0;
+  }
+
+  .mega-menu-column__inner {
+    display: block;
+    width: 100%;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .mega-menu-child-list > li {
+    display: list-item;
+    position: static;
+    padding: 0;
   }
 
   .mega-menu-column.col-span-2 {
@@ -45,7 +61,8 @@
 
   .mega-menu-link {
     display: inline-flex;
-    padding-block: 0.25rem;
+    width: 100%;
+    padding: 0.25rem 0;
     text-decoration: none;
     color: var(--color-base-content);
     font-family: var(--plt-font-body);
