@@ -1,0 +1,25 @@
+---
+description: UI compartida se corrige aquí (contratos y Web Components Lit); consumidores solo pin/sync
+alwaysApply: true
+---
+
+# Upstream UI — plt-design-system
+
+Shared UI, interaction and accessibility belong in this monorepo. Storefronts
+and CMS UIs only pin a commit/package and wire Shopify or editorial data.
+
+## Before changing UI
+
+1. Read [packages/design-system/docs/upstream-ui-policy.md](packages/design-system/docs/upstream-ui-policy.md).
+2. Update [packages/design-system/contracts/components.md](packages/design-system/contracts/components.md) when props, slots or `plt:*` events change.
+3. Prefer Lit Web Components under `packages/web-components` for storefront controls; tokens/themes under `packages/design-system`.
+4. Consider Liquid/Astro adapters in this monorepo when the public contract changes.
+
+## Do not
+
+- Expect consumers to hand-edit vendored bundles or `node_modules`.
+- Ship a storefront-only fork of a shared control; extend the contract here.
+
+## After merge
+
+Consumers bump the pinned SHA (`@playlovetoys/platform` or `@playlovetoys/design-system`), install, and sync where required (Liquid: `npm run sync:plt`).

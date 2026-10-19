@@ -16,6 +16,8 @@ El **Sistema de Diseño PLT** (`@playlovetoys/design-system`) es una capa de com
 
 **Paquete:** `@playlovetoys/design-system` v0.7.0
 
+**Política upstream:** los arreglos de UI compartida viven en este monorepo; ver [upstream-ui-policy.md](../upstream-ui-policy.md).
+
 ## Arquitectura
 
 ### Visión General del Sistema
