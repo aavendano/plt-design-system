@@ -11,6 +11,20 @@ cross-renderer contracts for PlayLoveToys.
    props, slots and `plt:*` events.
 3. **`packages/web-components`** — Lit implementations shipped to storefronts.
 
+## Functional and visual testing skill
+
+This repository consumes only the pinned `functional-visual-testing` Agent-OS
+skill at [`.agents/skills/functional-visual-testing/SKILL.md`](.agents/skills/functional-visual-testing/SKILL.md).
+The source commit, allowlisted files and SHA-256 digests are declared in
+[`.agents/skill-dependencies.json`](.agents/skill-dependencies.json).
+
+For UI changes, map functional acceptance criteria to the plan contract, then
+run the existing Vitest/Playwright test suite and capture visual evidence.
+Use `npm run check:skills` to validate the skill import and the
+[`variant-picker` pilot plan](tests/visual/variant-picker.plan.json).
+Update approved baselines only after human review. Never add `agents-os` to
+npm dependencies or import its Django runtime.
+
 ## Ownership
 
 - Fix shared UI, interaction and accessibility **here**.
