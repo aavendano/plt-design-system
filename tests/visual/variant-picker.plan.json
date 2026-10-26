@@ -25,8 +25,7 @@
       ],
       "visual": {
         "checkpoint": "sold-out",
-        "comparison": "peer",
-        "reference": "liquid",
+        "comparison": "observation",
         "viewports": [{"width": 640, "height": 900}]
       },
       "evidence": ["test-output", "screenshot", "trace-on-failure"]
