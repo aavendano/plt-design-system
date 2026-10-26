@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "plt-variant-picker-cross-renderer",
+  "source": "packages/design-system/contracts/components.md",
+  "runner": {
+    "kind": "vitest-playwright",
+    "command": "npm run test:browser -w @playlovetoys/web-components",
+    "testFile": "packages/web-components/tests/browser/frontends.test.ts"
+  },
+  "fixtures": ["liquid", "astro", "react"],
+  "policy": {
+    "mutations": "fixture-only",
+    "baselineUpdates": "human-approval"
+  },
+  "scenarios": [
+    {
+      "id": "variant-selection",
+      "criterion": "Changing variant choices updates the selected ID, product price and availability state",
+      "setup": "Build the existing identical product demos for Liquid, Astro and React",
+      "actions": ["Open each demo", "Select Blue", "Select Size L"],
+      "assertions": [
+        "Selected variant ID updates in the submitted form",
+        "Price updates after variant selection",
+        "Sold-out add-to-cart action becomes disabled"
+      ],
+      "visual": {
+        "checkpoint": "sold-out",
+        "comparison": "peer",
+        "reference": "liquid",
+        "viewports": [{"width": 640, "height": 900}]
+      },
+      "evidence": ["test-output", "screenshot", "trace-on-failure"]
+    },
+    {
+      "id": "picker-parity",
+      "criterion": "Variant picker renders identically across the Liquid, Astro and React adapters",
+      "setup": "Same product fixture, Chromium build, stable fonts and fixed component width",
+      "actions": ["Render picker in each frontend", "Stabilize the fixed-position crop"],
+      "assertions": [
+        "Each frontend displays two option fieldsets",
+        "Default selected variant and availability are equivalent"
+      ],
+      "visual": {
+        "checkpoint": "initial-picker-crop",
+        "comparison": "peer",
+        "reference": "liquid",
+        "viewports": [{"width": 640, "height": 900}]
+      },
+      "evidence": ["test-output", "screenshot", "trace-on-failure"]
+    }
+  ]
+}
