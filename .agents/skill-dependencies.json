@@ -6,7 +6,7 @@
       "source": {
         "repository": "aavendano/agents-os",
         "path": ".agents/skills/functional-visual-testing",
-        "ref": "5674b931ba245125e598231b7327e2dc514861ad"
+        "ref": "1ec73788d88a29f451ca312b09e5004102f88822"
       },
       "destination": ".agents/skills/functional-visual-testing",
       "files": {
