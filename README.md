@@ -38,6 +38,25 @@ npm run check
 
 The design-system checks reject contract drift, unsafe Liquid output, parallel PLT primitives, obsolete daisyUI modifiers and incomplete renderer anatomy. The demo build verifies the Tailwind/daisyUI integration. GitHub Actions runs the same workspace check on pull requests and pushes to `main`.
 
+## Development-only verification skill
+
+Functional-to-visual test planning is owned by Agent-OS and selectively
+imported as the single `functional-visual-testing` skill. The source commit,
+file allowlist and hashes are tracked in
+[`.agents/skill-dependencies.json`](.agents/skill-dependencies.json);
+no Agent-OS application/runtime package enters npm dependencies.
+
+```bash
+npm run check:skills                   # offline provenance/integrity + plan checks
+node scripts/sync-agent-skills.mjs --sync # explicit sync from the pinned GitHub SHA
+```
+
+The pilot is [`tests/visual/variant-picker.plan.json`](tests/visual/variant-picker.plan.json).
+It maps functional criteria and cross-renderer screenshots to the existing
+`@playlovetoys/web-components` Vitest/Playwright suite; those executable tests,
+fixtures and image comparisons continue to live here. Baseline changes require
+human approval, and the imported skill never runs Django.
+
 ## Documentation site
 
 The documentation site is authored with Zensical from Markdown sources in `docs/`.

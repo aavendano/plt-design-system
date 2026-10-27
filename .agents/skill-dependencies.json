@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "dependencies": [
+    {
+      "name": "functional-visual-testing",
+      "source": {
+        "repository": "aavendano/agents-os",
+        "path": ".agents/skills/functional-visual-testing",
+        "ref": "1ec73788d88a29f451ca312b09e5004102f88822"
+      },
+      "destination": ".agents/skills/functional-visual-testing",
+      "files": {
+        "SKILL.md": "3def088187bc020771f398113bf9cd5b6764e0d5894ea40203d7ba153097437d",
+        "references/plan-contract.md": "3120ef117754748886702206f546565a737feea0c2e15713497bfe0c33c8e559",
+        "scripts/validate-plan.mjs": "96ea9fd427131814ef45146300a9e601a2b218ed399468e109b182f9c14f9c6b",
+        "scripts/validate-plan.test.mjs": "43f0977648e94da8eb5d44b22ff84a50d264f8d6f0d7088201cda6c56f0fe7bc"
+      }
+    }
+  ]
+}
